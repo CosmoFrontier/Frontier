@@ -1,7 +1,19 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import {
+  Lensflare,
+  LensflareElement,
+} from "three/examples/jsm/objects/Lensflare";
+import {
+  GodRaysEffect,
+  EffectComposer,
+  EffectPass,
+  RenderPass,
+  KernelSize,
+  BlendFunction,
+  BloomEffect,
+} from "postprocessing";
 import months from "./months";
-
 document.addEventListener("DOMContentLoaded", function () {
   let AUTOMOVE = true;
   var scene = new THREE.Scene();
@@ -54,22 +66,37 @@ document.addEventListener("DOMContentLoaded", function () {
     map: new THREE.TextureLoader().load("assets/sun_main.jpg"),
   });
   const sunSphere = new THREE.Mesh(SunGeometry, SunMaterial);
-  sunSphere.position.set(0, 0, 50);
+  
 
-  scene.add(sunSphere);
-
-  const sunOut = new THREE.SphereGeometry(1.1, 32, 32);
-  const sunOutMaterial = new THREE.MeshPhongMaterial({
-    color: 0xfff93e,
-    transparent: true,
-    opacity: 0.5,
-    emissive: 0xfff93e,
-    emissiveIntensity: 0.5,
+  let godrayseffect = new GodRaysEffect(camera, sunSphere, {
+    resolutionScale: 0.75,
+    kernelSize: KernelSize.SMALL,
+    density: 0.96,
+    decay: 0.93,
+    weight: 0.3,
+    exposure: 0.55,
+    samples: 60,
+    clampMax: 1.0,
+    blendFunction: BlendFunction.SCREEN,
   });
-  const sunOutSphere = new THREE.Mesh(sunOut, sunOutMaterial);
-  sunOutSphere.position.set(0, 0, 50);
-  scene.add(sunOutSphere);
+  godrayseffect.dithering = true;
+  const bloomEffect = new BloomEffect({
+    blendFunction: BlendFunction.SCREEN,
+    kernelSize: KernelSize.MEDIUM,
+    resolutionScale: 0.5,
+    distinction: 3.8,
+  });
+  bloomEffect.blendMode.opacity.value = 2.5;
 
+  const effectPass = new EffectPass(camera, bloomEffect, godrayseffect);
+
+  effectPass.renderToScreen = true;
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(effectPass);
+
+  composer.setSize(window.innerWidth, window.innerHeight);
+  composer.render(scene, camera);
   //background
   var background = new THREE.TextureLoader().load("assets/star_map.png");
   background.wrapS = background.wrapT = THREE.RepeatWrapping;
@@ -87,7 +114,19 @@ document.addEventListener("DOMContentLoaded", function () {
   scene.add(ambientLight);
 
   const focuslight = new THREE.PointLight(0xffffff, 1.5, 0);
+  const textureLoader = new THREE.TextureLoader();
+
+  const textureFlare3 = textureLoader.load("assets/lensflare3.png");
+
   focuslight.position.set(0, 0, 50);
+  const lensflare = new Lensflare();
+
+  lensflare.addElement(new LensflareElement(textureFlare3, 60, 0.6));
+  lensflare.addElement(new LensflareElement(textureFlare3, 70, 0.7));
+  lensflare.addElement(new LensflareElement(textureFlare3, 120, 0.9));
+  lensflare.addElement(new LensflareElement(textureFlare3, 70, 1));
+  focuslight.add(lensflare);
+  focuslight.add(sunSphere);
   scene.add(focuslight);
 
   var cam_rotation = 0.001;
@@ -120,6 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.lookAt(earthSpehere.position);
     renderer.render(scene, camera);
+    composer.render(scene, camera);
     requestAnimationFrame(animate);
   };
   animate();
