@@ -7,7 +7,9 @@ import {
   BlendFunction,
   BloomEffect,
 } from "postprocessing";
+
 import * as THREE from "three";
+
 import {
   Lensflare,
   LensflareElement,
@@ -21,7 +23,7 @@ export default class SUN {
     this.composer = new EffectComposer(renderer);
   }
   init() {
-    const SunGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const SunGeometry = new THREE.SphereGeometry(20, 32, 32);
     const SunMaterial = new THREE.MeshPhongMaterial({
       color: 0xfff93e,
       emissive: 0xfff93e,
@@ -63,7 +65,7 @@ export default class SUN {
 
     const textureFlare3 = textureLoader.load("assets/lensflare3.png");
 
-    focuslight.position.set(0, 0, 50);
+    focuslight.position.set(0, 0, 0);
     const lensflare = new Lensflare();
 
     lensflare.addElement(new LensflareElement(textureFlare3, 60, 0.6));

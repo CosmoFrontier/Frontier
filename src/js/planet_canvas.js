@@ -11,11 +11,12 @@ export default class PlanetCanvas {
     this.cam_rotation = 0.001;
     this.entities = [];
     this.scene = new THREE.Scene();
+    this.focusAt = new THREE.Vector3(0, 0, 500);
     this.camera = new THREE.PerspectiveCamera(
       45,
       window.innerWidth / window.innerHeight
     );
-    this.camera.position.z = 2;
+    this.camera.position.z = -2;
     this.scene.add(this.camera);
 
     this.renderer = new THREE.WebGLRenderer({
@@ -34,9 +35,17 @@ export default class PlanetCanvas {
     const sun = new SUN(this.scene, this.camera, this.renderer);
     sun.init();
     this.entities.push(sun);
-    const earth = new Earth(this.scene, this.camera, this.renderer);
+    const earth = new Earth(this.scene, this.camera, this.renderer, 500);
+
     earth.init();
+    this.camera.position.set(0, 0, 500);
+    this.camera.position.z += 2;
+
+    this.camera.lookAt(this.focusAt);
+
     this.entities.push(earth);
+
+    this.controls.target.set(0, 0, 500);
   }
 
   init() {
@@ -56,12 +65,10 @@ export default class PlanetCanvas {
     this.scene.add(ambientLight);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.maxDistance = 100;
+
     this.controls.minDistance = 1;
     this.controls.addEventListener("change", () => (this.AUTOMOVE = false));
     this.loadEntities();
-    this.controls.update();
-
     this.renderer.render(this.scene, this.camera);
 
     this.render();
@@ -74,21 +81,19 @@ export default class PlanetCanvas {
   }
 
   render() {
+    requestAnimationFrame(this.render.bind(this));
     if (this.AUTOMOVE) {
       this.cam_rotation += 0.001;
       this.camera.position.x =
         this.camera_distance * Math.sin(this.cam_rotation);
       this.camera.position.z =
-        this.camera_distance * Math.cos(this.cam_rotation);
-      this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this.camera_distance * Math.cos(this.cam_rotation) + 500;
+      this.camera.lookAt(this.focusAt);
     }
 
-    //this.renderer.render(this.scene, this.camera);
     this.entities.forEach((entity) => entity.render());
 
     stats.update();
-
-    requestAnimationFrame(this.render.bind(this));
 
     let date = new Date();
     document.querySelector(".date-time .date").textContent =
