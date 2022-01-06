@@ -1,152 +1,95 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import {
-  Lensflare,
-  LensflareElement,
-} from "three/examples/jsm/objects/Lensflare";
-import {
-  GodRaysEffect,
-  EffectComposer,
-  EffectPass,
-  RenderPass,
-  KernelSize,
-  BlendFunction,
-  BloomEffect,
-} from "postprocessing";
+import Earth from "./entities/Earth";
+import SUN from "./entities/Sun";
 import months from "./months";
-document.addEventListener("DOMContentLoaded", function () {
-  let AUTOMOVE = true;
-  var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight
-  );
-  camera.position.z = 2;
-  scene.add(camera);
+import Stats from "three/examples/jsm/libs/stats.module.js";
 
-  var renderer = new THREE.WebGLRenderer({
-    antialias: true,
-    canvas: document.querySelector("#canvas"),
-  });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  document.body.appendChild(renderer.domElement);
+export default class PlanetCanvas {
+  constructor() {
+    this.AUTOMOVE = true;
+    this.cam_rotation = 0.001;
+    this.entities = [];
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight
+    );
+    this.camera.position.z = 2;
+    this.scene.add(this.camera);
 
-  const EarthGeometry = new THREE.SphereGeometry(0.4, 32, 32);
-  const material = new THREE.MeshPhongMaterial({
-    color: 0x48659f,
-    map: new THREE.TextureLoader().load("assets/earth_main.jpg"),
-  });
-  const earthSpehere = new THREE.Mesh(EarthGeometry, material);
-  earthSpehere.rotation.y = -90 * (Math.PI / 180);
-  const date = new Date();
+    this.renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      canvas: document.querySelector("#canvas"),
+    });
+    document.body.appendChild(this.renderer.domElement);
+    this.camera_distance = this.camera.position.z;
+    this.calibrateRenderer();
+    global.stats = new Stats();
+    global.stats.showPanel(0);
 
-  const seconds = () =>
-    date.getUTCHours() * 3600 +
-    date.getUTCMinutes() * 60 +
-    date.getUTCSeconds();
-  earthSpehere.rotation.y =
-    80 * (Math.PI / 180) + -seconds() * ((2 * Math.PI) / (24 * 3600));
-  scene.add(earthSpehere);
+    document.body.appendChild(stats.domElement);
+  }
+  loadEntities() {
+    const sun = new SUN(this.scene, this.camera, this.renderer);
+    sun.init();
+    this.entities.push(sun);
+    const earth = new Earth(this.scene, this.camera, this.renderer);
+    earth.init();
+    this.entities.push(earth);
+  }
 
-  const cloudGeometry = new THREE.SphereGeometry(0.401, 32, 32);
-  const cloudMaterial = new THREE.MeshPhongMaterial({
-    map: new THREE.TextureLoader().load("assets/cloud_map_earth.png"),
-    transparent: true,
-  });
-  const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
-  earthSpehere.add(cloudSphere);
-  earthSpehere.rotation.x = -23.43643 * (Math.PI / 180);
-  earthSpehere.rotation.y = -90 * (Math.PI / 180);
+  init() {
+    var background = new THREE.TextureLoader().load("assets/star_map.png");
+    background.wrapS = background.wrapT = THREE.RepeatWrapping;
+    background.repeat.set(1, 1);
 
-  const SunGeometry = new THREE.SphereGeometry(1, 32, 32);
-  const SunMaterial = new THREE.MeshPhongMaterial({
-    color: 0xfff93e,
-    emissive: 0xfff93e,
-    map: new THREE.TextureLoader().load("assets/sun_main.jpg"),
-  });
-  const sunSphere = new THREE.Mesh(SunGeometry, SunMaterial);
-  
+    var materialBackground = new THREE.MeshBasicMaterial({
+      map: background,
+      side: THREE.BackSide,
+    });
+    var geometryBackground = new THREE.SphereGeometry(80, 1200, 1200);
+    var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
+    this.scene.add(meshBackground);
 
-  let godrayseffect = new GodRaysEffect(camera, sunSphere, {
-    resolutionScale: 0.75,
-    kernelSize: KernelSize.SMALL,
-    density: 0.96,
-    decay: 0.93,
-    weight: 0.3,
-    exposure: 0.55,
-    samples: 60,
-    clampMax: 1.0,
-    blendFunction: BlendFunction.SCREEN,
-  });
-  godrayseffect.dithering = true;
-  const bloomEffect = new BloomEffect({
-    blendFunction: BlendFunction.SCREEN,
-    kernelSize: KernelSize.MEDIUM,
-    resolutionScale: 0.5,
-    distinction: 3.8,
-  });
-  bloomEffect.blendMode.opacity.value = 2.5;
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+    this.scene.add(ambientLight);
 
-  const effectPass = new EffectPass(camera, bloomEffect, godrayseffect);
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.maxDistance = 100;
+    this.controls.minDistance = 1;
+    this.controls.addEventListener("change", () => (this.AUTOMOVE = false));
+    this.loadEntities();
+    this.controls.update();
 
-  effectPass.renderToScreen = true;
-  const composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-  composer.addPass(effectPass);
+    this.renderer.render(this.scene, this.camera);
 
-  composer.setSize(window.innerWidth, window.innerHeight);
-  composer.render(scene, camera);
-  //background
-  var background = new THREE.TextureLoader().load("assets/star_map.png");
-  background.wrapS = background.wrapT = THREE.RepeatWrapping;
-  background.repeat.set(1, 1);
+    this.render();
+  }
 
-  var materialBackground = new THREE.MeshBasicMaterial({
-    map: background,
-    side: THREE.BackSide,
-  });
-  var geometryBackground = new THREE.SphereGeometry(80, 1200, 1200);
-  var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
-  scene.add(meshBackground);
+  calibrateRenderer() {
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setPixelRatio(window.innerWidth / window.innerHeight);
+    this.camera.updateProjectionMatrix();
+  }
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-  scene.add(ambientLight);
-
-  const focuslight = new THREE.PointLight(0xffffff, 1.5, 0);
-  const textureLoader = new THREE.TextureLoader();
-
-  const textureFlare3 = textureLoader.load("assets/lensflare3.png");
-
-  focuslight.position.set(0, 0, 50);
-  const lensflare = new Lensflare();
-
-  lensflare.addElement(new LensflareElement(textureFlare3, 60, 0.6));
-  lensflare.addElement(new LensflareElement(textureFlare3, 70, 0.7));
-  lensflare.addElement(new LensflareElement(textureFlare3, 120, 0.9));
-  lensflare.addElement(new LensflareElement(textureFlare3, 70, 1));
-  focuslight.add(lensflare);
-  focuslight.add(sunSphere);
-  scene.add(focuslight);
-
-  var cam_rotation = 0.001;
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.maxDistance = 100;
-  controls.minDistance = 1;
-  controls.addEventListener("change", function () {
-    AUTOMOVE = false;
-  });
-  controls.update();
-
-  const animate = function () {
-    var radius = 2;
-    earthSpehere.rotation.y =
-      80 * (Math.PI / 180) + seconds() * ((2 * Math.PI) / (24 * 3600));
-    if (AUTOMOVE) {
-      cam_rotation += 0.001;
-      camera.position.x = radius * Math.sin(cam_rotation);
-      camera.position.z = radius * Math.cos(cam_rotation);
+  render() {
+    if (this.AUTOMOVE) {
+      this.cam_rotation += 0.001;
+      this.camera.position.x =
+        this.camera_distance * Math.sin(this.cam_rotation);
+      this.camera.position.z =
+        this.camera_distance * Math.cos(this.cam_rotation);
+      this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     }
+
+    //this.renderer.render(this.scene, this.camera);
+    this.entities.forEach((entity) => entity.render());
+
+    stats.update();
+
+    requestAnimationFrame(this.render.bind(this));
+
     let date = new Date();
     document.querySelector(".date-time .date").textContent =
       months[date.getMonth()] +
@@ -156,18 +99,5 @@ document.addEventListener("DOMContentLoaded", function () {
       date.getFullYear();
     document.querySelector(".date-time .time").textContent =
       date.toLocaleTimeString();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.lookAt(earthSpehere.position);
-    renderer.render(scene, camera);
-    composer.render(scene, camera);
-    requestAnimationFrame(animate);
-  };
-  animate();
-  renderer.render(scene, camera);
-
-  document.onresize = function () {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.innerWidth / window.innerHeight);
-  };
-});
+  }
+}
