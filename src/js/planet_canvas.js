@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Earth from "./entities/Earth";
 import SUN from "./entities/Sun";
 import months from "./months";
+import Mars from "./entities/Mars";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -46,18 +47,20 @@ export default class PlanetCanvas {
     this.entities.push(earth);
 
     this.controls.target.set(0, 0, 500);
+
+    const mars = new Mars(this.scene, this.camera, this.renderer,500 * 1.34);
+    mars.init();
+    this.entities.push(mars);
   }
 
   init() {
     var background = new THREE.TextureLoader().load("assets/star_map.png");
-    background.wrapS = background.wrapT = THREE.RepeatWrapping;
-    background.repeat.set(1, 1);
 
     var materialBackground = new THREE.MeshBasicMaterial({
       map: background,
       side: THREE.BackSide,
     });
-    var geometryBackground = new THREE.SphereGeometry(80, 1200, 1200);
+    var geometryBackground = new THREE.SphereGeometry(2000, 32, 32);
     var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
     this.scene.add(meshBackground);
 
