@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Earth from "./entities/Earth";
 import SUN from "./entities/Sun";
 import months from "./months";
+import Mars from "./entities/Mars";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -34,9 +35,12 @@ export default class PlanetCanvas {
     const sun = new SUN(this.scene, this.camera, this.renderer);
     sun.init();
     this.entities.push(sun);
-    const earth = new Earth(this.scene, this.camera, this.renderer);
-    earth.init();
-    this.entities.push(earth);
+    // const earth = new Earth(this.scene, this.camera, this.renderer);
+    // earth.init();
+    // this.entities.push(earth);
+    const mars = new Mars(this.scene, this.camera, this.renderer);
+    mars.init();
+    this.entities.push(mars);
   }
 
   init() {
