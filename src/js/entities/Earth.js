@@ -8,7 +8,7 @@ export default class Earth {
   }
 
   init() {
-    const EarthGeometry = new THREE.SphereGeometry(20 / 54, 32, 32);
+    const EarthGeometry = new THREE.SphereGeometry(10 / 54, 32, 32);
     const material = new THREE.MeshPhongMaterial({
       color: 0x48659f,
       map: new THREE.TextureLoader().load("assets/earth_main.jpg"),
@@ -17,7 +17,7 @@ export default class Earth {
     this.earthSpehere.position.set(0, 0, this.perihelion);
     this.scene.add(this.earthSpehere);
 
-    const cloudGeometry = new THREE.SphereGeometry(20 / 54 + 0.001, 32, 32);
+    const cloudGeometry = new THREE.SphereGeometry(10 / 54 + 0.001, 32, 32);
     const cloudMaterial = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/cloud_map_earth.png"),
       transparent: true,

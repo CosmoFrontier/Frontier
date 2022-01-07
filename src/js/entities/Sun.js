@@ -23,7 +23,7 @@ export default class SUN {
     this.composer = new EffectComposer(renderer);
   }
   init() {
-    const SunGeometry = new THREE.SphereGeometry(20, 32, 32);
+    const SunGeometry = new THREE.SphereGeometry(10, 32, 32);
     const SunMaterial = new THREE.MeshPhongMaterial({
       color: 0xfff93e,
       emissive: 0xfff93e,

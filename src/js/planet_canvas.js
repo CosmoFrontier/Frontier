@@ -15,13 +15,16 @@ export default class PlanetCanvas {
     this.focusAt = new THREE.Vector3(0, 0, 500);
     this.camera = new THREE.PerspectiveCamera(
       45,
-      window.innerWidth / window.innerHeight
+      window.innerWidth / window.innerHeight,
+      1,
+      2000
     );
-    this.camera.position.z = -2;
+    this.camera.position.z = -1.2;
     this.scene.add(this.camera);
 
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
+      powerPreference: "high-performance",
       canvas: document.querySelector("#canvas"),
     });
     document.body.appendChild(this.renderer.domElement);
@@ -48,7 +51,7 @@ export default class PlanetCanvas {
 
     this.controls.target.set(0, 0, 500);
 
-    const mars = new Mars(this.scene, this.camera, this.renderer,500 * 1.34);
+    const mars = new Mars(this.scene, this.camera, this.renderer, 500 * 1.34);
     mars.init();
     this.entities.push(mars);
   }
@@ -62,7 +65,7 @@ export default class PlanetCanvas {
     });
     var geometryBackground = new THREE.SphereGeometry(2000, 32, 32);
     var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
-    this.scene.add(meshBackground);
+    //this.scene.add(meshBackground);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     this.scene.add(ambientLight);
@@ -78,8 +81,10 @@ export default class PlanetCanvas {
   }
 
   calibrateRenderer() {
+    this.renderer.autoClear = false;
+    this.renderer.clearDepth();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(window.innerWidth / window.innerHeight);
+    this.renderer.setPixelRatio(1);
     this.camera.updateProjectionMatrix();
   }
 
@@ -95,7 +100,6 @@ export default class PlanetCanvas {
     }
 
     this.entities.forEach((entity) => entity.render());
-
     stats.update();
 
     let date = new Date();
