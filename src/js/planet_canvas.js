@@ -12,21 +12,20 @@ export default class PlanetCanvas {
     this.cam_rotation = 0.001;
     this.entities = [];
     this.scene = new THREE.Scene();
-    this.focusAt = new THREE.Vector3(0, 0, 500);
     this.camera = new THREE.PerspectiveCamera(
       45,
       window.innerWidth / window.innerHeight,
       1,
       2000
     );
-    this.camera.position.z = -1.2;
-    this.scene.add(this.camera);
 
+    this.scene.add(this.camera);
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       powerPreference: "high-performance",
       canvas: document.querySelector("#canvas"),
     });
+
     document.body.appendChild(this.renderer.domElement);
     this.camera_distance = this.camera.position.z;
     this.calibrateRenderer();
@@ -35,27 +34,54 @@ export default class PlanetCanvas {
 
     document.body.appendChild(stats.domElement);
   }
+  setFocus(x, y, z) {
+    this.focusAt = new THREE.Vector3(x, y, z);
+    this.camera.lookAt(this.focusAt);
+    this.camera.position.set(x, y, z - 1.2);
+    this.controls.target.set(x, y, z);
+    this.controls.update();
+    console.log(x, y, z);
+  }
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
     sun.init();
     this.entities.push(sun);
-    const earth = new Earth(this.scene, this.camera, this.renderer, 500);
+    const earth = new Earth(
+      this.scene,
+      this.camera,
+      this.renderer,
+      this.data.find((x) => x.name === "Earth")
+    );
 
     earth.init();
-    this.camera.position.set(0, 0, 500);
-    this.camera.position.z += 2;
-
-    this.camera.lookAt(this.focusAt);
 
     this.entities.push(earth);
 
-    this.controls.target.set(0, 0, 500);
+    const mars = new Mars(
+      this.scene,
+      this.camera,
+      this.renderer,
+      this.data.find((x) => x.name === "Mars")
+    );
 
-    const mars = new Mars(this.scene, this.camera, this.renderer, 500 * 1.34);
     mars.init();
+    this.setFocus(
+      mars.marsSphere.position.x,
+      mars.marsSphere.position.y,
+      mars.marsSphere.position.z
+    );
     this.entities.push(mars);
   }
-
+  async fetchData() {
+    try {
+      const res = await fetch("https://ssd-abh80.vercel.app/all");
+      const data = await res.json();
+      this.data = data;
+    } catch {
+      console.log("Error while fetching data!");
+    }
+    this.init();
+  }
   init() {
     var background = new THREE.TextureLoader().load("assets/star_map.png");
 

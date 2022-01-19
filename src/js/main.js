@@ -1,4 +1,5 @@
 import PlanetCanvas from "./planet_canvas";
 document.addEventListener("DOMContentLoaded", () => {
-    new PlanetCanvas().init();
-})
+  const canvas = new PlanetCanvas();
+  canvas.fetchData();
+});
