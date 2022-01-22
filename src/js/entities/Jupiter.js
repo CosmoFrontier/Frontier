@@ -17,10 +17,10 @@ export default class Jupiter{
     init(){
         const JupiterGeometry = new THREE.SphereGeometry(10 / 9.66, 32, 32);
         const material = new THREE.MeshPhongMaterial({
-            // color:  0xbcafb2,
-            // map: new THREE.TextureLoader().load("assets/jupiter_main.jpg"),
-            color: 0x9c2e35,
-            map: new THREE.TextureLoader().load("assets/mars_main.jpg"),
+            color:  0xbcafb2,
+            map: new THREE.TextureLoader().load("assets/jupiter_main.jpg"),
+            // color: 0x9c2e35,
+            // map: new THREE.TextureLoader().load("assets/mars_main.jpg"),
 
         });
         this.jupiterSphere = new THREE.Mesh(JupiterGeometry, material);

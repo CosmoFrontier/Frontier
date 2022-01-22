@@ -5,6 +5,7 @@ import SUN from "./entities/Sun";
 import months from "./months";
 import Mars from "./entities/Mars";
 import Jupiter from "./entities/Jupiter";
+import Venus from "./entities/Venus";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -38,7 +39,7 @@ export default class PlanetCanvas {
   setFocus(x, y, z) {
     this.focusAt = new THREE.Vector3(x, y, z);
     this.camera.lookAt(this.focusAt);
-    this.camera.position.set(x, y, z - 1.2);
+    this.camera.position.set(x, y, z-1.2);
     this.controls.target.set(x, y, z);
     this.controls.update();
   }
@@ -88,8 +89,20 @@ export default class PlanetCanvas {
       this.data.find((x) => x.name === "Jupiter")
     );
     jupiter.init();
-    this.focusPlanet(jupiter);
+    // this.focusPlanet(jupiter);
     this.entities.push(jupiter);
+
+    const venus = new Venus(
+      this.scene,
+      this.camera,
+      this.renderer,
+      this.data.find((x) => x.name === "Venus")
+
+    );
+
+    venus.init();
+    this.focusPlanet(venus);
+    this.entities.push(venus);
   }
   async fetchData() {
     try {
