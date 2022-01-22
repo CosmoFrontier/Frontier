@@ -4,6 +4,7 @@ import Earth from "./entities/Earth";
 import SUN from "./entities/Sun";
 import months from "./months";
 import Mars from "./entities/Mars";
+import Jupiter from "./entities/Jupiter";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -53,16 +54,19 @@ export default class PlanetCanvas {
     const sun = new SUN(this.scene, this.camera, this.renderer);
     sun.init();
     this.entities.push(sun);
+
+
     const earth = new Earth(
       this.scene,
       this.camera,
       this.renderer,
       this.data.find((x) => x.name === "Earth")
     );
-
     earth.init();
+    // this.focusPlanet(earth);
 
     this.entities.push(earth);
+   
 
     const mars = new Mars(
       this.scene,
@@ -72,8 +76,20 @@ export default class PlanetCanvas {
     );
 
     mars.init();
-    this.focusPlanet(mars); // to focus on earth this.focusPlanet(earth);
+    
+    // this.focusPlanet(mars); // to focus on earth this.focusPlanet(earth);
     this.entities.push(mars);
+
+
+    const jupiter = new Jupiter(
+      this.scene,
+      this.camera,
+      this.renderer,
+      this.data.find((x) => x.name === "Jupiter")
+    );
+    jupiter.init();
+    this.focusPlanet(jupiter);
+    this.entities.push(jupiter);
   }
   async fetchData() {
     try {
