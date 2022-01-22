@@ -108,8 +108,12 @@ export default class PlanetCanvas {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     this.controls.minDistance = 1;
+    this.controls.enableZoom = true;
     this.controls.autoRotate = true;
-    this.controls.addEventListener("start", () => (this.AUTOMOVE = false));
+    this.controls.addEventListener("start", () => {
+      this.controls.autoRotate = false;
+      this.AUTOMOVE = false;
+    });
     this.loadEntities();
     this.renderer.render(this.scene, this.camera);
 
