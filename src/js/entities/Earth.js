@@ -7,6 +7,7 @@ export default class Earth {
     this.data = data;
     this.radius = 500 * this.data.data[0].radius;
     this.theeta = this.data.data[0].angular_distance;
+    this.inclination = 0;
     this.name = "earth";
   }
 
@@ -17,7 +18,11 @@ export default class Earth {
       map: new THREE.TextureLoader().load("assets/earth_main.jpg"),
     });
     this.earthSpehere = new THREE.Mesh(EarthGeometry, material);
-    this.earthSpehere.position.set(0, 0, this.radius);
+    this.earthSpehere.position.set(
+      Math.sin(this.theeta) * this.radius,
+      0,
+      this.radius * Math.cos(this.theeta)
+    );
     this.scene.add(this.earthSpehere);
 
     const cloudGeometry = new THREE.SphereGeometry(10 / 54 + 0.001, 32, 32);
@@ -30,33 +35,36 @@ export default class Earth {
     this.earthSpehere.rotation.x = 23.43643 * (Math.PI / 180);
     this.drawTrail();
   }
+  removeTrail() {
+    var trail = this.scene.getObjectByName(this.trail.name);
+    this.scene.remove(trail);
+  }
   drawTrail() {
     const ellipse = new THREE.EllipseCurve(
       0,
       0,
       this.radius,
       this.radius,
-      this.theeta,
-      0,
+      -(1.5 * Math.PI + this.theeta),
+      -Math.PI * 1.5,
       false,
       0
     );
     const points = ellipse.getPoints(50);
+
     for (let i = 0; i < points.length; i++) {
-      points[i] = new THREE.Vector3(
-        points[i].x,
-        points[i].x * Math.sin(this.data.data[0].inclination * (Math.PI / 180)),
-        points[i].y
-      );
+      points[i] = new THREE.Vector3(points[i].x, 0, points[i].y);
     }
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    // make a gradient line
+
     const colors = [];
-    let alpha = 0.5;
+
     const initialColor = 0x3f5d98;
     for (let i = 0; i < geometry.attributes.position.count; i++) {
-      var color = new THREE.Color();
-      
+      var color = new THREE.Color(initialColor);
+      color.r = color.r - (color.r / geometry.attributes.position.count) * i;
+      color.g = color.g - (color.g / geometry.attributes.position.count) * i;
+      color.b = color.b - (color.b / geometry.attributes.position.count) * i;
       colors.push(color.r, color.g, color.b);
     }
     geometry.setAttribute(
@@ -68,6 +76,8 @@ export default class Earth {
       transparent: true,
     });
     const line = new THREE.Line(geometry, Linematerial);
+    line.name = "earthTrail";
+    line.rotateX(-this.inclination);
     this.trail = line;
     this.scene.add(line);
   }

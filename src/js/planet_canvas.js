@@ -16,7 +16,7 @@ export default class PlanetCanvas {
       45,
       window.innerWidth / window.innerHeight,
       1,
-      2000
+      10000
     );
 
     this.scene.add(this.camera);
@@ -40,7 +40,14 @@ export default class PlanetCanvas {
     this.camera.position.set(x, y, z - 1.2);
     this.controls.target.set(x, y, z);
     this.controls.update();
-    console.log(x, y, z);
+  }
+  focusPlanet(planet) {
+    this.setFocus(
+      planet[planet.name.toLowerCase() + "Sphere"].position.x,
+      planet[planet.name.toLowerCase() + "Sphere"].position.y,
+      planet[planet.name.toLowerCase() + "Sphere"].position.z
+    );
+    planet.removeTrail();
   }
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
@@ -65,11 +72,7 @@ export default class PlanetCanvas {
     );
 
     mars.init();
-    this.setFocus(
-      mars.marsSphere.position.x,
-      mars.marsSphere.position.y,
-      mars.marsSphere.position.z
-    );
+    this.focusPlanet(mars); // to focus on earth this.focusPlanet(earth);
     this.entities.push(mars);
   }
   async fetchData() {
@@ -83,15 +86,21 @@ export default class PlanetCanvas {
     this.init();
   }
   init() {
-    var background = new THREE.TextureLoader().load("assets/star_map.png");
+    var background = new THREE.TextureLoader();
+    background.crossOrigin = true;
 
     var materialBackground = new THREE.MeshBasicMaterial({
-      map: background,
+      depthTest: false,
       side: THREE.BackSide,
     });
-    var geometryBackground = new THREE.SphereGeometry(2000, 32, 32);
+
+    var geometryBackground = new THREE.SphereGeometry(5000, 32, 32);
     var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
-    //this.scene.add(meshBackground);
+
+    background.load("/assets/star_map.png", (t) => {
+      materialBackground.map = t;
+      this.scene.add(meshBackground);
+    });
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     this.scene.add(ambientLight);
@@ -99,7 +108,8 @@ export default class PlanetCanvas {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     this.controls.minDistance = 1;
-    this.controls.addEventListener("change", () => (this.AUTOMOVE = false));
+    this.controls.autoRotate = true;
+    this.controls.addEventListener("start", () => (this.AUTOMOVE = false));
     this.loadEntities();
     this.renderer.render(this.scene, this.camera);
 
@@ -110,22 +120,16 @@ export default class PlanetCanvas {
     this.renderer.autoClear = false;
     this.renderer.clearDepth();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(1);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.camera.updateProjectionMatrix();
   }
 
   render() {
     requestAnimationFrame(this.render.bind(this));
-    if (this.AUTOMOVE) {
-      this.cam_rotation += 0.001;
-      this.camera.position.x =
-        this.camera_distance * Math.sin(this.cam_rotation);
-      this.camera.position.z =
-        this.camera_distance * Math.cos(this.cam_rotation) + 500;
-      this.camera.lookAt(this.focusAt);
-    }
-
     this.entities.forEach((entity) => entity.render());
+    if (this.AUTOMOVE) {
+      this.controls.update();
+    }
     stats.update();
 
     let date = new Date();
