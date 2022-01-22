@@ -17,13 +17,13 @@ export default class Earth {
       color: 0x48659f,
       map: new THREE.TextureLoader().load("assets/earth_main.jpg"),
     });
-    this.earthSpehere = new THREE.Mesh(EarthGeometry, material);
-    this.earthSpehere.position.set(
+    this.earthSphere = new THREE.Mesh(EarthGeometry, material);
+    this.earthSphere.position.set(
       Math.sin(this.theeta) * this.radius,
       0,
       this.radius * Math.cos(this.theeta)
     );
-    this.scene.add(this.earthSpehere);
+    this.scene.add(this.earthSphere);
 
     const cloudGeometry = new THREE.SphereGeometry(10 / 54 + 0.001, 32, 32);
     const cloudMaterial = new THREE.MeshPhongMaterial({
@@ -31,8 +31,8 @@ export default class Earth {
       transparent: true,
     });
     const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
-    this.earthSpehere.add(cloudSphere);
-    this.earthSpehere.rotation.x = 23.43643 * (Math.PI / 180);
+    this.earthSphere.add(cloudSphere);
+    this.earthSphere.rotation.x = 23.43643 * (Math.PI / 180);
     this.drawTrail();
   }
   removeTrail() {
@@ -87,7 +87,7 @@ export default class Earth {
     new Date().getUTCSeconds();
 
   render() {
-    this.earthSpehere.rotation.y =
+    this.earthSphere.rotation.y =
       -80 * (Math.PI / 180) + this.seconds() * ((2 * Math.PI) / (24 * 3600));
   }
 }

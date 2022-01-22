@@ -19,6 +19,7 @@ export default class Mars {
     const material = new THREE.MeshPhongMaterial({
       color: 0x9c2e35,
       map: new THREE.TextureLoader().load("assets/mars_main.jpg"),
+     
     });
     this.marsSphere = new THREE.Mesh(MarsGeometry, material);
     this.marsSphere.rotation.y = -90 * (Math.PI / 180);
