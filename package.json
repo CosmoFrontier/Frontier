@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "postprocessing": "^6.23.3",
+    "serve": "^13.0.2",
     "three": "^0.136.0"
   }
 }

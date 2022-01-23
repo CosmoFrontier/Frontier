@@ -7,6 +7,7 @@ import Mars from "./entities/Mars";
 import Jupiter from "./entities/Jupiter";
 import Venus from "./entities/Venus";
 import Saturn from "./entities/Saturn";
+import Mercury from "./entities/Mercury";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -109,9 +110,16 @@ export default class PlanetCanvas {
 
     );
     saturn.init();
-    this.focusPlanet(saturn);
+    // this.focusPlanet(saturn);
     this.entities.push(saturn);
 
+    const mercury = new Mercury(
+      this.scene, this.camera, this.renderer, this.data.find((x)=> x.name === "Mercury")
+
+    );
+    mercury.init();
+    this.focusPlanet(mercury);
+    this.entities.push(mercury);
   }
   async fetchData() {
     try {
