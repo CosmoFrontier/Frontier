@@ -14,7 +14,7 @@ export default class Uranus {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
   }
   get zaxis() {
-    return 1;
+    return 1.5;
   }
   init() {
     const UranusGeometry = new THREE.SphereGeometry(10 / 27.45, 32, 32);

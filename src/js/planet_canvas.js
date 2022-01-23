@@ -9,6 +9,7 @@ import Venus from "./entities/Venus";
 import Saturn from "./entities/Saturn";
 import Mercury from "./entities/Mercury";
 import Uranus from "./entities/Uranus";
+import Neptune from "./entities/Neptune";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -21,7 +22,7 @@ export default class PlanetCanvas {
       45,
       window.innerWidth / window.innerHeight,
       0.1,
-      15000
+      30000
     );
 
     this.scene.add(this.camera);
@@ -128,8 +129,16 @@ export default class PlanetCanvas {
       this.data.find((x) => x.name === "Uranus")
     )
     uranus.init();
-    this.focusPlanet(uranus);
+    // this.focusPlanet(uranus);
     this.entities.push(uranus);
+
+    const neptune = new Neptune(
+      this.scene, this.camera, this.renderer,
+      this.data.find((x) => x.name === "Neptune")
+    )
+    neptune.init();
+    this.focusPlanet(neptune);
+    this.entities.push(neptune);
   }
   async fetchData() {
     try {
@@ -150,7 +159,7 @@ export default class PlanetCanvas {
       side: THREE.BackSide,
     });
 
-    var geometryBackground = new THREE.SphereGeometry(10000, 32, 32);
+    var geometryBackground = new THREE.SphereGeometry(17000, 32, 32);
     var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
 
     background.load("/assets/star_map.png", (t) => {
