@@ -14,8 +14,8 @@ export default class Mars {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
   }
 
-  zaxis(){
-    this.camera
+  get zaxis() {
+    return 0.2;
   }
 
   init() {
@@ -23,7 +23,6 @@ export default class Mars {
     const material = new THREE.MeshPhongMaterial({
       color: 0x9c2e35,
       map: new THREE.TextureLoader().load("assets/mars_main.jpg"),
-     
     });
     this.marsSphere = new THREE.Mesh(MarsGeometry, material);
     this.marsSphere.rotation.y = -90 * (Math.PI / 180);
@@ -89,13 +88,5 @@ export default class Mars {
     new Date().getUTCMinutes() * 60 +
     new Date().getUTCSeconds();
 
-  render() {
-    this.marsSphere.position.set(
-      Math.sin(this.theeta) * this.radius,
-      this.y_distance,
-      this.radius * Math.cos(this.theeta)
-    );
-    this.marsSphere.rotation.y =
-      80 * (Math.PI / 180) + this.seconds() * ((2 * Math.PI) / (24 * 3600));
-  }
+  render() {}
 }

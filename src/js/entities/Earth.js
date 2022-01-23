@@ -10,7 +10,9 @@ export default class Earth {
     this.inclination = 0;
     this.name = "earth";
   }
-
+  get zaxis() {
+    return 1.5;
+  }
   init() {
     const EarthGeometry = new THREE.SphereGeometry(10 / 54, 32, 32);
     const material = new THREE.MeshPhongMaterial({

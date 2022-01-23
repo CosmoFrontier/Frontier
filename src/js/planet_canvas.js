@@ -18,7 +18,7 @@ export default class PlanetCanvas {
     this.camera = new THREE.PerspectiveCamera(
       45,
       window.innerWidth / window.innerHeight,
-      1,
+      0.1,
       15000
     );
 
@@ -36,18 +36,20 @@ export default class PlanetCanvas {
 
     document.body.appendChild(stats.domElement);
   }
-  setFocus(x, y, z) {
+  setFocus(x, y, z, zaxis) {
     this.focusAt = new THREE.Vector3(x, y, z);
     this.camera.lookAt(this.focusAt);
-    this.camera.position.set(x, y, z-2.5);
+    this.camera.position.set(x, y, z - zaxis);
     this.controls.target.set(x, y, z);
     this.controls.update();
   }
   focusPlanet(planet) {
+    console.log(planet.zaxis);
     this.setFocus(
       planet[planet.name.toLowerCase() + "Sphere"].position.x,
       planet[planet.name.toLowerCase() + "Sphere"].position.y,
-      planet[planet.name.toLowerCase() + "Sphere"].position.z
+      planet[planet.name.toLowerCase() + "Sphere"].position.z,
+      planet.zaxis
     );
     planet.removeTrail();
   }
@@ -55,7 +57,6 @@ export default class PlanetCanvas {
     const sun = new SUN(this.scene, this.camera, this.renderer);
     sun.init();
     this.entities.push(sun);
-
 
     const earth = new Earth(
       this.scene,
@@ -67,7 +68,6 @@ export default class PlanetCanvas {
     // this.focusPlanet(earth);
 
     this.entities.push(earth);
-   
 
     const mars = new Mars(
       this.scene,
@@ -77,10 +77,9 @@ export default class PlanetCanvas {
     );
 
     mars.init();
-    
+
     // this.focusPlanet(mars); // to focus on earth this.focusPlanet(earth);
     this.entities.push(mars);
-
 
     const jupiter = new Jupiter(
       this.scene,
@@ -97,7 +96,6 @@ export default class PlanetCanvas {
       this.camera,
       this.renderer,
       this.data.find((x) => x.name === "Venus")
-
     );
 
     venus.init();
@@ -105,13 +103,14 @@ export default class PlanetCanvas {
     this.entities.push(venus);
 
     const saturn = new Saturn(
-      this.scene, this.camera, this.renderer, this.data.find((x) => x.name === "Saturn")
-
+      this.scene,
+      this.camera,
+      this.renderer,
+      this.data.find((x) => x.name === "Saturn")
     );
     saturn.init();
     this.focusPlanet(saturn);
     this.entities.push(saturn);
-
   }
   async fetchData() {
     try {
@@ -146,6 +145,7 @@ export default class PlanetCanvas {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     this.controls.minDistance = 1;
+    this.controls.autoRotateSpeed = -0.5;
     this.controls.enableZoom = true;
     this.controls.autoRotate = true;
     this.controls.addEventListener("start", () => {
