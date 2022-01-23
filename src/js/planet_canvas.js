@@ -53,7 +53,7 @@ export default class PlanetCanvas {
       planet[planet.name.toLowerCase() + "Sphere"].position.z,
       planet.zaxis
     );
-    planet.removeTrail();
+  //planet.removeTrail();
   }
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
