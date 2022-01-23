@@ -7,6 +7,7 @@ import Mars from "./entities/Mars";
 import Jupiter from "./entities/Jupiter";
 import Venus from "./entities/Venus";
 import Saturn from "./entities/Saturn";
+import Mercury from "./entities/Mercury";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -44,7 +45,6 @@ export default class PlanetCanvas {
     this.controls.update();
   }
   focusPlanet(planet) {
-    console.log(planet.zaxis);
     this.setFocus(
       planet[planet.name.toLowerCase() + "Sphere"].position.x,
       planet[planet.name.toLowerCase() + "Sphere"].position.y,
@@ -109,8 +109,18 @@ export default class PlanetCanvas {
       this.data.find((x) => x.name === "Saturn")
     );
     saturn.init();
-    this.focusPlanet(saturn);
+    // this.focusPlanet(saturn);
     this.entities.push(saturn);
+
+    const mercury = new Mercury(
+      this.scene,
+      this.camera,
+      this.renderer,
+      this.data.find((x) => x.name === "Mercury")
+    );
+    mercury.init();
+    this.focusPlanet(mercury);
+    this.entities.push(mercury);
   }
   async fetchData() {
     try {
@@ -144,7 +154,7 @@ export default class PlanetCanvas {
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-    this.controls.minDistance = 1;
+    this.controls.minDistance = 0.1;
     this.controls.autoRotateSpeed = -0.5;
     this.controls.enableZoom = true;
     this.controls.autoRotate = true;
