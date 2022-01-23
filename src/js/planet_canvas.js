@@ -6,6 +6,7 @@ import months from "./months";
 import Mars from "./entities/Mars";
 import Jupiter from "./entities/Jupiter";
 import Venus from "./entities/Venus";
+import Saturn from "./entities/Saturn";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -18,7 +19,7 @@ export default class PlanetCanvas {
       45,
       window.innerWidth / window.innerHeight,
       1,
-      10000
+      15000
     );
 
     this.scene.add(this.camera);
@@ -29,7 +30,6 @@ export default class PlanetCanvas {
     });
 
     document.body.appendChild(this.renderer.domElement);
-    this.camera_distance = this.camera.position.z;
     this.calibrateRenderer();
     global.stats = new Stats();
     global.stats.showPanel(0);
@@ -39,7 +39,7 @@ export default class PlanetCanvas {
   setFocus(x, y, z) {
     this.focusAt = new THREE.Vector3(x, y, z);
     this.camera.lookAt(this.focusAt);
-    this.camera.position.set(x, y, z-1.2);
+    this.camera.position.set(x, y, z-2.5);
     this.controls.target.set(x, y, z);
     this.controls.update();
   }
@@ -101,8 +101,17 @@ export default class PlanetCanvas {
     );
 
     venus.init();
-    this.focusPlanet(venus);
+    // this.focusPlanet(venus);
     this.entities.push(venus);
+
+    const saturn = new Saturn(
+      this.scene, this.camera, this.renderer, this.data.find((x) => x.name === "Saturn")
+
+    );
+    saturn.init();
+    this.focusPlanet(saturn);
+    this.entities.push(saturn);
+
   }
   async fetchData() {
     try {
@@ -123,7 +132,7 @@ export default class PlanetCanvas {
       side: THREE.BackSide,
     });
 
-    var geometryBackground = new THREE.SphereGeometry(5000, 32, 32);
+    var geometryBackground = new THREE.SphereGeometry(10000, 32, 32);
     var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
 
     background.load("/assets/star_map.png", (t) => {

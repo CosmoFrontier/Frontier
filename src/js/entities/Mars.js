@@ -14,6 +14,10 @@ export default class Mars {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
   }
 
+  zaxis(){
+    this.camera
+  }
+
   init() {
     const MarsGeometry = new THREE.SphereGeometry(10 / 102.525711, 32, 32);
     const material = new THREE.MeshPhongMaterial({
