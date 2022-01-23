@@ -14,7 +14,7 @@ export default class Mercury {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
   }
   get zaxis() {
-    return .2;
+    return 0.2;
   }
   init() {
     const MercuryGeometry = new THREE.SphereGeometry(10 / 285, 32, 32);
@@ -87,13 +87,5 @@ export default class Mercury {
     new Date().getUTCMinutes() * 60 +
     new Date().getUTCSeconds();
 
-  render() {
-    this.mercurySphere.position.set(
-      Math.sin(this.theta) * this.radius,
-      this.y_distance,
-      this.radius * Math.cos(this.theta)
-    );
-    this.mercurySphere.rotation.y =
-      80 * (Math.PI / 180) + this.seconds() * ((2 * Math.PI) / (24 * 3600));
-  }
+  render() {}
 }
