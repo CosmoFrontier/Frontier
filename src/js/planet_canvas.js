@@ -165,6 +165,13 @@ export default class PlanetCanvas {
       x.elem.appendChild(ring);
       x.elem.appendChild(text);
       document.body.appendChild(x.elem);
+
+     
+    
+      // x.elem.addEventListener("click", (m)=>{
+      //   var lol = m.target.value;
+      //   return lol;
+      // })
     });
     // this.focusPlanet(earth);
        this.focusPlanet(saturn);

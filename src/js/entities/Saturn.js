@@ -35,8 +35,9 @@ export default class Saturn {
     this.saturnSphere.receiveShadow = true;
     const texture = new THREE.TextureLoader().load("assets/saturnRings.png");
 
-    const ring_material = new THREE.MeshPhongMaterial({
+    const ring_material = new THREE.MeshBasicMaterial({
       map: texture,
+      color: 0xffffff,
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 1,
