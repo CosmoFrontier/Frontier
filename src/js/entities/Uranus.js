@@ -12,6 +12,8 @@ export default class Uranus {
     this.inclination = 0.8 * (Math.PI / 180);
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
+    this.scenes = [];
+    this.color = 0x4fd0e7;
   }
   get zaxis() {
     return 1.5;
@@ -19,18 +21,17 @@ export default class Uranus {
   init() {
     const UranusGeometry = new THREE.SphereGeometry(10 / 27.45, 32, 32);
     const material = new THREE.MeshPhongMaterial({
-      color: 0x4FD0E7,
       map: new THREE.TextureLoader().load("assets/uranus_main.jpg"),
     });
     this.uranusSphere = new THREE.Mesh(UranusGeometry, material);
-    this.uranusSphere.position.y = -90 * (Math.PI / 180);
+
     this.uranusSphere.position.set(
       Math.sin(this.theta) * this.radius,
       this.y_distance,
       this.radius * Math.cos(this.theta)
     );
 
-    this.scene.add(this.uranusSphere);
+    this.scenes.push(this.uranusSphere);
     this.drawTrail();
   }
   drawTrail() {
@@ -52,7 +53,7 @@ export default class Uranus {
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
     const colors = [];
-    const initialColor = 0x4FD0E7;
+    const initialColor = 0x4fd0e7;
     for (let i = 0; i < geometry.attributes.position.count; i++) {
       var color = new THREE.Color(initialColor);
       color.r = color.r - (color.r / geometry.attributes.position.count) * i;
@@ -81,6 +82,12 @@ export default class Uranus {
   removeTrail() {
     var trail = this.scene.getObjectByName(this.trail.name);
     this.scene.remove(trail);
+  }
+  mount() {
+    this.scenes.forEach((scene) => this.scene.add(scene));
+  }
+  unmount() {
+    this.scenes.forEach((scene) => this.scene.remove(scene));
   }
   seconds = () =>
     new Date().getUTCHours() * 3600 +

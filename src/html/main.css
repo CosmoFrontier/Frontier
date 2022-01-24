@@ -6,6 +6,7 @@ html {
   width: 100%;
   font-family: "Roboto", sans-serif;
   color: white;
+  overflow: hidden;
 }
 canvas {
   height: 100vh;
@@ -14,7 +15,31 @@ canvas {
   top: 0;
   z-index: 1;
 }
-
+.label {
+  user-select: none;
+  cursor: pointer;
+  z-index: 3;
+  font-size: 12px;
+  gap: 2px;
+  color: rgba(255, 255, 255, 0.753);
+  position: absolute;
+  width: fit-content;
+  display: flex;
+}
+.label:hover {
+  color: white;
+}
+.label-text {
+  line-height: 10px;
+}
+.label-ring {
+  z-index: 3;
+  background-color: transparent;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  border-width: 0.5px;
+}
 .date-time {
   position: absolute;
   top: 10%;
@@ -29,11 +54,11 @@ canvas {
 }
 .date-time .date {
   font-size: 1rem;
-  color:rgba(232, 235, 235, 0.74);
+  color: rgba(232, 235, 235, 0.74);
   font-weight: bold;
 }
 .date-time .time {
   font-size: 1.7rem;
   font-weight: bold;
-  color : white;
+  color: white;
 }

@@ -12,6 +12,8 @@ export default class Mercury {
     this.inclination = 7 * (Math.PI / 180);
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
+    this.scenes = [];
+    this.color = 0xd5d2d1;
   }
   get zaxis() {
     return 0.2;
@@ -19,7 +21,6 @@ export default class Mercury {
   init() {
     const MercuryGeometry = new THREE.SphereGeometry(10 / 285, 32, 32);
     const material = new THREE.MeshPhongMaterial({
-      color: 0xd5d2d1,
       map: new THREE.TextureLoader().load("assets/mercury_main.jpeg"),
     });
     this.mercurySphere = new THREE.Mesh(MercuryGeometry, material);
@@ -30,7 +31,7 @@ export default class Mercury {
       this.radius * Math.cos(this.theta)
     );
 
-    this.scene.add(this.mercurySphere);
+    this.scenes.push(this.mercurySphere);
     this.drawTrail();
   }
   drawTrail() {
@@ -77,7 +78,12 @@ export default class Mercury {
     this.trail = line;
     this.scene.add(line);
   }
-
+  mount() {
+    this.scenes.forEach((scene) => this.scene.add(scene));
+  }
+  unmount() {
+    this.scenes.forEach((scene) => this.scene.remove(scene));
+  }
   removeTrail() {
     var trail = this.scene.getObjectByName(this.trail.name);
     this.scene.remove(trail);

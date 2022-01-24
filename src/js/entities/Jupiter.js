@@ -12,6 +12,8 @@ export default class Jupiter {
     this.inclination = 1.304 * (Math.PI / 180);
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
+    this.scenes = [];
+    this.color = 0xbcafb2;
   }
   get zaxis() {
     return 5;
@@ -19,7 +21,6 @@ export default class Jupiter {
   init() {
     const JupiterGeometry = new THREE.SphereGeometry(10 / 9.6, 32, 32);
     const material = new THREE.MeshPhongMaterial({
-      color: 0xbcafb2,
       map: new THREE.TextureLoader().load("assets/jupiter_main.jpg"),
     });
     this.jupiterSphere = new THREE.Mesh(JupiterGeometry, material);
@@ -29,7 +30,7 @@ export default class Jupiter {
       this.radius * Math.cos(this.theta)
     );
 
-    this.scene.add(this.jupiterSphere);
+    this.scenes.push(this.jupiterSphere);
     this.drawTrail();
   }
 
@@ -79,6 +80,12 @@ export default class Jupiter {
   removeTrail() {
     var trail = this.scene.getObjectByName(this.trail.name);
     this.scene.remove(trail);
+  }
+  mount() {
+    this.scenes.forEach((scene) => this.scene.add(scene));
+  }
+  unmount() {
+    this.scenes.forEach((scene) => this.scene.remove(scene));
   }
   seconds = () =>
     new Date().getUTCHours() * 3600 +

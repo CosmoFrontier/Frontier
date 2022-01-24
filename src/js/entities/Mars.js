@@ -12,16 +12,17 @@ export default class Mars {
     this.inclination = 1.8 * (Math.PI / 180); // get inclination froom https://nssdc.gsfc.nasa.gov/planetary/factsheet/ (orbital inclination)
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
+    this.scenes = [];
+    this.color = 0xb87f5f;
   }
 
   get zaxis() {
-    return 0.2;
+    return 0.5;
   }
 
   init() {
     const MarsGeometry = new THREE.SphereGeometry(10 / 102.525711, 32, 32);
     const material = new THREE.MeshPhongMaterial({
-      color: 0x9c2e35,
       map: new THREE.TextureLoader().load("assets/mars_main.jpg"),
     });
     this.marsSphere = new THREE.Mesh(MarsGeometry, material);
@@ -32,7 +33,7 @@ export default class Mars {
       this.radius * Math.cos(this.theeta)
     );
 
-    this.scene.add(this.marsSphere);
+    this.scenes.push(this.marsSphere);
     this.drawTrail();
   }
   drawTrail() {
@@ -82,6 +83,12 @@ export default class Mars {
   removeTrail() {
     var trail = this.scene.getObjectByName(this.trail.name);
     this.scene.remove(trail);
+  }
+  mount() {
+    this.scenes.forEach((scene) => this.scene.add(scene));
+  }
+  unmount() {
+    this.scenes.forEach((scene) => this.scene.remove(scene));
   }
   seconds = () =>
     new Date().getUTCHours() * 3600 +
