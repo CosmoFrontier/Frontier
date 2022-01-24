@@ -15,7 +15,7 @@ export default class Saturn {
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
-    this.color = 0xfae5bf;
+    this.color = 0xfae5bf; 
   }
   get zaxis() {
     return 4.5;
@@ -27,7 +27,6 @@ export default class Saturn {
       map: new THREE.TextureLoader().load("assets/saturn_main.jpg"),
     });
     this.saturnSphere = new THREE.Mesh(SaturnGeometry, material);
-
     this.saturnSphere.position.set(
       Math.sin(this.theta) * this.radius,
       this.y_distance,
@@ -35,9 +34,8 @@ export default class Saturn {
     );
     this.scene.add(this.saturnSphere);
 
-    const saturnRingGeometry = new THREE.RingGeometry(1.5,2,25);
-    const ring_material = new THREE.MeshBasicMaterial({
-      color: 0xffff00, side: THREE.DoubleSide
+    const saturnRingGeometry = new THREE.RingGeometry(1.5,2,50,0,2,8);    const ring_material = new THREE.MeshPhongMaterial({
+   map: new THREE.TextureLoader().load("assets/saturnRings.png")
     });
 
     this.mesh = new THREE.Mesh(saturnRingGeometry, ring_material);
@@ -48,7 +46,7 @@ export default class Saturn {
     );
     this.scene.add(this.mesh);
 
-    this.scenes.push(this.saturnSphere);
+    this.scenes.push(this.saturnSphere, this.mesh);
     this.drawTrail();
   }
 

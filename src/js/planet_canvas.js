@@ -119,7 +119,7 @@ export default class PlanetCanvas {
       this.data.find((x) => x.name === "Saturn")
     );
     saturn.init();
-    this.focusPlanet(saturn);
+    // this.focusPlanet(saturn);
     this.entities.push(saturn);
 
     const mercury = new Mercury(
@@ -163,7 +163,8 @@ export default class PlanetCanvas {
       x.elem.appendChild(text);
       document.body.appendChild(x.elem);
     });
-    this.focusPlanet(earth);
+    // this.focusPlanet(earth);
+       this.focusPlanet(saturn);
   }
   async fetchData() {
     try {
