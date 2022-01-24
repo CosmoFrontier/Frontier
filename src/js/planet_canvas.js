@@ -25,11 +25,12 @@ export default class PlanetCanvas {
       100000
     );
 
+    this.canvas = document.querySelector("#canvas");
     this.scene.add(this.camera);
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       powerPreference: "high-performance",
-      canvas: document.querySelector("#canvas"),
+      canvas: this.canvas,
     });
     this.planet = null;
     document.body.appendChild(this.renderer.domElement);
@@ -61,7 +62,7 @@ export default class PlanetCanvas {
     this.planet.elem.style.display = "block";
     this.planet.mount();
 
-   planet.removeTrail();
+    planet.removeTrail();
   }
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
@@ -231,8 +232,8 @@ export default class PlanetCanvas {
       vx[vx.name.toLowerCase() + "Sphere"].updateWorldMatrix(true, false);
       vx[vx.name.toLowerCase() + "Sphere"].getWorldPosition(tempV);
       tempV.project(this.camera);
-      const x = ((tempV.x + 1) * window.innerWidth) / 2;
-      const y = (-(tempV.y - 1) * window.innerHeight) / 2;
+      const x = (tempV.x * 0.5 + 0.5) * this.canvas.clientWidth;
+      const y = (tempV.y * -0.5 + 0.5) * this.canvas.clientHeight;
       vx.elem.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`;
     });
     if (this.AUTOMOVE) {
