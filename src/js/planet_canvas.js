@@ -32,6 +32,8 @@ export default class PlanetCanvas {
       powerPreference: "high-performance",
       canvas: this.canvas,
     });
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.planet = null;
     document.body.appendChild(this.renderer.domElement);
     this.calibrateRenderer();

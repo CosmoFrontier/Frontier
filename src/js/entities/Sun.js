@@ -60,12 +60,13 @@ export default class SUN {
 
     this.composer.setSize(window.innerWidth, window.innerHeight);
 
-    const focuslight = new THREE.PointLight(0xffffff, 0.5, 0);
+    const focuslight = new THREE.PointLight(0xffffff, 0.7, 0);
     const textureLoader = new THREE.TextureLoader();
 
     const textureFlare3 = textureLoader.load("assets/lensflare3.png");
 
     focuslight.position.set(0, 0, 0);
+
     const lensflare = new Lensflare();
 
     lensflare.addElement(new LensflareElement(textureFlare3, 60, 0.6));
