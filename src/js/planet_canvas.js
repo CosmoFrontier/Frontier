@@ -174,7 +174,7 @@ export default class PlanetCanvas {
       // })
     });
     // this.focusPlanet(earth);
-       this.focusPlanet(saturn);
+    this.focusPlanet(saturn);
   }
   async fetchData() {
     try {
@@ -241,6 +241,28 @@ export default class PlanetCanvas {
       vx[vx.name.toLowerCase() + "Sphere"].updateWorldMatrix(true, false);
       vx[vx.name.toLowerCase() + "Sphere"].getWorldPosition(tempV);
       tempV.project(this.camera);
+      var targetPosition = new THREE.Vector3();
+      targetPosition = targetPosition.setFromMatrixPosition(
+        vx[vx.name.toLowerCase() + "Sphere"].matrixWorld
+      );
+
+      this.camera.updateMatrixWorld();
+      var frustum = new THREE.Frustum();
+
+      frustum.setFromProjectionMatrix(
+        new THREE.Matrix4().multiplyMatrices(
+          this.camera.projectionMatrix,
+          this.camera.matrixWorldInverse
+        )
+      );
+      if (
+        !frustum.containsPoint(vx[vx.name.toLowerCase() + "Sphere"].position)
+      ) {
+        vx.elem.style.display = "none";
+        return;
+      } else {
+        vx.elem.style.display = "flex";
+      }
       const x = (tempV.x * 0.5 + 0.5) * this.canvas.clientWidth;
       const y = (tempV.y * -0.5 + 0.5) * this.canvas.clientHeight;
       vx.elem.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`;

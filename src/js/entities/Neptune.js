@@ -15,7 +15,7 @@ export default class Neptune {
     this.color = 0x73acac;
   }
   get zaxis() {
-    return 1000;
+    return 1.5;
   }
   init() {
     const NeptuneGeometry = new THREE.SphereGeometry(10 / 28.8, 32, 32);
