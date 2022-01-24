@@ -12,13 +12,16 @@ export default class Venus {
     this.inclination = 3.4 * (Math.PI / 180);
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
+    this.scenes = [];
+    this.color = 0x8b7d82;
   }
-
+  get zaxis() {
+    return 0.7;
+  }
   init() {
     const VenusGeometry = new THREE.SphereGeometry(10 / 115.06, 32, 32);
     const material = new THREE.MeshPhongMaterial({
-      color: 0x8b7d82,
-      map: new THREE.TextureLoader().load("assets/venus_main.jpeg"),
+      map: new THREE.TextureLoader().load("assets/venus_main.jpg"),
     });
     this.venusSphere = new THREE.Mesh(VenusGeometry, material);
     this.venusSphere.rotation.y = -90 * (Math.PI / 180);
@@ -28,7 +31,7 @@ export default class Venus {
       this.radius * Math.cos(this.theta)
     );
 
-    this.scene.add(this.venusSphere);
+    this.scenes.push(this.venusSphere);
     this.drawTrail();
   }
   drawTrail() {
@@ -78,6 +81,12 @@ export default class Venus {
   removeTrail() {
     var trail = this.scene.getObjectByName(this.trail.name);
     this.scene.remove(trail);
+  }
+  mount() {
+    this.scenes.forEach((scene) => this.scene.add(scene));
+  }
+  unmount() {
+    this.scenes.forEach((scene) => this.scene.remove(scene));
   }
 
   seconds = () =>

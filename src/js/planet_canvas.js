@@ -22,7 +22,7 @@ export default class PlanetCanvas {
       45,
       window.innerWidth / window.innerHeight,
       0.1,
-      30000
+      100000
     );
 
     this.scene.add(this.camera);
@@ -31,7 +31,7 @@ export default class PlanetCanvas {
       powerPreference: "high-performance",
       canvas: document.querySelector("#canvas"),
     });
-
+    this.planet = null;
     document.body.appendChild(this.renderer.domElement);
     this.calibrateRenderer();
     global.stats = new Stats();
@@ -47,18 +47,26 @@ export default class PlanetCanvas {
     this.controls.update();
   }
   focusPlanet(planet) {
+    if (this.planet) {
+      this.planet.elem.style.display = "flex";
+      this.planet.unmount();
+    }
     this.setFocus(
       planet[planet.name.toLowerCase() + "Sphere"].position.x,
       planet[planet.name.toLowerCase() + "Sphere"].position.y,
       planet[planet.name.toLowerCase() + "Sphere"].position.z,
       planet.zaxis
     );
-  //planet.removeTrail();
+    this.planet = planet;
+    this.planet.elem.style.display = "block";
+    this.planet.mount();
+
+   planet.removeTrail();
   }
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
     sun.init();
-    this.entities.push(sun);
+    this.sun = sun;
 
     const earth = new Earth(
       this.scene,
@@ -125,20 +133,38 @@ export default class PlanetCanvas {
     this.entities.push(mercury);
 
     const uranus = new Uranus(
-      this.scene,this.camera,this.renderer,
+      this.scene,
+      this.camera,
+      this.renderer,
       this.data.find((x) => x.name === "Uranus")
-    )
+    );
     uranus.init();
     // this.focusPlanet(uranus);
     this.entities.push(uranus);
 
     const neptune = new Neptune(
-      this.scene, this.camera, this.renderer,
+      this.scene,
+      this.camera,
+      this.renderer,
       this.data.find((x) => x.name === "Neptune")
-    )
+    );
     neptune.init();
-    this.focusPlanet(neptune);
+
     this.entities.push(neptune);
+    this.entities.forEach((x) => {
+      x.elem = document.createElement("div");
+      x.elem.className = "label";
+      const text = document.createElement("div");
+      text.textContent = x.name;
+      text.className = "label-text";
+      const ring = document.createElement("div");
+      ring.className = "label-ring";
+      ring.style.borderColor = "#" + x.color.toString(16);
+      x.elem.appendChild(ring);
+      x.elem.appendChild(text);
+      document.body.appendChild(x.elem);
+    });
+    this.focusPlanet(earth);
   }
   async fetchData() {
     try {
@@ -159,7 +185,7 @@ export default class PlanetCanvas {
       side: THREE.BackSide,
     });
 
-    var geometryBackground = new THREE.SphereGeometry(17000, 32, 32);
+    var geometryBackground = new THREE.SphereGeometry(60000, 32, 32);
     var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
 
     background.load("/assets/star_map.png", (t) => {
@@ -196,7 +222,19 @@ export default class PlanetCanvas {
 
   render() {
     requestAnimationFrame(this.render.bind(this));
-    this.entities.forEach((entity) => entity.render());
+    this.planet.render();
+    this.sun.render();
+
+    this.entities.forEach((vx) => {
+      if (this.planet.name == vx.name) return;
+      const tempV = new THREE.Vector3();
+      vx[vx.name.toLowerCase() + "Sphere"].updateWorldMatrix(true, false);
+      vx[vx.name.toLowerCase() + "Sphere"].getWorldPosition(tempV);
+      tempV.project(this.camera);
+      const x = ((tempV.x + 1) * window.innerWidth) / 2;
+      const y = (-(tempV.y - 1) * window.innerHeight) / 2;
+      vx.elem.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`;
+    });
     if (this.AUTOMOVE) {
       this.controls.update();
     }

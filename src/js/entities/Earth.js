@@ -9,6 +9,8 @@ export default class Earth {
     this.theeta = this.data.data[0].angular_distance;
     this.inclination = 0;
     this.name = "earth";
+    this.scenes = [];
+    this.color = 0x3f5d98;
   }
   get zaxis() {
     return 1.5;
@@ -25,7 +27,6 @@ export default class Earth {
       0,
       this.radius * Math.cos(this.theeta)
     );
-    this.scene.add(this.earthSphere);
 
     const cloudGeometry = new THREE.SphereGeometry(10 / 54 + 0.001, 32, 32);
     const cloudMaterial = new THREE.MeshPhongMaterial({
@@ -35,6 +36,7 @@ export default class Earth {
     const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
     this.earthSphere.add(cloudSphere);
     this.earthSphere.rotation.x = 23.43643 * (Math.PI / 180);
+    this.scenes.push(this.earthSphere);
     this.drawTrail();
   }
   removeTrail() {
@@ -82,6 +84,12 @@ export default class Earth {
     line.rotateX(-this.inclination);
     this.trail = line;
     this.scene.add(line);
+  }
+  mount() {
+    this.scenes.forEach((scene) => this.scene.add(scene));
+  }
+  unmount() {
+    this.scenes.forEach((scene) => this.scene.remove(scene));
   }
   seconds = () =>
     new Date().getUTCHours() * 3600 +
