@@ -150,7 +150,6 @@ export default class PlanetCanvas {
       this.data.find((x) => x.name === "Neptune")
     );
     neptune.init();
-
     this.entities.push(neptune);
     this.entities.forEach((x) => {
       x.elem = document.createElement("div");
@@ -165,7 +164,8 @@ export default class PlanetCanvas {
       x.elem.appendChild(text);
       document.body.appendChild(x.elem);
     });
-    this.focusPlanet(earth);
+    // this.focusPlanet(earth);
+       this.focusPlanet(saturn);
   }
   async fetchData() {
     try {

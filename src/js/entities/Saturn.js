@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import { PointsMaterial } from "three";
+import { Scene } from 'three';
 
 export default class Saturn {
   constructor(scene, camera, renderer, data) {
@@ -13,25 +15,38 @@ export default class Saturn {
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
-    this.color = 0xfae5bf;
+    this.color = 0xfae5bf; 
   }
   get zaxis() {
     return 4.5;
   }
   init() {
+
     const SaturnGeometry = new THREE.SphereGeometry(10 / 11.95, 32, 32);
     const material = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/saturn_main.jpg"),
     });
     this.saturnSphere = new THREE.Mesh(SaturnGeometry, material);
-
     this.saturnSphere.position.set(
       Math.sin(this.theta) * this.radius,
       this.y_distance,
       this.radius * Math.cos(this.theta)
     );
+    this.scene.add(this.saturnSphere);
 
-    this.scenes.push(this.saturnSphere);
+    const saturnRingGeometry = new THREE.RingGeometry(1.5,2,50,0,2,8);    const ring_material = new THREE.MeshPhongMaterial({
+   map: new THREE.TextureLoader().load("assets/saturnRings.png")
+    });
+
+    this.mesh = new THREE.Mesh(saturnRingGeometry, ring_material);
+    this.mesh.position.set(
+      Math.sin(this.theta) * this.radius,
+      this.y_distance,
+      this.radius * Math.cos(this.theta)
+    );
+    this.scene.add(this.mesh);
+
+    this.scenes.push(this.saturnSphere, this.mesh);
     this.drawTrail();
   }
 
@@ -46,6 +61,7 @@ export default class Saturn {
       false,
       0
     );
+
 
     const points = ellipse.getPoints(50);
     for (let i = 0; i < points.length; i++) {
@@ -68,6 +84,7 @@ export default class Saturn {
       new THREE.BufferAttribute(new Float32Array(colors), 3)
     );
 
+ 
     const Linematerial = new THREE.LineBasicMaterial({
       vertexColors: THREE.VertexColors,
       transparent: true,
