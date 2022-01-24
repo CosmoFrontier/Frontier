@@ -54,9 +54,9 @@ export default class Neptune {
     const colors = [];
     for (let i = 0; i < geometry.attributes.position.count; i++) {
       var color = new THREE.Color(initialColor);
-      // color.r = color.r - (color.r / geometry.attributes.position.count) * i;
-      // color.g = color.g - (color.g / geometry.attributes.position.count) * i;
-      // color.b = color.b - (color.b / geometry.attributes.position.count) * i;
+      color.r = color.r - (color.r / geometry.attributes.position.count) * i;
+      color.g = color.g - (color.g / geometry.attributes.position.count) * i;
+      color.b = color.b - (color.b / geometry.attributes.position.count) * i;
       colors.push(color.r, color.g, color.b);
     }
 

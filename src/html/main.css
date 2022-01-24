@@ -21,10 +21,13 @@ canvas {
   z-index: 3;
   font-size: 12px;
   gap: 2px;
-  color: white;
+  color: rgba(255, 255, 255, 0.753);
   position: absolute;
   width: fit-content;
   display: flex;
+}
+.label:hover {
+  color: white;
 }
 .label-text {
   line-height: 10px;
