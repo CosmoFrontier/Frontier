@@ -53,7 +53,7 @@ export default class PlanetCanvas {
       planet[planet.name.toLowerCase() + "Sphere"].position.z,
       planet.zaxis
     );
-  //planet.removeTrail();
+  planet.removeTrail();
   }
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
@@ -111,7 +111,7 @@ export default class PlanetCanvas {
       this.data.find((x) => x.name === "Saturn")
     );
     saturn.init();
-    // this.focusPlanet(saturn);
+    this.focusPlanet(saturn);
     this.entities.push(saturn);
 
     const mercury = new Mercury(
@@ -137,7 +137,7 @@ export default class PlanetCanvas {
       this.data.find((x) => x.name === "Neptune")
     )
     neptune.init();
-    this.focusPlanet(neptune);
+    // this.focusPlanet(neptune);
     this.entities.push(neptune);
   }
   async fetchData() {
