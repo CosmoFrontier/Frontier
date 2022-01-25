@@ -13,7 +13,7 @@ export default class Earth {
     this.color = 0x3f5d98;
   }
   get zaxis() {
-    return 1.5;
+    return 1;
   }
   init() {
     const EarthGeometry = new THREE.SphereGeometry(10 / 54, 32, 32);
