@@ -10,6 +10,7 @@ import Saturn from "./entities/Saturn";
 import Mercury from "./entities/Mercury";
 import Uranus from "./entities/Uranus";
 import Neptune from "./entities/Neptune";
+import Pluto from "./entities/Pluto";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 export default class PlanetCanvas {
@@ -156,7 +157,17 @@ export default class PlanetCanvas {
       this.data.find((x) => x.name === "Neptune")
     );
     neptune.init();
+
     this.entities.push(neptune);
+
+    const pluto = new Pluto(
+      this.scene,
+      this.camera,
+      this.renderer,
+      this.data.find((x) => x.name === "Pluto")
+    );
+    pluto.init();
+    this.entities.push(pluto);
 
     this.entities.forEach((x) => {
       x.elem = document.createElement("div");
@@ -197,7 +208,7 @@ export default class PlanetCanvas {
       });
     });
     // this.focusPlanet(earth);
-    this.focusPlanet(saturn);
+    this.focusPlanet(pluto);
   }
   async fetchData() {
     try {
