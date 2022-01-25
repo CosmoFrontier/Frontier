@@ -207,8 +207,8 @@ export default class PlanetCanvas {
         requestAnimationFrame(animate);
       });
     });
-    // this.focusPlanet(earth);
-    this.focusPlanet(pluto);
+  
+    this.focusPlanet(mars);
   }
   async fetchData() {
     try {

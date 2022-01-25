@@ -7,20 +7,100 @@
       href="https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic,900,900italic"
       rel="stylesheet"
     />
- 
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Solar System Dynamics</title>
     <link rel="icon" type="image/x-icon" href="/assets/F.ico" />
     <script src="js/script.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="/main.css" />
+    <style>
+      .page {
+        display: none;
+        padding: 0 0.5em;
+      }
+      body {
+        background-color: black;
+        /* background-size: 100%;
+        background-image: url("assets/load.gif");
+        background-repeat: no-repeat;
+        background-position: center; */
+      }
+
+      #loading {
+        position: fixed;
+        z-index: 100;
+        text-align: center;
+        font-family: Orbitron, sans-serif;
+        font-weight: 500;
+        font-size: 12rem;
+        line-height: 132px;
+        animation: lol 6s infinite;
+        letter-spacing: 0.28em;
+        background-image: linear-gradient(
+          180deg,
+          #ffffff 35.94%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-background-clip: text;
+        -moz-text-fill-color: transparent;
+      }
+      @keyframes lol {
+        from {
+          width: 0;
+          
+        }
+        to{
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
-    <canvas id="canvas" width="100%" height="100%"></canvas>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Orbitron:wght@900"
+      rel="stylesheet"
+    />
+    <div class="page">
+      <canvas id="canvas" width="100%" height="100%"></canvas>
 
-    <div class="date-time">
-      <div class="date"></div>
-      <div class="time"></div>
+      <div class="date-time">
+        <div class="date"></div>
+        <div class="time"></div>
+      </div>
     </div>
+    <div id="loading">FRONTIER</div>
+    <script>
+      const wait = (delay = 0) =>
+        new Promise((resolve) => setTimeout(resolve, delay));
+
+      const setVisible = (anyelem, visible) =>
+        ((typeof anyelem === "string"
+          ? document.querySelector(anyelem)
+          : anyelem
+        ).style.display = visible ? "block" : "none");
+
+      setVisible(".page", false);
+      setVisible("#loading", true);
+
+      document.addEventListener("DOMContentLoaded", () =>
+        wait(5000).then(() => {
+          setVisible(".page", true);
+          setVisible("#loading", false);
+        })
+      );
+    </script>
   </body>
 </html>
