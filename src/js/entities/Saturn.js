@@ -36,13 +36,23 @@ export default class Saturn {
     this.saturnSphere.receiveShadow = true;
     const texture = new THREE.TextureLoader().load("assets/saturnRings.png");
 
-    const ring_material = new THREE.MeshBasicMaterial({
+    const uniforms = THREE.UniformsUtils.merge([
+      THREE.UniformsLib.ambient,
+      THREE.UniformsLib.lights,
+      THREE.UniformsLib.shadowmap,
+      {
+        ringTexture: { value: texture },
+        innerRadius: { value: 1.3 },
+        outerRadius: { value: 2.0 },
+        lightPosition: { value: new THREE.Vector3(0, 0, 0) },
+      },
+    ]);
+    const ring_material = new THREE.MeshPhongMaterial({
       map: texture,
-      color: 0xffffff,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 1,
     });
+
     const geometry = new THREE.RingBufferGeometry(1.3, 2, 64);
     var pos = geometry.attributes.position;
     var v3 = new THREE.Vector3();
@@ -57,7 +67,7 @@ export default class Saturn {
       this.y_distance,
       this.radius * Math.cos(this.theta)
     );
-    this.mesh.rotateX(-0.5 * Math.PI);
+    this.mesh.rotateX(-0.4 * Math.PI);
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
 

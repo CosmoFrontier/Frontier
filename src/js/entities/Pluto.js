@@ -1,47 +1,41 @@
 import * as THREE from "three";
-export default class Earth {
+
+export default class Pluto {
   constructor(scene, camera, renderer, data) {
+    this.name = "pluto";
     this.scene = scene;
     this.camera = camera;
     this.renderer = renderer;
     this.data = data;
     this.radius = 500 * this.data.data[0].radius;
     this.theeta = this.data.data[0].angular_distance;
-    this.inclination = 0;
-    this.name = "earth";
+    this.inclination = 17.16 * (Math.PI / 180); // get inclination froom https://nssdc.gsfc.nasa.gov/planetary/factsheet/ (orbital inclination)
+    this.y_distance =
+      this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
-    this.color = 0x3f5d98;
+    this.color = 0xa3a3a3;
   }
+
   get zaxis() {
-    return 1;
+    return 0.12;
   }
+
   init() {
-    const EarthGeometry = new THREE.SphereGeometry(10 / 54, 32, 32);
+    const MarsGeometry = new THREE.SphereGeometry(10 / 585.996802154, 32, 32);
     const material = new THREE.MeshPhongMaterial({
-      color: 0x48659f,
-      map: new THREE.TextureLoader().load("assets/earth_main.jpg"),
+      map: new THREE.TextureLoader().load("assets/pluto_main.jpg"),
+      shininess: 0,
     });
-    this.earthSphere = new THREE.Mesh(EarthGeometry, material);
-    this.earthSphere.position.set(
+    this.plutoSphere = new THREE.Mesh(MarsGeometry, material);
+    this.plutoSphere.rotateY(Math.PI);
+    this.plutoSphere.position.set(
       Math.sin(this.theeta) * this.radius,
-      0,
+      this.y_distance,
       this.radius * Math.cos(this.theeta)
     );
 
-    const cloudGeometry = new THREE.SphereGeometry(10 / 54 + 0.001, 32, 32);
-    const cloudMaterial = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load("assets/cloud_map_earth.png"),
-      transparent: true,
-    });
-    const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
-    this.earthSphere.add(cloudSphere);
-    this.earthSphere.rotation.x = 23.43643 * (Math.PI / 180);
-    this.scenes.push(this.earthSphere);
+    this.scenes.push(this.plutoSphere);
     this.drawTrail();
-  }
-  removeTrail() {
-    var trail = this.scene.getObjectByName(this.trail.name);
-    this.scene.remove(trail);
   }
   drawTrail() {
     const ellipse = new THREE.EllipseCurve(
@@ -54,18 +48,19 @@ export default class Earth {
       false,
       0
     );
+
     const points = ellipse.getPoints(50);
 
     for (let i = 0; i < points.length; i++) {
       points[i] = new THREE.Vector3(points[i].x, 0, points[i].y);
     }
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
+    // make a gradient line
     const colors = [];
 
-    const initialColor = 0x3f5d98;
+    const initialColor = 0xa3a3a3;
+    var color = new THREE.Color(initialColor);
     for (let i = 0; i < geometry.attributes.position.count; i++) {
-      var color = new THREE.Color(initialColor);
       color.r = color.r - (color.r / geometry.attributes.position.count) * i;
       color.g = color.g - (color.g / geometry.attributes.position.count) * i;
       color.b = color.b - (color.b / geometry.attributes.position.count) * i;
@@ -80,10 +75,15 @@ export default class Earth {
       transparent: true,
     });
     const line = new THREE.Line(geometry, Linematerial);
-    line.name = "earthTrail";
     line.rotateX(-this.inclination);
+    line.name = "plutoTrail";
     this.trail = line;
+
     this.scene.add(line);
+  }
+  removeTrail() {
+    var trail = this.scene.getObjectByName(this.trail.name);
+    this.scene.remove(trail);
   }
   mount() {
     this.scenes.forEach((scene) => this.scene.add(scene));
@@ -96,8 +96,5 @@ export default class Earth {
     new Date().getUTCMinutes() * 60 +
     new Date().getUTCSeconds();
 
-  render() {
-    this.earthSphere.rotation.y =
-      -80 * (Math.PI / 180) + this.seconds() * ((2 * Math.PI) / (24 * 3600));
-  }
+  render() {}
 }

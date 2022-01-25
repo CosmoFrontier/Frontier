@@ -22,6 +22,7 @@ export default class Venus {
     const VenusGeometry = new THREE.SphereGeometry(10 / 115.06, 32, 32);
     const material = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/venus_main.jpg"),
+      shininess: 0,
     });
     this.venusSphere = new THREE.Mesh(VenusGeometry, material);
     this.venusSphere.rotation.y = -90 * (Math.PI / 180);
