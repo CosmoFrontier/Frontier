@@ -237,7 +237,7 @@ export default class PlanetCanvas {
       this.scene.add(meshBackground);
     });
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.05);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.07);
     this.scene.add(ambientLight);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
