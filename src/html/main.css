@@ -32,6 +32,13 @@ canvas {
 .label-text {
   line-height: 10px;
 }
+
+@keyframes loader-main {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .label-ring {
   z-index: 3;
   background-color: transparent;
@@ -61,4 +68,50 @@ canvas {
   font-size: 1.7rem;
   font-weight: bold;
   color: white;
+}
+.page {
+  display: none;
+  padding: 0 0.5em;
+}
+body {
+  background-color: black;
+  /* background-size: 100%;
+  background-image: url("assets/load.gif");
+  background-repeat: no-repeat;
+  background-position: center; */
+}
+
+#loading {
+  position: fixed;
+  z-index: 100;
+  text-align: center;
+  font-family: Orbitron, sans-serif;
+  font-weight: 500;
+  font-size: 12rem;
+  line-height: 132px;
+  animation: lol 6s infinite;
+  letter-spacing: 0.28em;
+  background-image: linear-gradient(
+    180deg,
+    #ffffff 35.94%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+}
+@keyframes lol {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
