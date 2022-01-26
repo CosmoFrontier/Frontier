@@ -58,15 +58,16 @@ canvas {
   left: 50%;
   transform: translateX(-50%);
   user-select: none;
+  font-family: 'Exo', sans-serif;
 }
 .date-time .date {
   font-size: 1rem;
   color: rgba(232, 235, 235, 0.74);
-  font-weight: bold;
+
 }
 .date-time .time {
   font-size: 1.7rem;
-  font-weight: bold;
+  font-family: 'Exo', sans-serif;
   color: white;
 }
 .page {
