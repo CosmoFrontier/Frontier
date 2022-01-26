@@ -67,6 +67,7 @@ export default class PlanetCanvas {
     if (!mounted) {
       this.planet.mount();
     }
+
     this.AUTOMOVE = true;
     this.controls.autoRotate = true;
     planet.removeTrail();
@@ -207,8 +208,8 @@ export default class PlanetCanvas {
         requestAnimationFrame(animate);
       });
     });
-  
-    this.focusPlanet(venus);
+
+    this.focusPlanet(saturn);
   }
   async fetchData() {
     try {

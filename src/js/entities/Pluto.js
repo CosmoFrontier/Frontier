@@ -22,13 +22,14 @@ export default class Pluto {
   }
 
   init() {
-    const MarsGeometry = new THREE.SphereGeometry(10 / 585.996802154, 32, 32);
+    const PlutoGeometry = new THREE.SphereGeometry(10 / 585.996802154, 32, 32);
     const material = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/pluto_main.jpg"),
       shininess: 0,
     });
-    this.plutoSphere = new THREE.Mesh(MarsGeometry, material);
+    this.plutoSphere = new THREE.Mesh(PlutoGeometry, material);
     this.plutoSphere.rotateX(this.tilt * (Math.PI / 180));
+    this.plutoSphere.rotateY(Math.PI * 1.7);
     this.plutoSphere.position.set(
       Math.sin(this.theeta) * this.radius,
       this.y_distance,
