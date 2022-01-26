@@ -8,6 +8,7 @@ export default class Mars {
     this.renderer = renderer;
     this.data = data;
     this.radius = 500 * this.data.data[0].radius;
+    this.tilt = this.data.tilt;
     this.theeta = this.data.data[0].angular_distance;
     this.inclination = 1.8 * (Math.PI / 180); // get inclination froom https://nssdc.gsfc.nasa.gov/planetary/factsheet/ (orbital inclination)
     this.y_distance =
@@ -26,7 +27,7 @@ export default class Mars {
       map: new THREE.TextureLoader().load("assets/mars_main.jpg"),
     });
     this.marsSphere = new THREE.Mesh(MarsGeometry, material);
-    this.marsSphere.rotation.y = -90 * (Math.PI / 180);
+    this.marsSphere.rotateX(this.tilt * (Math.PI / 180));
     this.marsSphere.position.set(
       Math.sin(this.theeta) * this.radius,
       this.y_distance,

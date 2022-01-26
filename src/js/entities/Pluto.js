@@ -10,6 +10,7 @@ export default class Pluto {
     this.radius = 500 * this.data.data[0].radius;
     this.theeta = this.data.data[0].angular_distance;
     this.inclination = 17.16 * (Math.PI / 180); // get inclination froom https://nssdc.gsfc.nasa.gov/planetary/factsheet/ (orbital inclination)
+    this.tilt = this.data.tilt;
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
@@ -27,7 +28,7 @@ export default class Pluto {
       shininess: 0,
     });
     this.plutoSphere = new THREE.Mesh(MarsGeometry, material);
-    this.plutoSphere.rotateY(Math.PI);
+    this.plutoSphere.rotateX(this.tilt * (Math.PI / 180));
     this.plutoSphere.position.set(
       Math.sin(this.theeta) * this.radius,
       this.y_distance,

@@ -12,6 +12,7 @@ export default class Saturn {
     this.radius = 500 * this.data.data[0].radius;
     this.theta = this.data.data[0].angular_distance;
     this.inclination = 2.5 * (Math.PI / 180);
+    this.tilt = this.data.tilt;
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
@@ -27,6 +28,7 @@ export default class Saturn {
       shininess: 0,
     });
     this.saturnSphere = new THREE.Mesh(SaturnGeometry, material);
+    this.saturnSphere.rotateX(this.tilt * (Math.PI / 180));
     this.saturnSphere.position.set(
       Math.sin(this.theta) * this.radius,
       this.y_distance,

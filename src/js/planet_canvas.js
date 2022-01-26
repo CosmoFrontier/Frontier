@@ -208,7 +208,7 @@ export default class PlanetCanvas {
       });
     });
   
-    this.focusPlanet(mars);
+    this.focusPlanet(venus);
   }
   async fetchData() {
     try {

@@ -9,6 +9,7 @@ export default class Jupiter {
     this.data = data;
     this.radius = 500 * this.data.data[0].radius;
     this.theta = this.data.data[0].angular_distance;
+    this.tilt = this.data.tilt;
     this.inclination = 1.304 * (Math.PI / 180);
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
@@ -24,6 +25,7 @@ export default class Jupiter {
       map: new THREE.TextureLoader().load("assets/jupiter_main.jpg"),
     });
     this.jupiterSphere = new THREE.Mesh(JupiterGeometry, material);
+    this.jupiterSphere.rotateX(this.tilt * (Math.PI / 180)); 
     this.jupiterSphere.position.set(
       Math.sin(this.theta) * this.radius,
       this.y_distance,

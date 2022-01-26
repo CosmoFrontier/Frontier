@@ -10,6 +10,7 @@ export default class Venus {
     this.radius = 500 * this.data.data[0].radius;
     this.theta = this.data.data[0].angular_distance;
     this.inclination = 3.4 * (Math.PI / 180);
+    this.tilt = this.data.tilt;
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
@@ -25,7 +26,7 @@ export default class Venus {
       shininess: 0,
     });
     this.venusSphere = new THREE.Mesh(VenusGeometry, material);
-    this.venusSphere.rotation.y = -90 * (Math.PI / 180);
+    this.venusSphere.rotateX(this.tilt * (Math.PI / 180));
     this.venusSphere.position.set(
       Math.sin(this.theta) * this.radius,
       this.y_distance,

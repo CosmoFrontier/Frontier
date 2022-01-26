@@ -10,6 +10,7 @@ export default class Mercury {
     this.radius = 500 * this.data.data[0].radius;
     this.theta = this.data.data[0].angular_distance;
     this.inclination = 7 * (Math.PI / 180);
+    this.tilt = this.data.tilt;
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
@@ -24,7 +25,7 @@ export default class Mercury {
       map: new THREE.TextureLoader().load("assets/mercury_main.jpeg"),
     });
     this.mercurySphere = new THREE.Mesh(MercuryGeometry, material);
-    this.mercurySphere.position.y = -90 * (Math.PI / 180);
+    this.mercurySphere.rotateX(this.tilt * (Math.PI / 180));
     this.mercurySphere.position.set(
       Math.sin(this.theta) * this.radius,
       this.y_distance,
@@ -51,6 +52,7 @@ export default class Mercury {
       points[i] = new THREE.Vector3(points[i].x, 0, points[i].y);
     }
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
 
     const colors = [];
     const initialColor = 0xd5d2d1;

@@ -10,6 +10,7 @@ export default class Uranus {
     this.radius = 500 * this.data.data[0].radius;
     this.theta = this.data.data[0].angular_distance;
     this.inclination = 0.8 * (Math.PI / 180);
+    this.tilt = this.data.tilt;
     this.y_distance =
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
@@ -24,6 +25,7 @@ export default class Uranus {
       map: new THREE.TextureLoader().load("assets/uranus_main.jpg"),
     });
     this.uranusSphere = new THREE.Mesh(UranusGeometry, material);
+    this.uranusSphere.rotateX(this.tilt * (Math.PI / 180));
 
     this.uranusSphere.position.set(
       Math.sin(this.theta) * this.radius,

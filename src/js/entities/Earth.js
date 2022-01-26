@@ -8,6 +8,7 @@ export default class Earth {
     this.radius = 500 * this.data.data[0].radius;
     this.theeta = this.data.data[0].angular_distance;
     this.inclination = 0;
+    this.tilt = this.data.tilt;
     this.name = "earth";
     this.scenes = [];
     this.color = 0x3f5d98;
@@ -35,7 +36,7 @@ export default class Earth {
     });
     const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
     this.earthSphere.add(cloudSphere);
-    this.earthSphere.rotation.x = 23.43643 * (Math.PI / 180);
+    this.earthSphere.rotateX(this.tilt * (Math.PI / 180));
     this.scenes.push(this.earthSphere);
     this.drawTrail();
   }
