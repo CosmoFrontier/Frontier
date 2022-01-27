@@ -15,6 +15,7 @@ export default class Venus {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
     this.color = 0x8b7d82;
+    this.symbol = "♀";
   }
   get zaxis() {
     return 0.7;

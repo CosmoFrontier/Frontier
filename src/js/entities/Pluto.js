@@ -15,6 +15,7 @@ export default class Pluto {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
     this.color = 0xa3a3a3;
+    this.symbol = "⯓";
   }
 
   get zaxis() {

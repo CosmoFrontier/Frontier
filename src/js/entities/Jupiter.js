@@ -15,6 +15,7 @@ export default class Jupiter {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
     this.color = 0xbcafb2;
+    this.symbol = "♃";
   }
   get zaxis() {
     return 5;

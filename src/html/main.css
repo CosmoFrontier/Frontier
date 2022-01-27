@@ -41,6 +41,22 @@ canvas {
   left: 10px;
   z-index: 5;
 }
+#travel_stats {
+  z-index: 6;
+  font-family: "Exo", sans-serif;
+  font-size: 1.5rem;
+  position: relative;
+  top: 10px;
+  opacity: 0;
+  font-weight: 500;
+  transition: opacity 0.2s ease-in-out;
+}
+#travel_stats.is-visible {
+  opacity: 1;
+}
+#travel_stats .bold-text {
+  font-weight: bold;
+}
 .label-ring {
   z-index: 3;
   background-color: transparent;
@@ -51,7 +67,7 @@ canvas {
 }
 .date-time {
   position: absolute;
-  top: 10%;
+  top: 5%;
   z-index: 2;
   text-align: center;
   height: fit-content;

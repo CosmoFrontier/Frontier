@@ -15,6 +15,7 @@ export default class Mars {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
     this.color = 0xb87f5f;
+    this.symbol = "♂";
   }
 
   get zaxis() {

@@ -12,6 +12,7 @@ export default class Earth {
     this.name = "earth";
     this.scenes = [];
     this.color = 0x3f5d98;
+    this.symbol = "🜨";
   }
   get zaxis() {
     return 1;
