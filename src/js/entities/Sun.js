@@ -22,6 +22,8 @@ export default class SUN {
     this.camera = camera;
     this.renderer = renderer;
     this.composer = new EffectComposer(renderer);
+    this.symbol = "☉";
+    this.color = 0xfff93e;
   }
   get zaxis() {
     return 1000;
