@@ -12,6 +12,7 @@ import Uranus from "./entities/Uranus";
 import Neptune from "./entities/Neptune";
 import Pluto from "./entities/Pluto";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import moment from "moment";
 
 export default class PlanetCanvas {
   constructor() {
@@ -74,13 +75,28 @@ export default class PlanetCanvas {
           content.querySelector(".planet_name").textContent =
             planet.name[0].toUpperCase() + planet.name.slice(1);
           content.querySelector(".planet_image").src = data.cover;
-          content.querySelector(".planet_type span").textContent = data.table.type;
+          content.querySelector(".planet_type span").textContent =
+            data.table.type;
           content
             .querySelector(`[data-label="rev_time"]`)
             .querySelector(".num").textContent = data.table.year.value;
           content
             .querySelector(`[data-label="rev_time"]`)
             .querySelector(".info").textContent = data.table.year.suffix;
+
+          content
+            .querySelector(`[data-label="sun_distance"]`)
+            .querySelector(".num").textContent = planet.radius.toFixed(2);
+
+          var totalsec = (
+            (planet.radius * 149597871 * 1000) /
+            (3 * Math.pow(10, 8) * 500)
+          ).toFixed(2);
+          content
+            .querySelector(`[data-label="time_to_sun"]`)
+            .querySelector(".num").textContent = moment
+            .utc(totalsec * 1000)
+            .format("HH:mm:ss");
           content
             .querySelector(`[data-label="moons_count"]`)
             .querySelector(".num").textContent = data.table.moons;

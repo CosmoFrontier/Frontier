@@ -194,6 +194,17 @@ body {
 .content .loader.is-visible {
   display: block;
 }
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 10px;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -208,6 +219,7 @@ body {
   font-family: Exo, Helvetica, Arial, sans-serif;
   height: 100%;
   position: absolute;
+  overflow-y: scroll;
   z-index: 3;
   height: 70%;
   top: 10%;
@@ -226,6 +238,7 @@ body {
 .planet_type {
   padding: 1rem;
   font-weight: bold;
+  
 }
 
 .planet_image {
@@ -260,6 +273,8 @@ body {
 }
 .planet_data {
   display: grid;
+  margin: 0.7rem;
+  text-transform: uppercase;
 
   border-bottom: 1px solid white;
 }
