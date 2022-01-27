@@ -57,6 +57,39 @@ export default class PlanetCanvas {
       this.planet.drawTrail();
       this.planet.unmount();
     }
+    if (planet.name != "sun") {
+      document
+        .querySelector(":root")
+        .style.setProperty("--content-color", "#" + planet.color.toString(16));
+      const content = document.querySelector(".content");
+      if (content.classList.contains("is-not-visible")) {
+        content.classList.remove("is-not-visible");
+      }
+      content.querySelector(".content-wrap").classList.add("is-not-visible");
+      content.querySelector(".loader").classList.add("is-visible");
+      fetch("https://ssd-abh80.vercel.app/planet/" + planet.name.toLowerCase())
+        .then((x) => x.json())
+        .then((data) => {
+          content.querySelector(".planet_desc").textContent = data.description;
+          content.querySelector(".planet_name").textContent =
+            planet.name[0].toUpperCase() + planet.name.slice(1);
+          content.querySelector(".planet_image").src = data.cover;
+          content.querySelector(".planet_type").textContent = data.type;
+          content
+            .querySelector(`[data-label="rev_time"]`)
+            .querySelector(".num").textContent = data.table.year.value;
+          content
+            .querySelector(`[data-label="rev_time"]`)
+            .querySelector(".info").textContent = data.table.year.suffix;
+          content
+            .querySelector(`[data-label="moons_count"]`)
+            .querySelector(".num").textContent = data.table.moons;
+          content.querySelector(".loader").classList.remove("is-visible");
+          content
+            .querySelector(".content-wrap")
+            .classList.remove("is-not-visible");
+        });
+    }
     this.setFocus(
       planet[planet.name.toLowerCase() + "Sphere"].position.x,
       planet[planet.name.toLowerCase() + "Sphere"].position.y,

@@ -12,16 +12,15 @@ const wait = (delay = 0) =>
 // setVisible(".page", false);
 // setVisible("#loading", true);
 
-
 document.addEventListener("DOMContentLoaded", () =>
-wait(2000).then(()=>{
-  const canvas = new PlanetCanvas();
-  canvas.fetchData();
-
-}
-));
-
-
+  wait(2000).then(() => {
+    const canvas = new PlanetCanvas();
+    canvas.fetchData();
+    document.querySelector(".close-svg").addEventListener("click", () => {
+      document.querySelector(".content").classList.add("is-not-visible");
+    });
+  })
+);
 
 // document.addEventListener("DOMContentLoaded", () =>
 //   wait(4000).then(() => {
