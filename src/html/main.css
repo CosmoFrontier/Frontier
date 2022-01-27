@@ -291,6 +291,8 @@ body {
   max-height: 200px;
   text-align: center;
   height: 200px;
+  background-size: cover;
+  background-position: center;
 }
 .other_data .num {
   font-size: 2rem;
