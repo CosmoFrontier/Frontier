@@ -33,7 +33,14 @@ canvas {
   line-height: 10px;
   font-family: "Roboto", sans-serif;
 }
-
+.logo {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+}
 .label-ring {
   z-index: 3;
   background-color: transparent;
@@ -53,16 +60,15 @@ canvas {
   left: 50%;
   transform: translateX(-50%);
   user-select: none;
-  font-family: 'Exo', sans-serif;
+  font-family: "Exo", sans-serif;
 }
 .date-time .date {
   font-size: 1rem;
   color: rgba(232, 235, 235, 0.74);
-
 }
 .date-time .time {
   font-size: 1.7rem;
-  font-family: 'Exo', sans-serif;
+  font-family: "Exo", sans-serif;
   color: white;
 }
 .page {

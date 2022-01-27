@@ -41,7 +41,7 @@ export default class PlanetCanvas {
     global.stats = new Stats();
     global.stats.showPanel(0);
 
-    document.body.appendChild(stats.domElement);
+    //document.body.appendChild(stats.domElement);
   }
   setFocus(x, y, z, zaxis) {
     this.focusAt = new THREE.Vector3(x, y, z);
