@@ -271,10 +271,12 @@ body {
   font-size: 2rem;
   padding-bottom: 0.5rem;
 }
+
 .planet_data {
   display: grid;
   margin: 0.7rem;
   text-transform: uppercase;
+ 
 
   border-bottom: 1px solid white;
 }

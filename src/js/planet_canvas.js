@@ -86,7 +86,7 @@ export default class PlanetCanvas {
 
           content
             .querySelector(`[data-label="sun_distance"]`)
-            .querySelector(".num").textContent = Math.ceil((planet.radius/500));
+            .querySelector(".num").textContent = Math.ceil(planet.radius / 500);
 
           var totalsec = (
             (planet.radius * 149597871 * 1000) /
@@ -100,6 +100,10 @@ export default class PlanetCanvas {
           content
             .querySelector(`[data-label="moons_count"]`)
             .querySelector(".num").textContent = data.table.moons;
+
+          content
+            .querySelector(`[data-label="name_sake"]`)
+            .querySelector(".num").textContent = data.table.namesake;
           content.querySelector(".loader").classList.remove("is-visible");
           content
             .querySelector(".content-wrap")
