@@ -63,11 +63,14 @@ export default class PlanetCanvas {
         .querySelector(":root")
         .style.setProperty("--content-color", "#" + planet.color.toString(16));
       const content = document.querySelector(".content");
+      document.querySelector(".bring-content-back").style.display = "none";
       if (content.classList.contains("is-not-visible")) {
         content.classList.remove("is-not-visible");
       }
+
       content.querySelector(".content-wrap").classList.add("is-not-visible");
       content.querySelector(".loader").classList.add("is-visible");
+
       fetch("https://ssd-abh80.vercel.app/planet/" + planet.name.toLowerCase())
         .then((x) => x.json())
         .then((data) => {

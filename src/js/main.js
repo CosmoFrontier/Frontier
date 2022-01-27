@@ -16,8 +16,15 @@ document.addEventListener("DOMContentLoaded", () =>
   wait(2000).then(() => {
     const canvas = new PlanetCanvas();
     canvas.fetchData();
+    document
+      .querySelector(".bring-content-back")
+      .addEventListener("click", () => {
+        document.querySelector(".content").classList.remove("is-not-visible");
+        document.querySelector(".bring-content-back").style.display = "none";
+      });
     document.querySelector(".close-svg").addEventListener("click", () => {
       document.querySelector(".content").classList.add("is-not-visible");
+      document.querySelector(".bring-content-back").style.display = "block";
     });
   })
 );
