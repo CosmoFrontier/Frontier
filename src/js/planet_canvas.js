@@ -74,7 +74,7 @@ export default class PlanetCanvas {
           content.querySelector(".planet_name").textContent =
             planet.name[0].toUpperCase() + planet.name.slice(1);
           content.querySelector(".planet_image").src = data.cover;
-          content.querySelector(".planet_type").textContent = data.type;
+          content.querySelector(".planet_type span").textContent = data.table.type;
           content
             .querySelector(`[data-label="rev_time"]`)
             .querySelector(".num").textContent = data.table.year.value;
