@@ -267,7 +267,7 @@ body {
 }
 .other_data .num .unit {
   color: white;
-  font-size: 16px;
+  font-size: 12px;
   top: -15%;
   position: relative;
   margin-left: 5px;
@@ -287,9 +287,10 @@ body {
 .content .planet_image {
   margin-left: 1rem;
   margin-right: 1rem;
-  width: 100%;
+  width: calc(100% - 2rem);
   max-height: 200px;
   text-align: center;
+  height: 200px;
 }
 .other_data .num {
   font-size: 2rem;

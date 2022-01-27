@@ -77,7 +77,7 @@ export default class PlanetCanvas {
           content.querySelector(".planet_desc").textContent = data.description;
           content.querySelector(".planet_name").textContent =
             planet.name[0].toUpperCase() + planet.name.slice(1);
-          content.querySelector(".planet_image").src = data.cover;
+          content.querySelector(".planet_image").style.backgroundImage = `url(${data.cover})`;
           content.querySelector(".planet_type span").textContent =
             data.table.type;
           content
