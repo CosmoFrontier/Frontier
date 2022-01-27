@@ -79,14 +79,14 @@ export default class PlanetCanvas {
             data.table.type;
           content
             .querySelector(`[data-label="rev_time"]`)
-            .querySelector(".num").textContent = data.table.year.value;
-          content
-            .querySelector(`[data-label="rev_time"]`)
-            .querySelector(".info").textContent = data.table.year.suffix;
+            .querySelector(".num").innerHTML =
+            data.table.year.value +
+            `<span class="unit"> ${data.table.year.suffix}</span>`;
 
           content
             .querySelector(`[data-label="sun_distance"]`)
-            .querySelector(".num").textContent = Math.ceil(planet.radius / 500);
+            .querySelector(".num").innerHTML =
+            Math.ceil(planet.radius / 500) + '<span class="unit"> AU</span>';
 
           var totalsec = (
             (planet.radius * 149597871 * 1000) /

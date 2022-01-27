@@ -220,6 +220,7 @@ body {
   height: 100%;
   position: absolute;
   overflow-y: scroll;
+  overflow-x: hidden;
   z-index: 3;
   height: 70%;
   top: 10%;
@@ -227,6 +228,7 @@ body {
   border: 0.5px #333333 solid;
   padding-bottom: 50px;
   min-width: 500px;
+  max-width: 500px;
 }
 .content h1 {
   margin-left: 1rem;
@@ -238,7 +240,6 @@ body {
 .planet_type {
   padding: 1rem;
   font-weight: bold;
-  
 }
 
 .planet_image {
@@ -254,15 +255,22 @@ body {
   margin: 1.5rem;
   text-align: justify;
 }
-
+.other_data .num .unit {
+  color: white;
+  font-size: 16px;
+  top: -15%;
+  position: relative;
+  margin-left: 5px;
+  font-weight: 500;
+}
 .other_data {
   margin-top: 3rem;
   margin-bottom: 2em;
-  margin-left: 2vw;
-  margin-right: 2vw;
-  width: calc(100% - 2vw * 2);
+  margin-left: 1em;
+  margin-right: 1em;
+  width: calc(100% - 2em);
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 0.5fr 0.5fr;
   grid-template-rows: auto auto auto auto;
   gap: 0.6em 0.9em;
 }
@@ -270,16 +278,16 @@ body {
 .other_data .num {
   font-size: 2rem;
   padding-bottom: 0.5rem;
+  font-weight: bold;
 }
 
 .planet_data {
   display: grid;
   margin: 0.7rem;
   text-transform: uppercase;
- 
 
   border-bottom: 1px solid white;
 }
 .num {
-  color : var(--content-color);
+  color: var(--content-color);
 }
