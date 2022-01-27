@@ -15,6 +15,7 @@ export default class Mercury {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
     this.color = 0xd5d2d1;
+    this.symbol = "☿";
   }
   get zaxis() {
     return 0.2;
@@ -52,7 +53,6 @@ export default class Mercury {
       points[i] = new THREE.Vector3(points[i].x, 0, points[i].y);
     }
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
 
     const colors = [];
     const initialColor = 0xd5d2d1;

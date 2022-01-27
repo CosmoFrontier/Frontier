@@ -49,9 +49,10 @@ export default class PlanetCanvas {
     this.camera.position.set(x, y, z - zaxis);
     this.controls.target.set(x, y, z);
     this.controls.update();
+    console.log("focusing", this.focusAt);
   }
   focusPlanet(planet, mounted) {
-    if (this.planet) {
+    if (this.planet && this.planet.name != "sun") {
       this.planet.elem.style.display = "flex";
       this.planet.drawTrail();
       this.planet.unmount();
@@ -63,14 +64,16 @@ export default class PlanetCanvas {
       planet.zaxis
     );
     this.planet = planet;
-    this.planet.elem.style.display = "none";
-    if (!mounted) {
+    if (this.planet.name != "sun") {
+      this.planet.elem.style.display = "none";
+    }
+    if (!mounted && this.planet.name != "sun") {
       this.planet.mount();
     }
 
     this.AUTOMOVE = true;
     this.controls.autoRotate = true;
-    planet.removeTrail();
+    if (this.planet.name != "sun") planet.removeTrail();
   }
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
@@ -184,6 +187,15 @@ export default class PlanetCanvas {
       document.body.appendChild(x.elem);
 
       x.elem.addEventListener("click", () => {
+        const travel_stats = document.querySelector("#travel_stats");
+        travel_stats.innerHTML =
+          `${x.symbol} Traveling to <span class="bold-text" style="color:${
+            "#" + x.color.toString(16)
+          };">` +
+          x.name[0].toUpperCase() +
+          x.name.slice(1) +
+          "</span>";
+        travel_stats.classList.add("is-visible");
         var camPos = this.camera.position;
         var initCampos = camPos.clone();
         var target = x[x.name.toLowerCase() + "Sphere"].position;
@@ -195,6 +207,9 @@ export default class PlanetCanvas {
           if (distance_in_percentage_from_init > 0.8) {
             this.focusPlanet(x, true);
             this.controls.enabled = true;
+            setTimeout(() => {
+              travel_stats.classList.remove("is-visible");
+            }, 1000);
             return;
           }
           camPos.x += (target.x - camPos.x) * 0.03;
@@ -209,7 +224,7 @@ export default class PlanetCanvas {
       });
     });
 
-    this.focusPlanet(mars);
+    this.focusPlanet(sun);
   }
   async fetchData() {
     try {
@@ -267,7 +282,7 @@ export default class PlanetCanvas {
 
   render() {
     requestAnimationFrame(this.render.bind(this));
-    this.planet.render();
+    if (this.planet.name != "sun") this.planet.render();
     this.sun.render();
 
     this.entities.forEach((vx) => {

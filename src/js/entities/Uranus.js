@@ -15,6 +15,7 @@ export default class Uranus {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
     this.color = 0x4fd0e7;
+    this.symbol = "⛢";
   }
   get zaxis() {
     return 1.5;

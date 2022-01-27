@@ -42,6 +42,22 @@ canvas {
   left: 10px;
   z-index: 5;
 }
+#travel_stats {
+  z-index: 6;
+  font-family: "Exo", sans-serif;
+  font-size: 1.5rem;
+  position: relative;
+  top: 10px;
+  opacity: 0;
+  font-weight: 500;
+  transition: opacity 0.2s ease-in-out;
+}
+#travel_stats.is-visible {
+  opacity: 1;
+}
+#travel_stats .bold-text {
+  font-weight: bold;
+}
 .label-ring {
   z-index: 3;
   background-color: transparent;
@@ -52,7 +68,7 @@ canvas {
 }
 .date-time {
   position: absolute;
-  top: 10%;
+  top: 5%;
   z-index: 2;
   text-align: center;
   height: fit-content;
@@ -148,23 +164,25 @@ body {
 }
 
 .planet_desc{
-  padding: 0.5rem;
-  max-width: 375px;
+  max-width: 460px;
   line-height: 1.4em;
   word-wrap: break-word;
+  margin: 1.5rem;
+  text-align: justify;
 }
 
 .other_data{
-  margin-top: 1em;
-    margin-bottom: 1em;
+  margin-top: 3rem;
+    margin-bottom: 2em;
     margin-left: 2vw;
     margin-right: 2vw;
     width: calc(100% - 2vw*2);
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto auto auto;
-    gap: 1em 1.2em;
+    gap: 0.6em 0.9em;
 }
+
 
 .other_data .num{
   font-size: 2rem;
@@ -172,5 +190,6 @@ body {
 }
 .planet_data{
   display: grid;
+  border-bottom: 2px solid white;
 
 }

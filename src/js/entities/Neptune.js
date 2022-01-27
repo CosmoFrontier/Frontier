@@ -14,6 +14,7 @@ export default class Neptune {
       this.radius * Math.sin(this.data.data[0].inclination * (Math.PI / 180));
     this.scenes = [];
     this.color = 0x73acac;
+    this.symbol = "♆";
   }
   get zaxis() {
     return 1.5;

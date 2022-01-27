@@ -18,9 +18,13 @@ import {
 export default class SUN {
   constructor(scene, camera, renderer) {
     this.scene = scene;
+    this.name = "sun";
     this.camera = camera;
     this.renderer = renderer;
     this.composer = new EffectComposer(renderer);
+  }
+  get zaxis() {
+    return 1000;
   }
   init() {
     const SunGeometry = new THREE.SphereGeometry(10, 32, 32);
@@ -77,7 +81,7 @@ export default class SUN {
     focuslight.add(sunSphere);
 
     this.scene.add(focuslight);
-
+    this.sunSphere = sunSphere;
     this.composer.render(this.scene, this.camera);
   }
 
