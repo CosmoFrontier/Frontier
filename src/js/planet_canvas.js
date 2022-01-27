@@ -86,7 +86,7 @@ export default class PlanetCanvas {
 
           content
             .querySelector(`[data-label="sun_distance"]`)
-            .querySelector(".num").textContent = planet.radius.toFixed(2);
+            .querySelector(".num").textContent = Math.ceil((planet.radius/500));
 
           var totalsec = (
             (planet.radius * 149597871 * 1000) /
