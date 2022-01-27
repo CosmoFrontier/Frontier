@@ -209,7 +209,7 @@ export default class PlanetCanvas {
       });
     });
 
-    this.focusPlanet(saturn);
+    this.focusPlanet(mars);
   }
   async fetchData() {
     try {
