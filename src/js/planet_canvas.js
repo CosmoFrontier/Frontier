@@ -225,6 +225,16 @@ export default class PlanetCanvas {
     });
 
     this.focusPlanet(sun);
+    document.querySelector("#travel_stats").innerHTML =
+      `${this.sun.symbol} Welcome to <span class="bold-text" style="color:${
+        "#" + this.sun.color.toString(16)
+      };">` +
+      "Solar System" +
+      "</span>";
+    document.querySelector("#travel_stats").classList.add("is-visible");
+    setTimeout(() => {
+      document.querySelector("#travel_stats").classList.remove("is-visible");
+    }, 5000);
   }
   async fetchData() {
     try {

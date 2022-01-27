@@ -65,6 +65,22 @@ canvas {
   height: 12px;
   border: 1px solid;
 }
+.footer {
+  position: absolute;
+  bottom: 10px;
+  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  color: #ffffff8a;
+  left: 10px;
+  letter-spacing: 1px;
+  z-index: 4;
+  font-weight: 500;
+}
+.footer .bold-t {
+  font-weight: bold;
+  font-size: 15px;
+  text-transform: uppercase;
+}
 .date-time {
   position: absolute;
   top: 5%;
@@ -81,11 +97,14 @@ canvas {
 .date-time .date {
   font-size: 1rem;
   color: rgba(232, 235, 235, 0.74);
+  margin-bottom: 10px;
+  font-weight: 500;
 }
 .date-time .time {
   font-size: 1.7rem;
   font-family: "Exo", sans-serif;
   color: white;
+  font-weight: 600;
 }
 .page {
   display: none;
