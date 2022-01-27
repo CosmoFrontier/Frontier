@@ -242,12 +242,6 @@ body {
   font-weight: bold;
 }
 
-.planet_image {
-  max-width: 375px;
-  max-height: 200px;
-  text-align: center;
-}
-
 .planet_desc {
   max-width: 460px;
   line-height: 1.4em;
@@ -274,7 +268,13 @@ body {
   grid-template-rows: auto auto auto auto;
   gap: 0.6em 0.9em;
 }
-
+.content .planet_image {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width: 100%;
+  max-height: 200px;
+  text-align: center;
+}
 .other_data .num {
   font-size: 2rem;
   padding-bottom: 0.5rem;
