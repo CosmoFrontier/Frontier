@@ -30,6 +30,19 @@ export default class Earth {
       this.radius * Math.cos(this.theeta)
     );
 
+    const moonGeometry = new THREE.SphereGeometry(20 / 3.74, 32,32);
+    const moon_material = new THREE.MeshPhongMaterial({
+      color:0xF7EAC6,
+      map: new THREE.TextureLoader().load("assets/moon_texture.jpg"),
+
+    });
+
+    this.moonSphere = new THREE.Mesh(moonGeometry, moon_material);
+    this.moonSphere.position.set(
+      Math.sin(this.theeta) * this.radius,
+      0, this.radius * Math.cos(this.theeta)
+    );
+
     const cloudGeometry = new THREE.SphereGeometry(10 / 54 + 0.001, 32, 32);
     const cloudMaterial = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/cloud_map_earth.png"),
@@ -38,7 +51,7 @@ export default class Earth {
     const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
     this.earthSphere.add(cloudSphere);
     this.earthSphere.rotateX(this.tilt * (Math.PI / 180));
-    this.scenes.push(this.earthSphere);
+    this.scenes.push(this.earthSphere, this.moonSphere);
     this.drawTrail();
   }
   removeTrail() {
