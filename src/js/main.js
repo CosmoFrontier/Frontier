@@ -26,6 +26,15 @@ document.addEventListener("DOMContentLoaded", () =>
       document.querySelector(".content").classList.add("is-not-visible");
       document.querySelector(".bring-content-back").style.display = "block";
     });
+    document.body.onclick = (e) => {
+      // get elment
+      const el = e.target;
+
+      if (!el.classList.contains("search-bar")) {
+        document.querySelector(".search-bar input").value = "";
+        document.querySelector(".search-bar .search-holder ul").innerHTML = "";
+      }
+    };
   })
 );
 

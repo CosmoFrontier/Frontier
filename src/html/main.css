@@ -311,20 +311,38 @@ body {
   color: var(--content-color);
 }
 
-.search-bar{
+.search-bar {
   position: absolute;
   display: block;
   margin: 1rem;
   z-index: 5;
-  border: 1px white solid;
+  border: 1px hsla(0, 0%, 100%, 0.2) solid;
   border-radius: 1.9rem;
   bottom: 0;
   left: 40%;
-
- 
+  font-family: "Roboto", sans-serif;
+  background-color: #00000050;
+  overflow: hidden;
 }
+.search-bar .search-holder ul {
+  text-align: center;
+  user-select: none;
+}
+.search-bar .search-holder ul li {
+  height: 50px;
 
-.search-bar .search-bar-input{
+  line-height: 50px;
+  color: #dcdfe0cb;
+  text-transform: capitalize;
+  border-bottom: 1px hsla(0, 0%, 100%, 0.2) solid;
+  width: 100%;
+  cursor: pointer;
+}
+.search-bar .search-holder ul li:hover {
+  background-color: #745cffc0;
+  color: white;
+}
+.search-bar .search-bar-input {
   height: 3em;
   min-width: 250px;
   padding: 0.5em 1.25em 0.5em 3.5em;
@@ -334,5 +352,4 @@ body {
   font-size: 0.85em;
   opacity: 0.75;
   border: none;
-
 }

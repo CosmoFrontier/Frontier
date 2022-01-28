@@ -51,7 +51,6 @@ export default class PlanetCanvas {
     this.camera.position.set(x, y, z - zaxis);
     this.controls.target.set(x, y, z);
     this.controls.update();
-    console.log("focusing", this.focusAt);
   }
   focusPlanet(planet, mounted) {
     if (this.planet && this.planet.name != "sun") {
@@ -133,6 +132,41 @@ export default class PlanetCanvas {
     this.AUTOMOVE = true;
     this.controls.autoRotate = true;
     if (this.planet.name != "sun") planet.removeTrail();
+  }
+  travelTo(x) {
+    const travel_stats = document.querySelector("#travel_stats");
+    var camPos = this.camera.position;
+    var initCampos = camPos.clone();
+    var target = x[x.name.toLowerCase() + "Sphere"].position;
+    x.mount();
+    this.controls.enabled = false;
+    travel_stats.innerHTML =
+      `${x.symbol} Traveling to <span class="bold-text" style="color:${
+        "#" + x.color.toString(16)
+      };">` +
+      x.name[0].toUpperCase() +
+      x.name.slice(1) +
+      "</span>";
+    travel_stats.classList.add("is-visible");
+    let animate = () => {
+      const distance_in_percentage_from_init =
+        initCampos.distanceTo(camPos) / initCampos.distanceTo(target);
+      if (distance_in_percentage_from_init > 0.8) {
+        this.focusPlanet(x, true);
+        this.controls.enabled = true;
+        setTimeout(() => {
+          travel_stats.classList.remove("is-visible");
+        }, 1000);
+        return;
+      }
+      camPos.x += (target.x - camPos.x) * 0.03;
+      camPos.y += (target.y - camPos.y) * 0.03;
+      camPos.z += (target.z - camPos.z) * 0.03;
+      this.camera.position.set(camPos.x, camPos.y, camPos.z);
+      this.camera.lookAt(target);
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
   }
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
@@ -233,22 +267,24 @@ export default class PlanetCanvas {
     this.entities.push(pluto);
 
     var search = document.querySelector("input");
-    search.addEventListener("change", (e) => {
-      let results = this.entities.filter(
-        (x) => x.name.toLowerCase() == search.value.toLowerCase()
-
+    const ul = document.querySelector(".search-holder ul");
+    search.addEventListener("keyup", (e) => {
+      if (!search.value) return;
+      let results = this.entities.filter((x) =>
+        x.name.toLowerCase().startsWith(search.value.toLowerCase())
       );
-
-      results.forEach((x)=>{
-        x.elem = document.createElement("div");
-        x.elem.className = "results";
-        const list = document.createElement("li");
-        list.textContent = x.name;
-        list.className = "results-list"
-
-        document.body.appendChild(list);
-      })
-    
+      ul.innerHTML = "";
+      results.forEach((x) => {
+        const el = document.createElement("li");
+        el.textContent = x.name[0].toUpperCase() + x.name.slice(1);
+        el.addEventListener("click", () => {
+          if (this.planet && this.planet.name == x.name) return;
+          this.travelTo(x);
+          ul.innerHTML = "";
+          search.value = "";
+        });
+        ul.appendChild(el);
+      });
     });
 
     this.entities.forEach((x) => {
@@ -265,40 +301,7 @@ export default class PlanetCanvas {
       document.body.appendChild(x.elem);
 
       x.elem.addEventListener("click", () => {
-        const travel_stats = document.querySelector("#travel_stats");
-        travel_stats.innerHTML =
-          `${x.symbol} Traveling to <span class="bold-text" style="color:${
-            "#" + x.color.toString(16)
-          };">` +
-          x.name[0].toUpperCase() +
-          x.name.slice(1) +
-          "</span>";
-        travel_stats.classList.add("is-visible");
-        var camPos = this.camera.position;
-        var initCampos = camPos.clone();
-        var target = x[x.name.toLowerCase() + "Sphere"].position;
-        x.mount();
-        this.controls.enabled = false;
-        let animate = () => {
-          const distance_in_percentage_from_init =
-            initCampos.distanceTo(camPos) / initCampos.distanceTo(target);
-          if (distance_in_percentage_from_init > 0.8) {
-            this.focusPlanet(x, true);
-            this.controls.enabled = true;
-            setTimeout(() => {
-              travel_stats.classList.remove("is-visible");
-            }, 1000);
-            return;
-          }
-          camPos.x += (target.x - camPos.x) * 0.03;
-          camPos.y += (target.y - camPos.y) * 0.03;
-          camPos.z += (target.z - camPos.z) * 0.03;
-          this.camera.position.set(camPos.x, camPos.y, camPos.z);
-          this.camera.lookAt(target);
-          requestAnimationFrame(animate);
-        };
-
-        requestAnimationFrame(animate);
+        this.travelTo(x);
       });
     });
 
