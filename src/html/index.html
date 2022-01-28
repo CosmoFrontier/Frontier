@@ -38,12 +38,14 @@
         <div class="time"></div>
         <div id="travel_stats"></div>
       </div>
+     
       <div class="content is-not-visible" id="content">
         <svg class="close-svg" width="20" height="20">
           <line x1="20" y1="0" x2="0" y2="20" />
           <line x1="0" x2="20" y1="0" y2="20" />
         </svg>
         <div class="loader"></div>
+        
         <div class="content-wrap">
           <h1 class="planet_name">Mercury</h1>
           <p class="planet_type" style="
@@ -82,25 +84,72 @@
               <div class="info">Namesake</div>
             </div>
           </div> 
-
-          <div class="search_bar" id="search_bar"> 
-            <input id="search" type="text" class="text" placeholder="Search..."  />
-
-          </div>
-          <div class="results_bar">
-            <ul class="results-list" id="list">
           </div>
 
 
 
         </div>
       </div>
+
+        
       <div class="bring-content-back">Panel</div>
+      <div class="search-bar">
+        <input type="text" class="search-bar-input" id="input" placeholder="Search..." />
+      </div>
+    
       <div class="footer">Powered by <span class="bold-t">Frontier</span></div>
     </div>
 
     <div id="loading">FRONTIER</div>
     <script>
+      //searcbar
+
+      // const planets = [
+      //   {name: mercury},
+      //   {name: venus},
+      //   {name: earth},
+      //   {name: mars},
+      //   {name: jupiter},
+      //   {name: saturn},
+      //   {name: uranus},
+      //   {name: neptune},
+      //   {name: pluto}
+      // ]
+
+      // const searchInput = document.querySelector('.input');
+      // searchInput.addEventListener("input", (e)=>{
+      //   let value = e.target.value;
+      //   if(value && value.trim().length > 0){
+      //     value = value.trim().toLowerCase();
+      //     listFunc(planets.filter(planet => {
+      //       return planet.name.includes(value);
+      //     }))
+
+      //   }
+      //   else{
+      //     return false;
+
+      //   }
+      // })
+
+      // function listFunc(results){
+      //   for(const planet of results){
+      //     const resultItem = document.createElement('li');
+      //     resultItem.classList.add('result-item');
+      //     const text = document.createTextNode(planet.name)
+
+      //     resultItem.appendChild(text);
+      //     list.appendChild(resultItem);
+      //   }
+      // }
+
+
+
+
+
+
+
+
       const wait = (delay = 0) =>
         new Promise((resolve) => setTimeout(resolve, delay));
 
@@ -118,6 +167,7 @@
           setVisible(".page", true);
           setVisible("#loading", false);
         })
+        
       );
     </script>
   </body>

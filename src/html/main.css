@@ -310,3 +310,29 @@ body {
 .num {
   color: var(--content-color);
 }
+
+.search-bar{
+  position: absolute;
+  display: block;
+  margin: 1rem;
+  z-index: 5;
+  border: 1px white solid;
+  border-radius: 1.9rem;
+  bottom: 0;
+  left: 40%;
+
+ 
+}
+
+.search-bar .search-bar-input{
+  height: 3em;
+  min-width: 250px;
+  padding: 0.5em 1.25em 0.5em 3.5em;
+  background: none;
+  outline: none;
+  color: white;
+  font-size: 0.85em;
+  opacity: 0.75;
+  border: none;
+
+}

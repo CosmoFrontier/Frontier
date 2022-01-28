@@ -232,6 +232,25 @@ export default class PlanetCanvas {
     pluto.init();
     this.entities.push(pluto);
 
+    var search = document.querySelector("input");
+    search.addEventListener("change", (e) => {
+      let results = this.entities.filter(
+        (x) => x.name.toLowerCase() == search.value.toLowerCase()
+
+      );
+
+      results.forEach((x)=>{
+        x.elem = document.createElement("div");
+        x.elem.className = "results";
+        const list = document.createElement("li");
+        list.textContent = x.name;
+        list.className = "results-list"
+
+        document.body.appendChild(list);
+      })
+    
+    });
+
     this.entities.forEach((x) => {
       x.elem = document.createElement("div");
       x.elem.className = "label";
