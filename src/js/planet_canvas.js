@@ -13,7 +13,7 @@ import Neptune from "./entities/Neptune";
 import Pluto from "./entities/Pluto";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import moment from "moment";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export default class PlanetCanvas {
   constructor() {
@@ -78,7 +78,9 @@ export default class PlanetCanvas {
           content.querySelector(".planet_desc").textContent = data.description;
           content.querySelector(".planet_name").textContent =
             planet.name[0].toUpperCase() + planet.name.slice(1);
-          content.querySelector(".planet_image").style.backgroundImage = `url(${data.cover})`;
+          content.querySelector(
+            ".planet_image"
+          ).style.backgroundImage = `url(${data.cover})`;
           content.querySelector(".planet_type span").textContent =
             data.table.type;
           content
@@ -282,20 +284,6 @@ export default class PlanetCanvas {
     });
 
     this.focusPlanet(sun);
-
-
-    const loader = new GLTFLoader();
-const scene = this.scene;
-const camera = this.camera;
-    loader.load('assets/satellite.glb', (glb)=>{
-      console.log(glb);
-    glb.scene.position.set(camera.position.x , camera.position.y ,camera.position.z + 1)
-    scene.add(glb.scene)
-}, function(xhr){
-      console.log(xhr.loaded/xhr.total * 100) + "% loaded";
-    },function(err){
-      console.log(err);
-    })
 
     document.querySelector("#travel_stats").innerHTML =
       `${this.sun.symbol} Welcome to <span class="bold-text" style="color:${
