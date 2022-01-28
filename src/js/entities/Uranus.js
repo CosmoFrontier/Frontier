@@ -24,6 +24,7 @@ export default class Uranus {
     const UranusGeometry = new THREE.SphereGeometry(10 / 27.45, 32, 32);
     const material = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/uranus_main.jpg"),
+      shininess: 0,
     });
     this.uranusSphere = new THREE.Mesh(UranusGeometry, material);
     this.uranusSphere.rotateX(this.tilt * (Math.PI / 180));
