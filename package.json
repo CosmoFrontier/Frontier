@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "rimraf dist && webpack --watch --devtool=inline-source-map --mode=development",
     "build": "rimraf dist && webpack --mode=production",
-    "serve": "webpack-dev-server --mode=development --open"
+    "serve": "webpack-dev-server --mode=development --open",
+    "serve2":"serve dist"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^10.2.0",

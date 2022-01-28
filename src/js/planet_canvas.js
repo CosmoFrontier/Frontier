@@ -13,6 +13,7 @@ import Neptune from "./entities/Neptune";
 import Pluto from "./entities/Pluto";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import moment from "moment";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export default class PlanetCanvas {
   constructor() {
@@ -281,6 +282,21 @@ export default class PlanetCanvas {
     });
 
     this.focusPlanet(sun);
+
+
+    const loader = new GLTFLoader();
+const scene = this.scene;
+const camera = this.camera;
+    loader.load('assets/satellite.glb', (glb)=>{
+      console.log(glb);
+    glb.scene.position.set(camera.position.x , camera.position.y ,camera.position.z + 1)
+    scene.add(glb.scene)
+}, function(xhr){
+      console.log(xhr.loaded/xhr.total * 100) + "% loaded";
+    },function(err){
+      console.log(err);
+    })
+
     document.querySelector("#travel_stats").innerHTML =
       `${this.sun.symbol} Welcome to <span class="bold-text" style="color:${
         "#" + this.sun.color.toString(16)
