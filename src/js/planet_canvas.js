@@ -52,12 +52,13 @@ export default class PlanetCanvas {
     this.controls.target.set(x, y, z);
     this.controls.update();
   }
-  focusPlanet(planet, mounted) {
-    if (this.planet && this.planet.name != "sun") {
+  async focusPlanet(planet, mounted, isMoon) {
+    if (this.planet && this.planet.name != "sun" && !planet.moon) {
       this.planet.elem.style.display = "flex";
       this.planet.drawTrail();
       this.planet.unmount();
     }
+
     if (planet.name != "sun") {
       document
         .querySelector(":root")
@@ -71,56 +72,65 @@ export default class PlanetCanvas {
       content.querySelector(".content-wrap").classList.add("is-not-visible");
       content.querySelector(".loader").classList.add("is-visible");
 
-      fetch("https://ssd-abh80.vercel.app/planet/" + planet.name.toLowerCase())
-        .then((x) => x.json())
-        .then((data) => {
-          content.querySelector(".planet_desc").textContent = data.description;
-          content.querySelector(".planet_name").textContent =
-            planet.name[0].toUpperCase() + planet.name.slice(1);
-          content.querySelector(
-            ".planet_image"
-          ).style.backgroundImage = `url(${data.cover})`;
-          content.querySelector(".planet_type span").textContent =
-            data.table.type;
-          content
-            .querySelector(`[data-label="rev_time"]`)
-            .querySelector(".num").innerHTML =
-            data.table.year.value +
-            `<span class="unit"> ${data.table.year.suffix}</span>`;
+      // fetch("https://ssd-abh80.vercel.app/planet/" + planet.name.toLowerCase())
+      //   .then((x) => x.json())
+      //   .then((data) => {
+      //     content.querySelector(".planet_desc").textContent = data.description;
+      //     content.querySelector(".planet_name").textContent =
+      //       planet.name[0].toUpperCase() + planet.name.slice(1);
+      //     content.querySelector(
+      //       ".planet_image"
+      //     ).style.backgroundImage = `url(${data.cover})`;
+      //     content.querySelector(".planet_type span").textContent =
+      //       data.table.type;
+      //     content
+      //       .querySelector(`[data-label="rev_time"]`)
+      //       .querySelector(".num").innerHTML =
+      //       data.table.year.value +
+      //       `<span class="unit"> ${data.table.year.suffix}</span>`;
 
-          content
-            .querySelector(`[data-label="sun_distance"]`)
-            .querySelector(".num").innerHTML =
-            Math.ceil(planet.radius / 500) + '<span class="unit"> AU</span>';
+      //     content
+      //       .querySelector(`[data-label="sun_distance"]`)
+      //       .querySelector(".num").innerHTML =
+      //       Math.ceil(planet.radius / 500) + '<span class="unit"> AU</span>';
 
-          var totalsec = (
-            (planet.radius * 149597871 * 1000) /
-            (3 * Math.pow(10, 8) * 500)
-          ).toFixed(2);
-          content
-            .querySelector(`[data-label="time_to_sun"]`)
-            .querySelector(".num").textContent = moment
-            .utc(totalsec * 1000)
-            .format("HH:mm:ss");
-          content
-            .querySelector(`[data-label="moons_count"]`)
-            .querySelector(".num").textContent = data.table.moons;
+      //     var totalsec = (
+      //       (planet.radius * 149597871 * 1000) /
+      //       (3 * Math.pow(10, 8) * 500)
+      //     ).toFixed(2);
+      //     content
+      //       .querySelector(`[data-label="time_to_sun"]`)
+      //       .querySelector(".num").textContent = moment
+      //       .utc(totalsec * 1000)
+      //       .format("HH:mm:ss");
+      //     content
+      //       .querySelector(`[data-label="moons_count"]`)
+      //       .querySelector(".num").textContent = data.table.moons;
 
-          content
-            .querySelector(`[data-label="name_sake"]`)
-            .querySelector(".num").textContent = data.table.namesake;
-          content.querySelector(".loader").classList.remove("is-visible");
-          content
-            .querySelector(".content-wrap")
-            .classList.remove("is-not-visible");
-        });
+      //     content
+      //       .querySelector(`[data-label="name_sake"]`)
+      //       .querySelector(".num").textContent = data.table.namesake;
+      //     content.querySelector(".loader").classList.remove("is-visible");
+      //     content
+      //       .querySelector(".content-wrap")
+      //       .classList.remove("is-not-visible");
+      //   })
+      //   .catch((err) => {});
     }
-    this.setFocus(
-      planet[planet.name.toLowerCase() + "Sphere"].position.x,
-      planet[planet.name.toLowerCase() + "Sphere"].position.y,
-      planet[planet.name.toLowerCase() + "Sphere"].position.z,
-      planet.zaxis
-    );
+    if (isMoon) {
+      this.setFocus(
+        planet.position.x,
+        planet.position.y,
+        planet.position.z,
+        0.3
+      );
+    } else
+      this.setFocus(
+        planet[planet.name.toLowerCase() + "Sphere"].position.x,
+        planet[planet.name.toLowerCase() + "Sphere"].position.y,
+        planet[planet.name.toLowerCase() + "Sphere"].position.z,
+        planet.zaxis
+      );
     this.planet = planet;
     if (this.planet.name != "sun") {
       this.planet.elem.style.display = "none";
@@ -133,11 +143,14 @@ export default class PlanetCanvas {
     this.controls.autoRotate = true;
     if (this.planet.name != "sun") planet.removeTrail();
   }
-  travelTo(x) {
+
+  travelTo(x, isMoon) {
     const travel_stats = document.querySelector("#travel_stats");
     var camPos = this.camera.position;
     var initCampos = camPos.clone();
-    var target = x[x.name.toLowerCase() + "Sphere"].position;
+    let target = null;
+    if (isMoon) target = x.position;
+    else target = x[x.name.toLowerCase() + "Sphere"].position;
     x.mount();
     this.controls.enabled = false;
     travel_stats.innerHTML =
@@ -152,19 +165,18 @@ export default class PlanetCanvas {
       const distance_in_percentage_from_init =
         initCampos.distanceTo(camPos) / initCampos.distanceTo(target);
       if (distance_in_percentage_from_init > 0.8) {
-        this.focusPlanet(x, true);
+        this.focusPlanet(x, true, isMoon);
         this.controls.enabled = true;
         setTimeout(() => {
           travel_stats.classList.remove("is-visible");
         }, 1000);
         return;
-      }
+      } else requestAnimationFrame(animate);
       camPos.x += (target.x - camPos.x) * 0.03;
       camPos.y += (target.y - camPos.y) * 0.03;
       camPos.z += (target.z - camPos.z) * 0.03;
       this.camera.position.set(camPos.x, camPos.y, camPos.z);
       this.camera.lookAt(target);
-      requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
   }
@@ -299,7 +311,9 @@ export default class PlanetCanvas {
       x.elem.appendChild(ring);
       x.elem.appendChild(text);
       document.body.appendChild(x.elem);
-
+      x.onMoonClick = (e) => {
+        this.travelTo(e, true);
+      };
       x.elem.addEventListener("click", () => {
         this.travelTo(x);
       });
@@ -402,6 +416,7 @@ export default class PlanetCanvas {
           }
           const x1 = (tempV.x * 0.5 + 0.5) * this.canvas.clientWidth;
           const y = (tempV.y * -0.5 + 0.5) * this.canvas.clientHeight;
+
           x.elem.style.transform = `translate(-50%, -50%) translate(${x1}px, ${y}px)`;
         });
       }

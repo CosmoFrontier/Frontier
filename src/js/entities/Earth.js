@@ -5,7 +5,6 @@ export default class Earth extends BaseEntity {
     super(scene, camera, renderer, data, 0x3f5d98, 0);
     this.name = "earth";
     this.symbol = "🜨";
-    super.loadMoons();
   }
   get zaxis() {
     return 1;
@@ -31,8 +30,8 @@ export default class Earth extends BaseEntity {
     const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
     this.earthSphere.add(cloudSphere);
     this.earthSphere.rotateX(this.tilt * (Math.PI / 180));
-    this.scenes.push(this.earthSphere, this.moonSphere);
-    this.setScene(this.scenes);
+    this.scenes.push(this.earthSphere);
+
     this.drawTrail();
   }
 
@@ -42,6 +41,7 @@ export default class Earth extends BaseEntity {
     new Date().getUTCSeconds();
 
   render() {
+    super.render();
     this.earthSphere.rotation.y =
       -80 * (Math.PI / 180) + this.seconds() * ((2 * Math.PI) / (24 * 3600));
   }
