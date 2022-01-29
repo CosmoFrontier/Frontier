@@ -377,6 +377,35 @@ export default class PlanetCanvas {
     if (this.planet.name != "sun") this.planet.render();
     this.sun.render();
 
+    if (this.planet) {
+      if (this.planet.moons) {
+        this.planet.moons.forEach((x) => {
+          const tempV = new THREE.Vector3();
+          x.updateMatrixWorld(true, false);
+          x.getWorldPosition(tempV);
+          tempV.project(this.camera);
+          var targetPosition = new THREE.Vector3();
+          targetPosition = targetPosition.setFromMatrixPosition(x.matrixWorld);
+          this.camera.updateMatrixWorld();
+          var frustum = new THREE.Frustum();
+          frustum.setFromProjectionMatrix(
+            new THREE.Matrix4().multiplyMatrices(
+              this.camera.projectionMatrix,
+              this.camera.matrixWorldInverse
+            )
+          );
+          if (!frustum.containsPoint(x.position)) {
+            x.elem.style.display = "none";
+            return;
+          } else {
+            x.elem.style.display = "block";
+          }
+          const x1 = (tempV.x * 0.5 + 0.5) * this.canvas.clientWidth;
+          const y = (tempV.y * -0.5 + 0.5) * this.canvas.clientHeight;
+          x.elem.style.transform = `translate(-50%, -50%) translate(${x1}px, ${y}px)`;
+        });
+      }
+    }
     this.entities.forEach((vx) => {
       if (this.planet.name == vx.name) return;
       const tempV = new THREE.Vector3();
@@ -403,7 +432,7 @@ export default class PlanetCanvas {
         vx.elem.style.display = "none";
         return;
       } else {
-        vx.elem.style.display = "flex";
+        vx.elem.style.display = "block";
       }
       const x = (tempV.x * 0.5 + 0.5) * this.canvas.clientWidth;
       const y = (tempV.y * -0.5 + 0.5) * this.canvas.clientHeight;

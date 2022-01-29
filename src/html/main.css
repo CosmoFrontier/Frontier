@@ -28,7 +28,7 @@ canvas {
   color: rgba(255, 255, 255, 0.753);
   position: absolute;
   width: fit-content;
-  display: flex;
+  display: none;
 }
 .label:hover {
   color: white;
@@ -36,6 +36,9 @@ canvas {
 .label-text {
   line-height: 10px;
   font-family: "Roboto", sans-serif;
+  position: absolute;
+  top: -0.01px;
+  left: 17px;
 }
 .logo {
   height: 50px;
@@ -328,6 +331,7 @@ body {
   text-align: center;
   user-select: none;
 }
+
 .search-bar .search-holder ul li {
   height: 50px;
 

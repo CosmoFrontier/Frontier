@@ -15,6 +15,7 @@ export default class BaseEntity {
     this.color = color;
     this.tilt = this.data.tilt;
     this.scenes = [];
+    this.moons = [];
   }
   setScene(scene) {
     this.scenes = [...scene, ...this.scenes];
@@ -39,7 +40,12 @@ export default class BaseEntity {
           this.radius * Math.cos(this.theeta) +
           data.radius * 500 * Math.cos(data.angular_distance);
 
-        this.createMoon("assets/" + moon.texture.map, moon.radius, { x, y, z });
+        this.createMoon(moon.name, "assets/" + moon.texture.map, moon.radius, {
+          x,
+          y,
+          z,
+        });
+
         this.drawMoonTrail(
           Math.sin(this.theeta) * this.radius,
           this.radius * Math.cos(this.theeta),
@@ -50,7 +56,7 @@ export default class BaseEntity {
       }
     });
   }
-  createMoon(map, radius, pos = { x: 0, y: 0, z: 0 }) {
+  createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }) {
     const moonGeometry = new THREE.SphereGeometry(10 / radius, 32, 32);
     const moonMaterial = new THREE.MeshPhongMaterial({
       shininess: 0,
@@ -58,8 +64,21 @@ export default class BaseEntity {
     });
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
     moon.position.set(pos.x, pos.y, pos.z);
+    moon.elem = document.createElement("div");
+    moon.elem.className = "label";
+    const text = document.createElement("div");
+    text.textContent = name[0].toUpperCase() + name.slice(1);
+    text.className = "label-text";
+    const ring = document.createElement("div");
+    ring.className = "label-ring";
+    ring.style.borderColor = "#" + this.color.toString(16);
 
-    this.scenes.push(moon);
+    moon.elem.appendChild(ring);
+    moon.elem.appendChild(text);
+
+    moon.name = name;
+    document.body.appendChild(moon.elem);
+    this.moons.push(moon);
   }
   drawTrail() {
     const ellipse = new THREE.EllipseCurve(
@@ -139,7 +158,7 @@ export default class BaseEntity {
     const line = new THREE.Line(geometry, Linematerial);
     line.rotateX(-incl);
     line.position.set(x, this.y_distance, z);
-    this.scene.add(line);
+    this.scenes.push(line);
   }
   removeTrail() {
     var trail = this.scene.getObjectByName("earthTrail");
