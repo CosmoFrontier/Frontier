@@ -13,7 +13,8 @@ export default class Mars extends BaseEntity {
   }
 
   init() {
-    const MarsGeometry = new THREE.SphereGeometry(10 / 102.525711, 32, 32);
+    const MarsGeometry = new THREE.SphereGeometry(10 / 205.26, 32, 32);
+    this.size = 10 / 205.26;
     const material = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/mars_main.jpg"),
     });
@@ -26,7 +27,7 @@ export default class Mars extends BaseEntity {
     );
 
     this.scenes.push(this.marsSphere);
-   
+
     this.drawTrail();
   }
 }

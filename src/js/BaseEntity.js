@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import moonData from "./moonData";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 export default class BaseEntity {
   constructor(scene, camera, renderer, data, color, inclination) {
     this.scene = scene;
@@ -33,70 +34,95 @@ export default class BaseEntity {
     }
 
     if (!data.length) return;
-    data.forEach((moon) => {
+    data.forEach(async (moon) => {
       if (!moon.texture) return;
-      if (moon.texture.drawSelf) {
-        const data = moon.datas[0];
-        const x =
-          Math.sin(this.theeta) * this.radius +
-          data.radius * 500 * Math.sin(data.angular_distance);
-        const y =
-          this.y_distance +
-          data.radius *
-            500 *
-            Math.sin((data.inclination + this.inclination) * (Math.PI / 180));
-        const z =
-          this.radius * Math.cos(this.theeta) +
-          data.radius * 500 * Math.cos(data.angular_distance);
+      const data = moon.datas[0];
+      const x =
+        Math.sin(this.theeta) * this.radius +
+        (this.size / 2) * 25 * Math.sin(data.angular_distance) +
+        data.radius * 500 * Math.sin(data.angular_distance);
+      const y =
+        this.y_distance +
+        (this.size / 2) *
+          25 *
+          Math.sin(((data.inclination + this.inclination) * Math.PI) / 180) +
+        data.radius *
+          500 *
+          Math.sin((data.inclination + this.inclination) * (Math.PI / 180));
+      const z =
+        this.radius * Math.cos(this.theeta) +
+        (this.size / 2) * 25 +
+        data.radius * 500 * Math.cos(data.angular_distance);
 
-        this.createMoon(
-          moon.name,
-          "assets/" + moon.texture.map,
-          moon.radius,
-          {
-            x,
-            y,
-            z,
-          },
-          data
+      if (moon.texture.drawSelf) {
+        this.setupMoon(
+          this.createMoon(
+            moon.name,
+            "assets/" + moon.texture.map,
+            moon.radius,
+            {
+              x,
+              y,
+              z,
+            },
+            data
+          )
         );
-        this.drawMoonTrail(
-          Math.sin(this.theeta) * this.radius,
-          this.radius * Math.cos(this.theeta),
-          data.radius,
-          data.angular_distance,
-          data.inclination * (Math.PI / 180),
-          moon.name
+      } else {
+        this.setupMoon(
+          await this.loadGlb(
+            moon.name,
+            "assets/" + moon.texture.map,
+            10 / moon.radius,
+            { x, y, z }
+          )
         );
-        this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
       }
+      this.drawMoonTrail(
+        Math.sin(this.theeta) * this.radius,
+        this.radius * Math.cos(this.theeta),
+        (this.size / 2) * 25 + data.radius * 500,
+        data.angular_distance,
+        data.inclination * (Math.PI / 180),
+        moon.name
+      );
+      this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
     });
   }
+  loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }) {
+    return new Promise((resolve, reject) => {
+      if (!map) return;
+      const Loader = new GLTFLoader();
 
-  createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }, data) {
-    const moonGeometry = new THREE.SphereGeometry(10 / radius, 32, 32);
-    const moonMaterial = new THREE.MeshPhongMaterial({
-      shininess: 0,
-      map: new THREE.TextureLoader().load(map),
+      Loader.load(
+        map,
+        (glb) => {
+          const obj = glb.scene;
+          obj.position.set(pos.x, pos.y, pos.z);
+          obj.scale.set(radius, radius, radius);
+          obj.name = name;
+          resolve(obj);
+        },
+        function (xhr) {},
+        function (err) {
+          reject(err);
+        }
+      );
     });
-
-    const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-    moon.position.set(pos.x, pos.y, pos.z);
+  }
+  setupMoon(moon) {
+    moon.t = this;
+    moon.moon = true;
     moon.elem = document.createElement("div");
     moon.elem.className = "label";
     const text = document.createElement("div");
-    text.textContent = name[0].toUpperCase() + name.slice(1);
+    text.textContent = moon.name[0].toUpperCase() + moon.name.slice(1);
     text.className = "label-text";
     const ring = document.createElement("div");
     ring.className = "label-ring";
     ring.style.borderColor = "#" + this.color.toString(16);
-
-    moon.elem.appendChild(ring);
     moon.elem.appendChild(text);
-    moon.t = this;
-    moon.moon = true;
-
-    moon.name = name;
+    moon.elem.appendChild(ring);
     moon.render = this.render.bind(this);
     document.body.appendChild(moon.elem);
     moon.color = this.color;
@@ -108,11 +134,11 @@ export default class BaseEntity {
       this.scene.remove(moon);
     };
     moon.drawTrail = () => {
-      console.log(this.scenes.find((x) => x.name == moon.name + "Trail"));
+      this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
     };
 
     moon.removeTrail = () => {
-      var trail = this.scene.getObjectByName(name + "Trail");
+      var trail = this.scene.getObjectByName(moon.name + "Trail");
       this.scene.remove(trail);
     };
     Object.defineProperty(moon, "removeTrail", {
@@ -125,6 +151,19 @@ export default class BaseEntity {
       this.onMoonClick(moon);
     };
     this.moons.push(moon);
+  }
+  createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }) {
+    const moonGeometry = new THREE.SphereGeometry(10 / radius, 32, 32);
+    const moonMaterial = new THREE.MeshPhongMaterial({
+      shininess: 0,
+      map: new THREE.TextureLoader().load(map),
+    });
+
+    const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+    moon.name = name;
+    moon.position.set(pos.x, pos.y, pos.z);
+
+    return moon;
   }
   drawTrail() {
     const ellipse = new THREE.EllipseCurve(
@@ -172,8 +211,8 @@ export default class BaseEntity {
     const ellipse = new THREE.EllipseCurve(
       0,
       0,
-      radius * 500,
-      radius * 500,
+      radius,
+      radius,
       -(1.5 * Math.PI + theeta),
       -Math.PI * 1.5,
       false,

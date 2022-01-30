@@ -4,6 +4,7 @@ import BaseEntity from "./../BaseEntity";
 export default class Pluto extends BaseEntity {
   constructor(scene, camera, renderer, data) {
     super(scene, camera, renderer, data, 0xa3a3a3, 17.16 * (Math.PI / 180));
+
     this.name = "pluto";
     this.symbol = "⯓";
   }
@@ -14,6 +15,7 @@ export default class Pluto extends BaseEntity {
 
   init() {
     const PlutoGeometry = new THREE.SphereGeometry(10 / 585.996802154, 32, 32);
+    this.size = 10 / 585.996802154;
     const material = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/pluto_main.jpg"),
       shininess: 0,

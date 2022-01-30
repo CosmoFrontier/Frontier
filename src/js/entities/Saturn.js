@@ -14,6 +14,7 @@ export default class Saturn extends BaseEntity {
   }
   init() {
     const SaturnGeometry = new THREE.SphereGeometry(10 / 11.95, 32, 32);
+    this.size = 10 / 11.95;
     const material = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/saturn_main.jpg"),
       shininess: 0,
