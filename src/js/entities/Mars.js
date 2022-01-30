@@ -3,7 +3,7 @@ import BaseEntity from "./../BaseEntity";
 
 export default class Mars extends BaseEntity {
   constructor(scene, camera, renderer, data) {
-    super(scene, camera, renderer, data, 0xb87f5f, 1.8 * (Math.PI / 180));
+    super(scene, camera, renderer, data, 0xb87f5f, 0);
     this.name = "mars";
     this.symbol = "♂";
   }
@@ -30,4 +30,16 @@ export default class Mars extends BaseEntity {
 
     this.drawTrail();
   }
+
+  seconds = () =>
+    new Date().getUTCHours() * 3600 +
+    new Date().getUTCMinutes() * 60 +
+    new Date().getUTCSeconds();
+
+  render() {
+    super.render();
+    
+  }
+
+
 }

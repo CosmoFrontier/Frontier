@@ -327,6 +327,7 @@ body {
   background-color: #00000050;
   overflow: hidden;
 }
+
 .search-bar .search-holder ul {
   text-align: center;
   user-select: none;
@@ -343,7 +344,7 @@ body {
   cursor: pointer;
 }
 .search-bar .search-holder ul li:hover {
-  background-color: #745cffc0;
+  background-color: rgb(100, 100, 100);
   color: white;
 }
 .search-bar .search-bar-input {
