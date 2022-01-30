@@ -32,27 +32,40 @@ export default class BaseEntity {
     } catch (e) {
       this.fetchedMoons = true;
     }
+ 
+
 
     if (!data.length) return;
     data.forEach(async (moon) => {
       if (!moon.texture) return;
       const data = moon.datas[0];
-      const x =
-        Math.sin(this.theeta) * this.radius +
-        (this.size / 2) * 25 * Math.sin(data.angular_distance) +
-        data.radius * 500 * Math.sin(data.angular_distance);
-      const y =
-        this.y_distance +
-        (this.size / 2) *
-          25 *
-          Math.sin(((data.inclination + this.inclination) * Math.PI) / 180) +
-        data.radius *
-          500 *
-          Math.sin((data.inclination + this.inclination) * (Math.PI / 180));
-      const z =
-        this.radius * Math.cos(this.theeta) +
-        (this.size / 2) * 25 +
-        data.radius * 500 * Math.cos(data.angular_distance);
+      let p = this.drawMoonTrail(
+        Math.sin(this.theeta) * this.radius,
+        this.radius * Math.cos(this.theeta),
+        (this.size / 2) * 25 + data.radius * 500,
+        data.angular_distance,
+        data.inclination * (Math.PI / 180),
+        moon.name
+        
+      );
+      const x =p[0].x;
+        // Math.sin(this.theeta) * this.radius +
+        // (this.size / 2) * 25 * Math.sin(data.angular_distance) +
+        // data.radius * 500 * Math.sin(data.angular_distance);
+      const y = p[0].y;
+        // this.y_distance +
+        // (this.size / 2) *
+        //   25 *
+        //   Math.sin(((data.inclination + this.inclination) * Math.PI) / 180) +
+        // data.radius *
+        //   500 *
+        //   Math.sin((data.inclination + this.inclination) * (Math.PI / 180));
+      const z = p[0].z;
+        // this.radius * Math.cos(this.theeta) +
+        // (this.size / 2) * 25 +
+        // data.radius * 500 * Math.cos(data.angular_distance);
+
+      
 
       if (moon.texture.drawSelf) {
         this.setupMoon(
@@ -80,14 +93,7 @@ export default class BaseEntity {
           )
         );
       }
-      this.drawMoonTrail(
-        Math.sin(this.theeta) * this.radius,
-        this.radius * Math.cos(this.theeta),
-        (this.size / 2) * 25 + data.radius * 500,
-        data.angular_distance,
-        data.inclination * (Math.PI / 180),
-        moon.name
-      );
+          
       this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
     });
   }
@@ -248,6 +254,7 @@ export default class BaseEntity {
     line.name = name + "Trail";
 
     this.scenes.push(line);
+    return points;
   }
   removeTrail() {
     var trail = this.scene.getObjectByName(this.name + "Trail");

@@ -30,6 +30,8 @@ canvas {
   width: fit-content;
   display: none;
 }
+
+
 .label:hover {
   color: white;
 }
