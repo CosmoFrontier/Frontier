@@ -72,7 +72,9 @@ export default class BaseEntity {
         this.setupMoon(
           await this.loadGlb(
             moon.name,
-            "assets/" + moon.texture.map,
+            "assets/moons/" +
+              moon.texture.map[0].toUpperCase() +
+              moon.texture.map.slice(1),
             10 / moon.radius,
             { x, y, z }
           )
@@ -214,7 +216,7 @@ export default class BaseEntity {
       radius,
       radius,
       -(1.5 * Math.PI + theeta),
-      -Math.PI * 1.5,
+      (1.5 * Math.PI + theeta - Math.PI * 1.5),
       false,
       0
     );
