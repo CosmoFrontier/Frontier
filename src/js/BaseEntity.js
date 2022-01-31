@@ -45,29 +45,13 @@ export default class BaseEntity {
         data.inclination * (Math.PI / 180),
         moon.name
       );
-      const x = p[0].x + this.radius * Math.sin(this.theeta);
-      // Math.sin(this.theeta) * this.radius +
-      // (this.size / 2) * 25 * Math.sin(data.angular_distance) +
-      // data.radius * 500 * Math.sin(data.angular_distance);
+      const x = p.x + this.radius * Math.sin(this.theeta);
+
       const y =
         this.y_distance +
-        data.radius *
-          500 *
-          Math.sin((data.inclination + this.inclination) * (Math.PI / 180)) +
-        (this.size / 2) *
-          25 *
-          Math.sin(((data.inclination + this.inclination) * Math.PI) / 180);
-      // this.y_distance +
-      // (this.size / 2) *
-      //   25 *
-      //   Math.sin(((data.inclination + this.inclination) * Math.PI) / 180) +
-      // data.radius *
-      //   500 *
-      //   Math.sin((data.inclination + this.inclination) * (Math.PI / 180));
-      const z = p[0].z + this.radius * Math.cos(this.theeta);
-      // this.radius * Math.cos(this.theeta) +
-      // (this.size / 2) * 25 +
-      // data.radius * 500 * Math.cos(data.angular_distance);
+        ((this.size / 2) * 25 + data.radius * 500) *
+          Math.sin(data.inclination * (Math.PI / 180));
+      const z = p.z + this.radius * Math.cos(this.theeta);
 
       if (moon.texture.drawSelf) {
         this.setupMoon(
@@ -80,7 +64,7 @@ export default class BaseEntity {
               y,
               z,
             },
-            data
+            data.inclination * (Math.PI / 180)
           )
         );
       } else {
@@ -91,7 +75,8 @@ export default class BaseEntity {
               moon.texture.map[0].toUpperCase() +
               moon.texture.map.slice(1),
             10 / moon.radius,
-            { x, y, z }
+            { x, y, z },
+            data.inclination * (Math.PI / 180)
           )
         );
       }
@@ -99,18 +84,45 @@ export default class BaseEntity {
       this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
     });
   }
-  loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }) {
+  loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
     return new Promise((resolve, reject) => {
       if (!map) return;
       const Loader = new GLTFLoader();
+
+      var sceneExtent = new THREE.BoxGeometry(radius, radius, radius);
+      var cube = new THREE.Mesh(sceneExtent);
+      var sceneBounds = new THREE.Box3().setFromObject(cube);
+      let lengthSceneBounds = {
+        x: Math.abs(sceneBounds.max.x - sceneBounds.min.x),
+        y: Math.abs(sceneBounds.max.y - sceneBounds.min.y),
+        z: Math.abs(sceneBounds.max.z - sceneBounds.min.z),
+      };
+
+      // Calculate side lengths of glb-model bounding box
+
+      // Calculate length ratios
 
       Loader.load(
         map,
         (glb) => {
           const obj = glb.scene;
+          var meshBounds = new THREE.Box3().setFromObject(obj);
+          let lengthMeshBounds = {
+            x: Math.abs(meshBounds.max.x - meshBounds.min.x),
+            y: Math.abs(meshBounds.max.y - meshBounds.min.y),
+            z: Math.abs(meshBounds.max.z - meshBounds.min.z),
+          };
+          let lengthRatios = [
+            lengthSceneBounds.x / lengthMeshBounds.x,
+            lengthSceneBounds.y / lengthMeshBounds.y,
+            lengthSceneBounds.z / lengthMeshBounds.z,
+          ];
+          let minRatio = Math.min(...lengthRatios);
+          obj.scale.set(minRatio, minRatio, minRatio);
           obj.position.set(pos.x, pos.y, pos.z);
-          obj.scale.set(radius, radius, radius);
+
           obj.name = name;
+
           resolve(obj);
         },
         function (xhr) {},
@@ -162,7 +174,7 @@ export default class BaseEntity {
     };
     this.moons.push(moon);
   }
-  createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }) {
+  createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
     const moonGeometry = new THREE.SphereGeometry(10 / radius, 32, 32);
     const moonMaterial = new THREE.MeshPhongMaterial({
       shininess: 0,
@@ -175,6 +187,7 @@ export default class BaseEntity {
 
     return moon;
   }
+
   drawTrail() {
     const ellipse = new THREE.EllipseCurve(
       0,
@@ -212,9 +225,12 @@ export default class BaseEntity {
       transparent: true,
     });
     const line = new THREE.Line(geometry, Linematerial);
+
     line.name = this.name + "Trail";
+
     line.rotateX(-this.inclination);
     this.trail = line;
+
     this.scene.add(line);
   }
   drawMoonTrail(x, z, radius, theeta, incl, name) {
@@ -224,7 +240,7 @@ export default class BaseEntity {
       radius,
       radius,
       -(1.5 * Math.PI + theeta),
-      1.5 * Math.PI + theeta - Math.PI * 1.5,
+      -Math.PI * 1.5,
       false,
       0
     );
@@ -251,12 +267,16 @@ export default class BaseEntity {
       transparent: true,
     });
     const line = new THREE.Line(geometry, Linematerial);
-    line.rotateX(-incl);
+
     line.position.set(x, this.y_distance, z);
+    line.rotateX(-incl);
     line.name = name + "Trail";
+    line.updateMatrix();
 
     this.scenes.push(line);
-    return points;
+    const temp = points[0].clone();
+    line.localToWorld(temp);
+    return temp;
   }
   removeTrail() {
     var trail = this.scene.getObjectByName(this.name + "Trail");
