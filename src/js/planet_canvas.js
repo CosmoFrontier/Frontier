@@ -72,50 +72,88 @@ export default class PlanetCanvas {
       content.querySelector(".content-wrap").classList.add("is-not-visible");
       content.querySelector(".loader").classList.add("is-visible");
 
-      // fetch("https://ssd-abh80.vercel.app/planet/" + planet.name.toLowerCase())
-      //   .then((x) => x.json())
-      //   .then((data) => {
-      //     content.querySelector(".planet_desc").textContent = data.description;
-      //     content.querySelector(".planet_name").textContent =
-      //       planet.name[0].toUpperCase() + planet.name.slice(1);
-      //     content.querySelector(
-      //       ".planet_image"
-      //     ).style.backgroundImage = `url(${data.cover})`;
-      //     content.querySelector(".planet_type span").textContent =
-      //       data.table.type;
-      //     content
-      //       .querySelector(`[data-label="rev_time"]`)
-      //       .querySelector(".num").innerHTML =
-      //       data.table.year.value +
-      //       `<span class="unit"> ${data.table.year.suffix}</span>`;
+      fetch("https://ssd-abh80.vercel.app/body/" + planet.name.toLowerCase())
+        .then((x) => x.json())
+        .then((data) => {
+          if(isMoon){
+            content.querySelector(".content-wrap").classList.remove("is-not-visible");
+            content.querySelector(".loader").classList.remove("is-visible");
+  
+            // const moon_name = document.querySelector(".planet_name");
+            // moon_name.textContent = `${planet.name[0].toUpperCase()+planet.name.slice(1)}`;
+            // const moon_desc = document.querySelector(".planet_desc");
+            // moon_desc.textContent = `${data.description}`;   
+            // const moon_image = document.querySelector(".planet_image");
+            // moon_image.style.backgroundImage = `url(${data.cover})`;
 
-      //     content
-      //       .querySelector(`[data-label="sun_distance"]`)
-      //       .querySelector(".num").innerHTML =
-      //       Math.ceil(planet.radius / 500) + '<span class="unit"> AU</span>';
+            content.querySelector(".planet_desc").textContent = data.description;
+            content.querySelector(".planet_name").textContent =
+              planet.name[0].toUpperCase() + planet.name.slice(1);
+            content.querySelector(
+              ".planet_image"
+            ).style.backgroundImage = `url(${data.cover})`;
 
-      //     var totalsec = (
-      //       (planet.radius * 149597871 * 1000) /
-      //       (3 * Math.pow(10, 8) * 500)
-      //     ).toFixed(2);
-      //     content
-      //       .querySelector(`[data-label="time_to_sun"]`)
-      //       .querySelector(".num").textContent = moment
-      //       .utc(totalsec * 1000)
-      //       .format("HH:mm:ss");
-      //     content
-      //       .querySelector(`[data-label="moons_count"]`)
-      //       .querySelector(".num").textContent = data.table.moons;
+          
+            const table = document.querySelector(".other_data");
+            table.innerHTML = "";
+            table.innerHTML+= `<div class="planet_data" data-label="rev_time">
+            <div class="num">${data.table.year.value}</div>
+            <div class="info">Length of year </div>            
+          </div>`
+ 
+          }
+          else{
 
-      //     content
-      //       .querySelector(`[data-label="name_sake"]`)
-      //       .querySelector(".num").textContent = data.table.namesake;
-      //     content.querySelector(".loader").classList.remove("is-visible");
-      //     content
-      //       .querySelector(".content-wrap")
-      //       .classList.remove("is-not-visible");
-      //   })
-      //   .catch((err) => {});
+          content.querySelector(".content-wrap").classList.remove("is-not-visible");
+          content.querySelector(".loader").classList.remove("is-visible");
+           
+          content.querySelector(".planet_desc").textContent = data.description;
+          content.querySelector(".planet_name").textContent =
+            planet.name[0].toUpperCase() + planet.name.slice(1);
+          content.querySelector(
+            ".planet_image"
+          ).style.backgroundImage = `url(${data.cover})`;
+          content.querySelector(".planet_type span").textContent =
+            data.table.type;
+          content
+            .querySelector(`[data-label="rev_time"]`)
+            .querySelector(".num").innerHTML =
+            data.table.year.value +
+            `<span class="unit"> ${data.table.year.suffix}</span>`;
+
+          content
+            .querySelector(`[data-label="sun_distance"]`)
+            .querySelector(".num").innerHTML =
+            Math.ceil(planet.radius / 500) + '<span class="unit"> AU</span>';
+
+          var totalsec = (
+            (planet.radius * 149597871 * 1000) /
+            (3 * Math.pow(10, 8) * 500)
+          ).toFixed(2);
+          content
+            .querySelector(`[data-label="time_to_sun"]`)
+            .querySelector(".num").textContent = moment
+            .utc(totalsec * 1000)
+            .format("HH:mm:ss");
+          content
+            .querySelector(`[data-label="moons_count"]`)
+            .querySelector(".num").textContent = data.table.moons;
+
+          content
+            .querySelector(`[data-label="name_sake"]`)
+            .querySelector(".num").textContent = data.table.namesake;
+
+          
+          content.querySelector(".loader").classList.remove("is-visible");
+          content
+            .querySelector(".content-wrap")
+            .classList.remove("is-not-visible");
+          }
+          // table.innerHTML = "";
+          
+          
+        })
+        .catch((err) => {});
     }
     if (isMoon) {
       this.setFocus(
@@ -193,7 +231,6 @@ export default class PlanetCanvas {
     );
     earth.init();
     // this.focusPlanet(earth);
-
     this.entities.push(earth);
 
     const mars = new Mars(
@@ -204,8 +241,7 @@ export default class PlanetCanvas {
     );
 
     mars.init();
-
-    // this.focusPlanet(mars); // to focus on earth this.focusPlanet(earth);
+    // this.focusPlanet(mars); 
     this.entities.push(mars);
 
     const jupiter = new Jupiter(
