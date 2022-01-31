@@ -24,8 +24,8 @@ export default class PlanetCanvas {
     this.camera = new THREE.PerspectiveCamera(
       45,
       window.innerWidth / window.innerHeight,
-      0.1,
-      100000
+      0.00001,
+      1000000
     );
 
     this.canvas = document.querySelector("#canvas");
@@ -392,8 +392,9 @@ export default class PlanetCanvas {
     this.sun.render();
 
     if (this.planet) {
-      if (this.planet.moons) {
-        this.planet.moons.forEach((x) => {
+      if (this.planet.moons || (this.planet.t && this.planet.t.moons)) {
+        const loopFor = this.planet.moons || this.planet.t.moons;
+        loopFor.forEach((x) => {
           const tempV = new THREE.Vector3();
           x.updateMatrixWorld(true, false);
           x.getWorldPosition(tempV);
