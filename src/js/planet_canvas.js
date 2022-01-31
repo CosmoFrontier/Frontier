@@ -75,83 +75,104 @@ export default class PlanetCanvas {
       fetch("https://ssd-abh80.vercel.app/body/" + planet.name.toLowerCase())
         .then((x) => x.json())
         .then((data) => {
-          if(isMoon){
-            content.querySelector(".content-wrap").classList.remove("is-not-visible");
+          if (isMoon) {
+            content
+              .querySelector(".content-wrap")
+              .classList.remove("is-not-visible");
             content.querySelector(".loader").classList.remove("is-visible");
-  
+
             // const moon_name = document.querySelector(".planet_name");
             // moon_name.textContent = `${planet.name[0].toUpperCase()+planet.name.slice(1)}`;
             // const moon_desc = document.querySelector(".planet_desc");
-            // moon_desc.textContent = `${data.description}`;   
+            // moon_desc.textContent = `${data.description}`;
             // const moon_image = document.querySelector(".planet_image");
             // moon_image.style.backgroundImage = `url(${data.cover})`;
 
-            content.querySelector(".planet_desc").textContent = data.description;
+            content.querySelector(".planet_desc").textContent =
+              data.description;
             content.querySelector(".planet_name").textContent =
               planet.name[0].toUpperCase() + planet.name.slice(1);
             content.querySelector(
               ".planet_image"
             ).style.backgroundImage = `url(${data.cover})`;
 
-          
             const table = document.querySelector(".other_data");
             table.innerHTML = "";
-            table.innerHTML+= `<div class="planet_data" data-label="rev_time">
+            table.innerHTML += `<div class="planet_data" data-label="rev_time">
             <div class="num">${data.table.year.value}</div>
             <div class="info">Length of year </div>            
-          </div>`
- 
-          }
-          else{
+          </div>`;
+          } else {
+            const table = document.querySelector(".other_data");
+            table.innerHTML = `<div class="planet_data" data-label="rev_time">
+          <div class="num">88</div>
+          <div class="info">Length of year</div>
+        </div>
+        <div class="planet_data" data-label="sun_distance">
+          <div class="num">0.4</div>
+          <div class="info">Distance from Sun</div>
+        </div>
+        <div class="planet_data" data-label="time_to_sun">
+          <div class="num">8</div>
+          <div class="info">One way light time to Sun</div>
+        </div>
 
-          content.querySelector(".content-wrap").classList.remove("is-not-visible");
-          content.querySelector(".loader").classList.remove("is-visible");
-           
-          content.querySelector(".planet_desc").textContent = data.description;
-          content.querySelector(".planet_name").textContent =
-            planet.name[0].toUpperCase() + planet.name.slice(1);
-          content.querySelector(
-            ".planet_image"
-          ).style.backgroundImage = `url(${data.cover})`;
-          content.querySelector(".planet_type span").textContent =
-            data.table.type;
-          content
-            .querySelector(`[data-label="rev_time"]`)
-            .querySelector(".num").innerHTML =
-            data.table.year.value +
-            `<span class="unit"> ${data.table.year.suffix}</span>`;
+        <div class="planet_data" data-label="moons_count">
+          <div class="num">0</div>
+          <div class="info">Moons</div>
+        </div>
+        <div class="planet_data" data-label="name_sake">
+          <div class="num" style="font-size:16px;"><Roman god of speed></div>
+          <div class="info">Namesake</div>
+        </div>`;
+            content
+              .querySelector(".content-wrap")
+              .classList.remove("is-not-visible");
+            content.querySelector(".loader").classList.remove("is-visible");
 
-          content
-            .querySelector(`[data-label="sun_distance"]`)
-            .querySelector(".num").innerHTML =
-            Math.ceil(planet.radius / 500) + '<span class="unit"> AU</span>';
+            content.querySelector(".planet_desc").textContent =
+              data.description;
+            content.querySelector(".planet_name").textContent =
+              planet.name[0].toUpperCase() + planet.name.slice(1);
+            content.querySelector(
+              ".planet_image"
+            ).style.backgroundImage = `url(${data.cover})`;
+            content.querySelector(".planet_type span").textContent =
+              data.table.type;
+            content
+              .querySelector(`[data-label="rev_time"]`)
+              .querySelector(".num").innerHTML =
+              data.table.year.value +
+              `<span class="unit"> ${data.table.year.suffix}</span>`;
 
-          var totalsec = (
-            (planet.radius * 149597871 * 1000) /
-            (3 * Math.pow(10, 8) * 500)
-          ).toFixed(2);
-          content
-            .querySelector(`[data-label="time_to_sun"]`)
-            .querySelector(".num").textContent = moment
-            .utc(totalsec * 1000)
-            .format("HH:mm:ss");
-          content
-            .querySelector(`[data-label="moons_count"]`)
-            .querySelector(".num").textContent = data.table.moons;
+            content
+              .querySelector(`[data-label="sun_distance"]`)
+              .querySelector(".num").innerHTML =
+              Math.ceil(planet.radius / 500) + '<span class="unit"> AU</span>';
 
-          content
-            .querySelector(`[data-label="name_sake"]`)
-            .querySelector(".num").textContent = data.table.namesake;
+            var totalsec = (
+              (planet.radius * 149597871 * 1000) /
+              (3 * Math.pow(10, 8) * 500)
+            ).toFixed(2);
+            content
+              .querySelector(`[data-label="time_to_sun"]`)
+              .querySelector(".num").textContent = moment
+              .utc(totalsec * 1000)
+              .format("HH:mm:ss");
+            content
+              .querySelector(`[data-label="moons_count"]`)
+              .querySelector(".num").textContent = data.table.moons;
 
-          
-          content.querySelector(".loader").classList.remove("is-visible");
-          content
-            .querySelector(".content-wrap")
-            .classList.remove("is-not-visible");
+            content
+              .querySelector(`[data-label="name_sake"]`)
+              .querySelector(".num").textContent = data.table.namesake;
+
+            content.querySelector(".loader").classList.remove("is-visible");
+            content
+              .querySelector(".content-wrap")
+              .classList.remove("is-not-visible");
           }
           // table.innerHTML = "";
-          
-          
         })
         .catch((err) => {});
     }
@@ -241,7 +262,7 @@ export default class PlanetCanvas {
     );
 
     mars.init();
-    // this.focusPlanet(mars); 
+    // this.focusPlanet(mars);
     this.entities.push(mars);
 
     const jupiter = new Jupiter(
