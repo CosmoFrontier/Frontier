@@ -181,7 +181,7 @@ export default class PlanetCanvas {
         planet.position.x,
         planet.position.y,
         planet.position.z,
-        0.3
+        0.1
       );
     } else
       this.setFocus(
