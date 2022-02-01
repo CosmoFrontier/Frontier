@@ -42,7 +42,7 @@ export default class SUN {
       kernelSize: KernelSize.SMALL,
       density: 0.96,
       decay: 0.93,
-      weight: 0.3,
+      weight: 0.8,
       exposure: 0.55,
       samples: 60,
       clampMax: 1.0,
