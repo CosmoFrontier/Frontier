@@ -351,10 +351,15 @@ body {
   overflow: hidden;
 }
 
+.search-bar:hover{
+  border: 1px rgb(170, 170, 170) solid;
+}
+
 .search-bar .search-holder ul {
   text-align: center;
   user-select: none;
 }
+
 
 .search-bar .search-holder ul li {
   height: 50px;
@@ -367,7 +372,11 @@ body {
   cursor: pointer;
 }
 .search-bar .search-holder ul li:hover {
-  background-color: rgb(100, 100, 100);
+  background-color: rgb(75, 75, 75);
+  color: white;
+}
+
+.search-bar-input::placeholder:hover{
   color: white;
 }
 .search-bar .search-bar-input {
