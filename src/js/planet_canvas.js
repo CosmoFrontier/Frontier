@@ -452,6 +452,7 @@ export default class PlanetCanvas {
       if (this.planet.moons || (this.planet.t && this.planet.t.moons)) {
         const loopFor = this.planet.moons || this.planet.t.moons;
         loopFor.forEach((x) => {
+          if(this.planet && this.planet.name == x.name) return;
           const tempV = new THREE.Vector3();
           x.updateMatrixWorld(true, false);
           x.getWorldPosition(tempV);
