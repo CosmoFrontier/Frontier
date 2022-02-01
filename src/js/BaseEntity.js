@@ -174,10 +174,9 @@ export default class BaseEntity {
     moon.elem.className = "label";
     const text = document.createElement("div");
     text.textContent = moon.name[0].toUpperCase() + moon.name.slice(1);
-    text.className = "label-text";
+    text.className = "label-text-sat";
     const ring = document.createElement("div");
     ring.className = "label-square";
-    ring.style.borderColor = "#" + this.color.toString(16);
     moon.elem.appendChild(text);
     moon.elem.appendChild(ring);
     moon.render = this.render.bind(this);

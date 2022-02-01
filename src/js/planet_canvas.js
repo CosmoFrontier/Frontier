@@ -362,7 +362,6 @@ export default class PlanetCanvas {
       x.elem.appendChild(text);
       document.body.appendChild(x.elem);
       x.onMoonClick = (e) => {
-        
         this.travelTo(e, true);
       };
       x.elem.addEventListener("click", () => {
