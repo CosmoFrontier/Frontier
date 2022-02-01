@@ -1,4 +1,5 @@
-# Cosmos Exploration
+# Frontier
+Explore the Solar System in real time 3d
 Made by @abh80 and @mohittk
 
 <div class="img" align="center" >
