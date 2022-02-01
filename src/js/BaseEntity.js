@@ -37,22 +37,57 @@ export default class BaseEntity {
     data.forEach(async (moon) => {
       if (!moon.texture) return;
       const data = moon.datas[0];
-      let p = this.drawMoonTrail(
-        Math.sin(this.theeta) * this.radius,
-        this.radius * Math.cos(this.theeta),
-        (this.size / 2) * 25 + data.radius * 500,
-        data.angular_distance,
-        data.inclination * (Math.PI / 180),
-        moon.name
-      );
-      const x = p.x + this.radius * Math.sin(this.theeta);
 
+      const rad = (this.size / 2) * 25 + data.radius * 500;
+      const x =
+        this.radius * Math.sin(this.theeta) +
+        rad * Math.sin(data.angular_distance);
       const y =
-        this.y_distance +
-        ((this.size / 2) * 25 + data.radius * 500) *
-          Math.sin(data.inclination * (Math.PI / 180));
-      const z = p.z + this.radius * Math.cos(this.theeta);
+        this.y_distance + rad * Math.sin(data.inclination * (Math.PI / 180));
+      const z =
+        this.radius * Math.cos(this.theeta) +
+        rad * Math.cos(data.angular_distance);
+      let radius = rad;
 
+      // make circular points starting from x,y,z and around 0,0,0
+      const points = [];
+      const colors = [];
+      const intensity = 0.02;
+      const color = new THREE.Color(this.color);
+      for (let i = 360; i > 0; i--) {
+        const x1 =
+          radius * Math.sin((i * Math.PI) / 180 + data.angular_distance);
+        const current_incllination =
+          data.inclination *
+          (Math.PI / 180) *
+          Math.cos(2 * Math.PI - (i * Math.PI) / 180);
+        const y1 = radius * Math.sin(current_incllination);
+        const z1 =
+          radius * Math.cos((i * Math.PI) / 180 + data.angular_distance);
+        points.push(new THREE.Vector3(x1, y1, z1));
+        color.r = color.r - (color.r / 360) * (360 - i) * intensity;
+        color.g = color.g - (color.g / 360) * (360 - i) * intensity;
+        color.b = color.b - (color.b / 360) * (360 - i) * intensity;
+        colors.push(color.r, color.g, color.b);
+      }
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const material = new THREE.LineBasicMaterial({
+        vertexColors: THREE.VertexColors,
+        transparent: true,
+      });
+      geometry.setAttribute(
+        "color",
+        new THREE.Float32BufferAttribute(colors, 3)
+      );
+      const line = new THREE.Line(geometry, material);
+      line.position.set(
+        this.radius * Math.sin(this.theeta),
+        this.y_distance,
+        this.radius * Math.cos(this.theeta)
+      );
+      line.name = moon.name + "Trail";
+
+      this.scenes.push(line);
       if (moon.texture.drawSelf) {
         this.setupMoon(
           this.createMoon(
@@ -170,6 +205,7 @@ export default class BaseEntity {
       value: moon.drawTrail.bind(this),
     });
     moon.elem.onclick = () => {
+      moon.elem.style.display = "none";
       this.onMoonClick(moon);
     };
     this.moons.push(moon);
@@ -189,33 +225,67 @@ export default class BaseEntity {
   }
 
   drawTrail() {
-    const ellipse = new THREE.EllipseCurve(
-      0,
-      0,
-      this.radius,
-      this.radius,
-      -(1.5 * Math.PI + this.theeta),
-      -Math.PI * 1.5,
-      false,
-      0
-    );
-    const points = ellipse.getPoints(50);
+    // const ellipse = new THREE.EllipseCurve(
+    //   0,
+    //   0,
+    //   this.radius,
+    //   this.radius,
+    //   -(1.5 * Math.PI + this.theeta),
+    //   -Math.PI * 1.5,
+    //   false,
+    //   0
+    // );
+    // const points = ellipse.getPoints(50);
 
-    for (let i = 0; i < points.length; i++) {
-      points[i] = new THREE.Vector3(points[i].x, 0, points[i].y);
-    }
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    // for (let i = 0; i < points.length; i++) {
+    //   points[i] = new THREE.Vector3(points[i].x, 0, points[i].y);
+    // }
+    // const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
+    // const colors = [];
+
+    // const initialColor = this.color;
+    // for (let i = 0; i < geometry.attributes.position.count; i++) {
+    //   var color = new THREE.Color(initialColor);
+    //   color.r = color.r - (color.r / geometry.attributes.position.count) * i;
+    //   color.g = color.g - (color.g / geometry.attributes.position.count) * i;
+    //   color.b = color.b - (color.b / geometry.attributes.position.count) * i;
+    //   colors.push(color.r, color.g, color.b);
+    // }
+    // geometry.setAttribute(
+    //   "color",
+    //   new THREE.BufferAttribute(new Float32Array(colors), 3)
+    // );
+    // const Linematerial = new THREE.LineBasicMaterial({
+    //   vertexColors: THREE.VertexColors,
+    //   transparent: true,
+    // });
+    // const line = new THREE.Line(geometry, Linematerial);
+
+    // line.name = this.name + "Trail";
+
+    // line.rotateX(-this.inclination);
+    // this.trail = line;
+
+    // this.scene.add(line);
+    const points = [];
     const colors = [];
-
-    const initialColor = this.color;
-    for (let i = 0; i < geometry.attributes.position.count; i++) {
-      var color = new THREE.Color(initialColor);
-      color.r = color.r - (color.r / geometry.attributes.position.count) * i;
-      color.g = color.g - (color.g / geometry.attributes.position.count) * i;
-      color.b = color.b - (color.b / geometry.attributes.position.count) * i;
+    const color = new THREE.Color(this.color);
+    for (let i = 360; i > 0; i--) {
+      const x1 = this.radius * Math.sin((i * Math.PI) / 180 + this.theeta);
+      const current_incllination =
+        this.data.data[0].inclination *
+        (Math.PI / 180) *
+        Math.cos(2 * Math.PI - (i * Math.PI) / 180);
+      const y1 = this.radius * Math.sin(current_incllination);
+      const z1 = this.radius * Math.cos((i * Math.PI) / 180 + this.theeta);
+      points.push(new THREE.Vector3(x1, y1, z1));
+      color.r = color.r - (color.r / 360) * (360 - i) * 0.02;
+      color.g = color.g - (color.g / 360) * (360 - i) * 0.02;
+      color.b = color.b - (color.b / 360) * (360 - i) * 0.02;
       colors.push(color.r, color.g, color.b);
     }
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
     geometry.setAttribute(
       "color",
       new THREE.BufferAttribute(new Float32Array(colors), 3)
@@ -225,59 +295,10 @@ export default class BaseEntity {
       transparent: true,
     });
     const line = new THREE.Line(geometry, Linematerial);
-
     line.name = this.name + "Trail";
-
-    line.rotateX(-this.inclination);
-    this.trail = line;
-
     this.scene.add(line);
   }
-  drawMoonTrail(x, z, radius, theeta, incl, name) {
-    const ellipse = new THREE.EllipseCurve(
-      0,
-      0,
-      radius,
-      radius,
-      -(1.5 * Math.PI + theeta),
-      -Math.PI * 1.5,
-      false,
-      0
-    );
-    const points = ellipse.getPoints(50);
-    for (let i = 0; i < points.length; i++) {
-      points[i] = new THREE.Vector3(points[i].x, 0, points[i].y);
-    }
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const colors = [];
-    const initialColor = this.color;
-    for (let i = 0; i < geometry.attributes.position.count; i++) {
-      var color = new THREE.Color(initialColor);
-      color.r = color.r - (color.r / geometry.attributes.position.count) * i;
-      color.g = color.g - (color.g / geometry.attributes.position.count) * i;
-      color.b = color.b - (color.b / geometry.attributes.position.count) * i;
-      colors.push(color.r, color.g, color.b);
-    }
-    geometry.setAttribute(
-      "color",
-      new THREE.BufferAttribute(new Float32Array(colors), 3)
-    );
-    const Linematerial = new THREE.LineBasicMaterial({
-      vertexColors: THREE.VertexColors,
-      transparent: true,
-    });
-    const line = new THREE.Line(geometry, Linematerial);
 
-    line.position.set(x, this.y_distance, z);
-    line.rotateX(-incl);
-    line.name = name + "Trail";
-    line.updateMatrix();
-
-    this.scenes.push(line);
-    const temp = points[0].clone();
-    line.localToWorld(temp);
-    return temp;
-  }
   removeTrail() {
     var trail = this.scene.getObjectByName(this.name + "Trail");
     this.scene.remove(trail);
