@@ -27,8 +27,8 @@ export default class Jupiter extends BaseEntity {
     );
 
     this.scenes.push(this.jupiterSphere);
-   
-    this.drawTrail();
+
+    this.createTrail();
   }
 
   render() {}

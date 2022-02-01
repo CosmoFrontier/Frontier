@@ -54,6 +54,6 @@ export default class Saturn extends BaseEntity {
     this.mesh.receiveShadow = true;
 
     this.scenes.push(this.saturnSphere, this.mesh);
-    this.drawTrail();
+    this.createTrail();
   }
 }

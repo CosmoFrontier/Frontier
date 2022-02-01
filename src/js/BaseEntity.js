@@ -49,7 +49,7 @@ export default class BaseEntity {
         rad * Math.cos(data.angular_distance);
       let radius = rad;
 
-      // make circular points starting from x,y,z and around 0,0,0
+
       const points = [];
       const colors = [];
       const intensity = 0.02;
@@ -224,54 +224,11 @@ export default class BaseEntity {
     return moon;
   }
 
-  drawTrail() {
-    // const ellipse = new THREE.EllipseCurve(
-    //   0,
-    //   0,
-    //   this.radius,
-    //   this.radius,
-    //   -(1.5 * Math.PI + this.theeta),
-    //   -Math.PI * 1.5,
-    //   false,
-    //   0
-    // );
-    // const points = ellipse.getPoints(50);
-
-    // for (let i = 0; i < points.length; i++) {
-    //   points[i] = new THREE.Vector3(points[i].x, 0, points[i].y);
-    // }
-    // const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
-    // const colors = [];
-
-    // const initialColor = this.color;
-    // for (let i = 0; i < geometry.attributes.position.count; i++) {
-    //   var color = new THREE.Color(initialColor);
-    //   color.r = color.r - (color.r / geometry.attributes.position.count) * i;
-    //   color.g = color.g - (color.g / geometry.attributes.position.count) * i;
-    //   color.b = color.b - (color.b / geometry.attributes.position.count) * i;
-    //   colors.push(color.r, color.g, color.b);
-    // }
-    // geometry.setAttribute(
-    //   "color",
-    //   new THREE.BufferAttribute(new Float32Array(colors), 3)
-    // );
-    // const Linematerial = new THREE.LineBasicMaterial({
-    //   vertexColors: THREE.VertexColors,
-    //   transparent: true,
-    // });
-    // const line = new THREE.Line(geometry, Linematerial);
-
-    // line.name = this.name + "Trail";
-
-    // line.rotateX(-this.inclination);
-    // this.trail = line;
-
-    // this.scene.add(line);
+  createTrail() {
     const points = [];
     const colors = [];
     const color = new THREE.Color(this.color);
-    for (let i = 360; i > 0; i--) {
+    for (let i = 360; i > 0; i-= 0.01) {
       const x1 = this.radius * Math.sin((i * Math.PI) / 180 + this.theeta);
       const current_incllination =
         this.data.data[0].inclination *
@@ -280,9 +237,9 @@ export default class BaseEntity {
       const y1 = this.radius * Math.sin(current_incllination);
       const z1 = this.radius * Math.cos((i * Math.PI) / 180 + this.theeta);
       points.push(new THREE.Vector3(x1, y1, z1));
-      color.r = color.r - (color.r / 360) * (360 - i) * 0.02;
-      color.g = color.g - (color.g / 360) * (360 - i) * 0.02;
-      color.b = color.b - (color.b / 360) * (360 - i) * 0.02;
+      color.r = color.r - (color.r / 360) * (360 - i) * 0.0002;
+      color.g = color.g - (color.g / 360) * (360 - i) * 0.0002;
+      color.b = color.b - (color.b / 360) * (360 - i) * 0.0002;
       colors.push(color.r, color.g, color.b);
     }
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -296,9 +253,12 @@ export default class BaseEntity {
     });
     const line = new THREE.Line(geometry, Linematerial);
     line.name = this.name + "Trail";
+
     this.scene.add(line);
   }
-
+  drawTrail() {
+    this.createTrail();
+  }
   removeTrail() {
     var trail = this.scene.getObjectByName(this.name + "Trail");
     this.scene.remove(trail);

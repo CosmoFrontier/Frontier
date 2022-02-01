@@ -30,7 +30,6 @@ export default class Pluto extends BaseEntity {
     );
 
     this.scenes.push(this.plutoSphere);
-
-    this.drawTrail();
+    this.createTrail();
   }
 }

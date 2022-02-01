@@ -25,6 +25,6 @@ export default class Venus extends BaseEntity {
     );
 
     this.scenes.push(this.venusSphere);
-    this.drawTrail();
+    this.createTrail();
   }
 }

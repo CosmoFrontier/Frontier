@@ -24,6 +24,6 @@ export default class Mercury extends BaseEntity {
     );
 
     this.scenes.push(this.mercurySphere);
-    this.drawTrail();
+    this.createTrail();
   }
 }

@@ -27,6 +27,6 @@ export default class Neptune extends BaseEntity {
     );
 
     this.scenes.push(this.neptuneSphere);
-    this.drawTrail();
+    this.createTrail();
   }
 }
