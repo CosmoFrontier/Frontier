@@ -72,7 +72,7 @@ export default class PlanetCanvas {
       content.querySelector(".content-wrap").classList.add("is-not-visible");
       content.querySelector(".loader").classList.add("is-visible");
 
-      fetch("https://ssd-abh80.vercel.app/body/" + planet.name.toLowerCase()) //https://ssd-abh80.vercel.app/body/
+      fetch("http://localhost:3000/body/" + planet.name.toLowerCase()) //https://ssd-abh80.vercel.app/body/
         .then((x) => x.json())
         .then((data) => {
           if (isMoon) {
@@ -173,8 +173,7 @@ export default class PlanetCanvas {
         planet.position.x,
         planet.position.y,
         planet.position.z,
-        0.1
-      );
+        0.1  );
     } else
       this.setFocus(
         planet[planet.name.toLowerCase() + "Sphere"].position.x,
@@ -384,7 +383,7 @@ export default class PlanetCanvas {
   }
   async fetchData() {
     try {
-      const res = await fetch("https://ssd-abh80.vercel.app/all"); //https://ssd-abh80.vercel.app/all
+      const res = await fetch("http://localhost:3000/all"); //https://ssd-abh80.vercel.app/all
       const data = await res.json();
       this.data = data;
     } catch {

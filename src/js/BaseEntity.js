@@ -169,6 +169,7 @@ export default class BaseEntity {
   }
   setupMoon(moon) {
     moon.t = this;
+    moon.zaxis = 1;
     moon.moon = true;
     moon.elem = document.createElement("div");
     moon.elem.className = "label";

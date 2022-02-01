@@ -2,7 +2,7 @@ export default function moonData(name) {
   return new Promise(async (resolve, reject) => {
     try {
       const data = await fetch(
-        "https://ssd-abh80.vercel.app/satellite/" + name //https://ssd-abh80.vercel.app/satellite/
+        "http://localhost:3000/satellite/" + name //https://ssd-abh80.vercel.app/satellite/
       );
       const json = await data.json();
       resolve(json);
