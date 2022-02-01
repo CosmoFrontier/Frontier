@@ -28,7 +28,7 @@ export default class Mars extends BaseEntity {
 
     this.scenes.push(this.marsSphere);
 
-    this.drawTrail();
+    this.createTrail();
   }
 
   seconds = () =>

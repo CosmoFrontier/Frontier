@@ -33,7 +33,7 @@ export default class Earth extends BaseEntity {
     this.earthSphere.rotateX(this.tilt * (Math.PI / 180));
     this.scenes.push(this.earthSphere);
 
-    this.drawTrail();
+    this.createTrail();
   }
 
   seconds = () =>

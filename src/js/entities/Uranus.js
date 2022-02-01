@@ -27,6 +27,6 @@ export default class Uranus extends BaseEntity {
     );
 
     this.scenes.push(this.uranusSphere);
-    this.drawTrail();
+    this.createTrail();
   }
 }
