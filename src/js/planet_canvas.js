@@ -48,7 +48,7 @@ export default class PlanetCanvas {
   setFocus(x, y, z, zaxis) {
     this.focusAt = new THREE.Vector3(x, y, z);
     this.camera.lookAt(this.focusAt);
-    this.camera.position.set(x, y, z - zaxis);
+    this.camera.position.set(x, y, z - zaxis); 
     this.controls.target.set(x, y, z);
     this.controls.update();
   }
@@ -72,7 +72,7 @@ export default class PlanetCanvas {
       content.querySelector(".content-wrap").classList.add("is-not-visible");
       content.querySelector(".loader").classList.add("is-visible");
 
-      fetch("https://ssd-abh80.vercel.app/body/" + planet.name.toLowerCase())
+      fetch("https://ssd-abh80.vercel.app/body/" + planet.name.toLowerCase()) //https://ssd-abh80.vercel.app/body/
         .then((x) => x.json())
         .then((data) => {
           if (isMoon) {
@@ -80,14 +80,6 @@ export default class PlanetCanvas {
               .querySelector(".content-wrap")
               .classList.remove("is-not-visible");
             content.querySelector(".loader").classList.remove("is-visible");
-
-            // const moon_name = document.querySelector(".planet_name");
-            // moon_name.textContent = `${planet.name[0].toUpperCase()+planet.name.slice(1)}`;
-            // const moon_desc = document.querySelector(".planet_desc");
-            // moon_desc.textContent = `${data.description}`;
-            // const moon_image = document.querySelector(".planet_image");
-            // moon_image.style.backgroundImage = `url(${data.cover})`;
-
             content.querySelector(".planet_desc").textContent =
               data.description;
             content.querySelector(".planet_name").textContent =
@@ -194,6 +186,7 @@ export default class PlanetCanvas {
     if (this.planet.name != "sun") {
       this.planet.elem.style.display = "none";
     }
+    
     if (!mounted && this.planet.name != "sun") {
       this.planet.mount();
     }
@@ -369,6 +362,7 @@ export default class PlanetCanvas {
       x.elem.appendChild(text);
       document.body.appendChild(x.elem);
       x.onMoonClick = (e) => {
+        
         this.travelTo(e, true);
       };
       x.elem.addEventListener("click", () => {
@@ -391,7 +385,7 @@ export default class PlanetCanvas {
   }
   async fetchData() {
     try {
-      const res = await fetch("https://ssd-abh80.vercel.app/all");
+      const res = await fetch("https://ssd-abh80.vercel.app/all"); //https://ssd-abh80.vercel.app/all
       const data = await res.json();
       this.data = data;
     } catch {
@@ -422,7 +416,7 @@ export default class PlanetCanvas {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     this.controls.minDistance = 0.1;
-    this.controls.autoRotateSpeed = -0.5;
+    this.controls.autoRotateSpeed = 0.5;
     this.controls.enableZoom = true;
     this.controls.autoRotate = true;
     this.controls.addEventListener("start", () => {
@@ -452,6 +446,7 @@ export default class PlanetCanvas {
       if (this.planet.moons || (this.planet.t && this.planet.t.moons)) {
         const loopFor = this.planet.moons || this.planet.t.moons;
         loopFor.forEach((x) => {
+          if(this.planet && this.planet.name == x.name) return;
           const tempV = new THREE.Vector3();
           x.updateMatrixWorld(true, false);
           x.getWorldPosition(tempV);

@@ -74,6 +74,15 @@ canvas {
   height: 12px;
   border: 1px solid;
 }
+
+.label-square{
+  z-index: 3;
+  background-color: transparent;
+  border-radius: 10%;
+  width: 12px;
+  height: 12px;
+  border: 1px solid;
+}
 .footer {
   position: absolute;
   bottom: 10px;

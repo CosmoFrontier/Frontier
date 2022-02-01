@@ -176,7 +176,7 @@ export default class BaseEntity {
     text.textContent = moon.name[0].toUpperCase() + moon.name.slice(1);
     text.className = "label-text";
     const ring = document.createElement("div");
-    ring.className = "label-ring";
+    ring.className = "label-square";
     ring.style.borderColor = "#" + this.color.toString(16);
     moon.elem.appendChild(text);
     moon.elem.appendChild(ring);
