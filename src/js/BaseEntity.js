@@ -37,8 +37,9 @@ export default class BaseEntity {
     data.forEach(async (moon) => {
       if (!moon.texture) return;
       const data = moon.datas[0];
-
-      const rad = (this.size / 2) * 25 + data.radius * 500;
+      let multiplyFactor = 12.5;
+      if (moon.articifial) multiplyFactor = 1;
+      const rad = this.size * multiplyFactor + data.radius * 500;
       const x =
         this.radius * Math.sin(this.theeta) +
         rad * Math.sin(data.angular_distance);
@@ -49,11 +50,13 @@ export default class BaseEntity {
         rad * Math.cos(data.angular_distance);
       let radius = rad;
 
-
       const points = [];
       const colors = [];
       const intensity = 0.02;
-      const color = new THREE.Color(this.color);
+      let color = new THREE.Color(this.color);
+      if (moon.articifial) {
+        color = new THREE.Color(0x9fa9b3);
+      }
       for (let i = 360; i > 0; i--) {
         const x1 =
           radius * Math.sin((i * Math.PI) / 180 + data.angular_distance);
@@ -89,37 +92,44 @@ export default class BaseEntity {
 
       this.scenes.push(line);
       if (moon.texture.drawSelf) {
-        this.setupMoon(
-          this.createMoon(
-            moon.name,
-            "assets/" + moon.texture.map,
-            moon.radius,
-            {
-              x,
-              y,
-              z,
-            },
-            data.inclination * (Math.PI / 180)
-          )
+        const ob = this.createMoon(
+          moon.name,
+          "assets/" + moon.texture.map,
+          moon.radius,
+          {
+            x,
+            y,
+            z,
+          },
+          data.inclination * (Math.PI / 180)
         );
+
+        this.setupMoon(ob);
       } else {
-        this.setupMoon(
-          await this.loadGlb(
-            moon.name,
-            "assets/moons/" +
-              moon.texture.map[0].toUpperCase() +
-              moon.texture.map.slice(1),
-            10 / moon.radius,
-            { x, y, z },
-            data.inclination * (Math.PI / 180)
-          )
+        const ob = await this.loadGlb(
+          moon.name,
+          "assets/moons/" +
+            moon.texture.map[0].toUpperCase() +
+            moon.texture.map.slice(1),
+          10 / moon.radius,
+          { x, y, z },
+          data.inclination * (Math.PI / 180)
         );
+
+        ob.articifial = moon.articifial;
+        this.setupMoon(ob);
       }
 
       this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
     });
   }
   loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
+    if (isNaN(radius)) {
+      radius = 0.01;
+    }
+    if (radius < 1) {
+      radius *= 1.5;
+    }
     return new Promise((resolve, reject) => {
       if (!map) return;
       const Loader = new GLTFLoader();
@@ -157,6 +167,7 @@ export default class BaseEntity {
           obj.position.set(pos.x, pos.y, pos.z);
 
           obj.name = name;
+          obj.zaxis = radius + 0.01;
 
           resolve(obj);
         },
@@ -169,7 +180,7 @@ export default class BaseEntity {
   }
   setupMoon(moon) {
     moon.t = this;
-    moon.zaxis = 1;
+
     moon.moon = true;
     moon.elem = document.createElement("div");
     moon.elem.className = "label";
@@ -177,7 +188,9 @@ export default class BaseEntity {
     text.textContent = moon.name[0].toUpperCase() + moon.name.slice(1);
     text.className = "label-text-sat";
     const ring = document.createElement("div");
-    ring.className = "label-square";
+
+    if (moon.articifial) ring.className = "label-square";
+    else ring.className = "label-ring";
     moon.elem.appendChild(text);
     moon.elem.appendChild(ring);
     moon.render = this.render.bind(this);
@@ -228,7 +241,7 @@ export default class BaseEntity {
     const points = [];
     const colors = [];
     const color = new THREE.Color(this.color);
-    for (let i = 360; i > 0; i-= 0.01) {
+    for (let i = 360; i > 0; i -= 0.01) {
       const x1 = this.radius * Math.sin((i * Math.PI) / 180 + this.theeta);
       const current_incllination =
         this.data.data[0].inclination *
