@@ -91,6 +91,7 @@ export default class PlanetCanvas {
         .then((x) => x.json())
         .then((data) => {
           if (isMoon) {
+            
             content
               .querySelector(".content-wrap")
               .classList.remove("is-not-visible");
@@ -110,7 +111,17 @@ export default class PlanetCanvas {
             table.innerHTML += `<div class="planet_data" data-label="rev_time">
             <div class="num">${data.table.year.value}<span class="unit">${data.table.year.suffix}</span></div>
             <div class="info">Length of year </div>            
-          </div><div class="planet_data"><div class="num" style="font-size:16px;">${data.table.namesake}</div><div class="info">Namesake</div></div>`;
+          </div>
+          <div class="planet_data">
+          <div class="num" style="font-size:16px;">${data.table.namesake}</div>
+          <div class="info">Namesake</div>
+          </div>
+          <div class="planet_data">
+          <div class="num">${(planet.data.radius * 1.49 * Math.pow(10,8)).toFixed(2)}<span class="unit">Kms</span></div>
+          <div class="info">Distance from parent planet</div>
+          </div>
+
+          `;
           } else {
             const table = document.querySelector(".other_data");
             table.innerHTML = `<div class="planet_data" data-label="rev_time">
