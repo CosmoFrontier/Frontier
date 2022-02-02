@@ -28,6 +28,9 @@ export default class SUN {
   get zaxis() {
     return 1000;
   }
+
+ 
+
   init() {
     const SunGeometry = new THREE.SphereGeometry(10, 32, 32);
     const SunMaterial = new THREE.MeshPhongMaterial({
