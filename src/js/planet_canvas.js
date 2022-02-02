@@ -331,9 +331,11 @@ export default class PlanetCanvas {
     const ul = document.querySelector(".search-holder ul");
     search.addEventListener("keyup", (e) => {
       if (!search.value) return;
+      // fetch("https://ssd-abh80.vercel.app/body/all")
       let results = this.entities.filter((x) =>
         x.name.toLowerCase().startsWith(search.value.toLowerCase())
       );
+
       ul.innerHTML = "";
       results.forEach((x) => {
         const el = document.createElement("li");
