@@ -13,7 +13,6 @@ import Neptune from "./entities/Neptune";
 import Pluto from "./entities/Pluto";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import moment from "moment";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export default class PlanetCanvas {
   constructor() {
@@ -46,9 +45,9 @@ export default class PlanetCanvas {
     //document.body.appendChild(stats.domElement);
   }
   setFocus(x, y, z, zaxis) {
-    this.focusAt = new THREE.Vector3(x,y,z);
+    this.focusAt = new THREE.Vector3(x, y, z);
     this.camera.lookAt(this.focusAt);
-    this.camera.position.set(x, y, z - zaxis); 
+    this.camera.position.set(x, y, z - zaxis);
     this.controls.target.set(x, y, z);
     this.controls.update();
   }
@@ -173,7 +172,8 @@ export default class PlanetCanvas {
         planet.position.x,
         planet.position.y,
         planet.position.z,
-        0.1  );
+        planet.zaxis
+      );
     } else
       this.setFocus(
         planet[planet.name.toLowerCase() + "Sphere"].position.x,
@@ -185,7 +185,7 @@ export default class PlanetCanvas {
     if (this.planet.name != "sun") {
       this.planet.elem.style.display = "none";
     }
-    
+
     if (!mounted && this.planet.name != "sun") {
       this.planet.mount();
     }
@@ -413,7 +413,7 @@ export default class PlanetCanvas {
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-    this.controls.minDistance = 0.1;
+    this.controls.minDistance = 0.0001;
     this.controls.autoRotateSpeed = 0.5;
     this.controls.enableZoom = true;
     this.controls.autoRotate = true;
@@ -444,7 +444,7 @@ export default class PlanetCanvas {
       if (this.planet.moons || (this.planet.t && this.planet.t.moons)) {
         const loopFor = this.planet.moons || this.planet.t.moons;
         loopFor.forEach((x) => {
-          if(this.planet && this.planet.name == x.name) return;
+          if (this.planet && this.planet.name == x.name) return;
           const tempV = new THREE.Vector3();
           x.updateMatrixWorld(true, false);
           x.getWorldPosition(tempV);
