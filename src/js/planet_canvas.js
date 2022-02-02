@@ -57,7 +57,10 @@ export default class PlanetCanvas {
       this.planet.drawTrail();
       this.planet.unmount();
     }
-
+    if (this.planet && this.planet.name != "sun" && this.planet.moon) {
+      this.planet.elem.style.display = "none";
+      this.planet.unmount();
+    }
     if (planet.name != "sun") {
       document
         .querySelector(":root")
@@ -86,14 +89,15 @@ export default class PlanetCanvas {
             content.querySelector(
               ".planet_image"
             ).style.backgroundImage = `url(${data.cover})`;
+            content.querySelector(".planet_type span").textContent =
+              data.table.type;
 
             const table = document.querySelector(".other_data");
             table.innerHTML = "";
             table.innerHTML += `<div class="planet_data" data-label="rev_time">
-            <div class="num">${data.table.year.value}   <span class="unit"> ${data.table.year.suffix}</span></div>
-         
-            <div class="info"> Length of year </div>            
-          </div>`;
+            <div class="num">${data.table.year.value}<span class="unit">${data.table.year.suffix}</span></div>
+            <div class="info">Length of year </div>            
+          </div><div class="planet_data"><div class="num" style="font-size:16px;">${data.table.namesake}</div><div class="info">Namesake</div></div>`;
           } else {
             const table = document.querySelector(".other_data");
             table.innerHTML = `<div class="planet_data" data-label="rev_time">
