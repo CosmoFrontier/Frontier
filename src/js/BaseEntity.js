@@ -109,7 +109,7 @@ export default class BaseEntity {
           },
           data.inclination * (Math.PI / 180)
         );
-
+        ob.data = data;
         this.setupMoon(ob);
       } else {
         const ob = await this.loadGlb(
@@ -123,6 +123,7 @@ export default class BaseEntity {
         );
 
         ob.articifial = moon.articifial;
+        ob.data = data;
         this.setupMoon(ob);
       }
 
