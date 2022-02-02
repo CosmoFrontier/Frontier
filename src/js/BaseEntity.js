@@ -175,7 +175,7 @@ export default class BaseEntity {
 
           obj.name = name;
 
-          obj.zaxis = radius + radius * 0.0666666667;
+          obj.zaxis = radius * 3;
 
           resolve(obj);
         },
