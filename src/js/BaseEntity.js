@@ -36,7 +36,7 @@ export default class BaseEntity {
     if (!data.length) return;
     data.forEach(async (moon) => {
       if (!moon.texture) return;
-      
+
       const data = moon.datas[0];
       if (Math.abs(data.inclination) > 90) {
         if (data.inclination > 0)
@@ -100,7 +100,7 @@ export default class BaseEntity {
       if (moon.texture.drawSelf) {
         const ob = this.createMoon(
           moon.name,
-          "assets/" + moon.texture.map,
+          "assets/moons/" + moon.texture.map,
           moon.radius,
           {
             x,
@@ -173,7 +173,8 @@ export default class BaseEntity {
           obj.position.set(pos.x, pos.y, pos.z);
 
           obj.name = name;
-          obj.zaxis = radius + 0.01;
+
+          obj.zaxis = radius + radius * 0.0666666667;
 
           resolve(obj);
         },
@@ -238,6 +239,8 @@ export default class BaseEntity {
 
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
     moon.name = name;
+
+    moon.zaxis = (10/radius) * 3;
     moon.position.set(pos.x, pos.y, pos.z);
 
     return moon;
@@ -290,5 +293,7 @@ export default class BaseEntity {
   }
   unmount() {
     this.scenes.forEach((scene) => scene && this.scene.remove(scene));
+    if (this.moons.length)
+      this.moons.forEach((moon) => (moon.elem.style.display = "none"));
   }
 }
