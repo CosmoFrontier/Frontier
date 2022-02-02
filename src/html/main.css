@@ -101,6 +101,19 @@ canvas {
   height: 12px;
   border: 1px solid white;
 }
+
+.label-diamond{
+  z-index: 3;
+  background-color: transparent;
+  border-radius: 10%;
+  width: 12px;
+  height: 12px;
+  -ms-transform: rotate(45deg); /* IE 9 */
+  transform: rotate(45deg);
+  border: 1px solid white;
+}
+
+
 .footer {
   position: absolute;
   bottom: 10px;

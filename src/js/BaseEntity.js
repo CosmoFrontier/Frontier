@@ -198,7 +198,7 @@ export default class BaseEntity {
     const ring = document.createElement("div");
 
     if (moon.articifial) ring.className = "label-square";
-    else ring.className = "label-ring";
+    else ring.className = "label-diamond";
     moon.elem.appendChild(text);
     moon.elem.appendChild(ring);
     moon.render = this.render.bind(this);
