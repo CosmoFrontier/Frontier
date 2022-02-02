@@ -42,6 +42,9 @@ canvas {
   top: -0.01px;
   left: 17px;
 }
+.label-text:hover {
+  color: white;
+}
 
 .label-text-sat {
   line-height: 10px;
@@ -52,6 +55,9 @@ canvas {
   color: white;
 }
 
+.label-text-sat:hover {
+  color: white;
+}
 
 
 .logo {

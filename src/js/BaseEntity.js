@@ -36,7 +36,13 @@ export default class BaseEntity {
     if (!data.length) return;
     data.forEach(async (moon) => {
       if (!moon.texture) return;
+      
       const data = moon.datas[0];
+      if (Math.abs(data.inclination) > 90) {
+        if (data.inclination > 0)
+          data.inclination = Math.abs(data.inclination) - 90;
+        else data.inclination = -(Math.abs(data.inclination) - 90);
+      }
       let multiplyFactor = 12.5;
       if (moon.articifial) multiplyFactor = 1;
       const rad = this.size * multiplyFactor + data.radius * 500;
