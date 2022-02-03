@@ -24,111 +24,114 @@ export default class BaseEntity {
     this.scenes = [...scene, ...this.scenes];
   }
 
-  async loadMoons() {
-    let data = null;
-    try {
-      data = await moonData(this.name);
-      this.fetchedMoons = true;
-    } catch (e) {
-      this.fetchedMoons = true;
-    }
-
-    if (!data.length) return;
-    data.forEach(async (moon) => {
-      if (!moon.texture) return;
-
-      const data = moon.datas[0];
-      if (Math.abs(data.inclination) > 90) {
-        if (data.inclination > 0)
-          data.inclination = Math.abs(data.inclination) - 90;
-        else data.inclination = -(Math.abs(data.inclination) - 90);
+  loadMoons() {
+    return new Promise(async (resolve, reject) => {
+      let data = null;
+      try {
+        data = await moonData(this.name);
+        this.fetchedMoons = true;
+      } catch (e) {
+        this.fetchedMoons = true;
       }
-      let multiplyFactor = 12.5;
-      if (moon.articifial) multiplyFactor = 1;
-      const rad = this.size * multiplyFactor + data.radius * 500;
-      const x =
-        this.radius * Math.sin(this.theeta) +
-        rad * Math.sin(data.angular_distance);
-      const y =
-        this.y_distance + rad * Math.sin(data.inclination * (Math.PI / 180));
-      const z =
-        this.radius * Math.cos(this.theeta) +
-        rad * Math.cos(data.angular_distance);
-      let radius = rad;
 
-      const points = [];
-      const colors = [];
-      const intensity = 0.02;
-      let color = new THREE.Color(this.color);
-      if (moon.articifial) {
-        color = new THREE.Color(0x9fa9b3);
-      }
-      for (let i = 360; i > 0; i--) {
-        const x1 =
-          radius * Math.sin((i * Math.PI) / 180 + data.angular_distance);
-        const current_incllination =
-          data.inclination *
-          (Math.PI / 180) *
-          Math.cos(2 * Math.PI - (i * Math.PI) / 180);
-        const y1 = radius * Math.sin(current_incllination);
-        const z1 =
-          radius * Math.cos((i * Math.PI) / 180 + data.angular_distance);
-        points.push(new THREE.Vector3(x1, y1, z1));
-        color.r = color.r - (color.r / 360) * (360 - i) * intensity;
-        color.g = color.g - (color.g / 360) * (360 - i) * intensity;
-        color.b = color.b - (color.b / 360) * (360 - i) * intensity;
-        colors.push(color.r, color.g, color.b);
-      }
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      const material = new THREE.LineBasicMaterial({
-        vertexColors: THREE.VertexColors,
-        transparent: true,
+      if (!data.length) return;
+      data.forEach(async (moon) => {
+        if (!moon.texture) return;
+
+        const data = moon.datas[0];
+        if (Math.abs(data.inclination) > 90) {
+          if (data.inclination > 0)
+            data.inclination = Math.abs(data.inclination) - 90;
+          else data.inclination = -(Math.abs(data.inclination) - 90);
+        }
+        let multiplyFactor = 12.5;
+        if (moon.articifial) multiplyFactor = 1;
+        const rad = this.size * multiplyFactor + data.radius * 500;
+        const x =
+          this.radius * Math.sin(this.theeta) +
+          rad * Math.sin(data.angular_distance);
+        const y =
+          this.y_distance + rad * Math.sin(data.inclination * (Math.PI / 180));
+        const z =
+          this.radius * Math.cos(this.theeta) +
+          rad * Math.cos(data.angular_distance);
+        let radius = rad;
+
+        const points = [];
+        const colors = [];
+        const intensity = 0.02;
+        let color = new THREE.Color(this.color);
+        if (moon.articifial) {
+          color = new THREE.Color(0x9fa9b3);
+        }
+        for (let i = 360; i > 0; i--) {
+          const x1 =
+            radius * Math.sin((i * Math.PI) / 180 + data.angular_distance);
+          const current_incllination =
+            data.inclination *
+            (Math.PI / 180) *
+            Math.cos(2 * Math.PI - (i * Math.PI) / 180);
+          const y1 = radius * Math.sin(current_incllination);
+          const z1 =
+            radius * Math.cos((i * Math.PI) / 180 + data.angular_distance);
+          points.push(new THREE.Vector3(x1, y1, z1));
+          color.r = color.r - (color.r / 360) * (360 - i) * intensity;
+          color.g = color.g - (color.g / 360) * (360 - i) * intensity;
+          color.b = color.b - (color.b / 360) * (360 - i) * intensity;
+          colors.push(color.r, color.g, color.b);
+        }
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        const material = new THREE.LineBasicMaterial({
+          vertexColors: THREE.VertexColors,
+          transparent: true,
+        });
+        geometry.setAttribute(
+          "color",
+          new THREE.Float32BufferAttribute(colors, 3)
+        );
+        const line = new THREE.Line(geometry, material);
+        line.position.set(
+          this.radius * Math.sin(this.theeta),
+          this.y_distance,
+          this.radius * Math.cos(this.theeta)
+        );
+        line.name = moon.name + "Trail";
+
+        this.scenes.push(line);
+
+        if (moon.texture.drawSelf) {
+          const ob = this.createMoon(
+            moon.name,
+            "assets/moons/" + moon.texture.map,
+            moon.radius,
+            {
+              x,
+              y,
+              z,
+            },
+            data.inclination * (Math.PI / 180)
+          );
+          ob.data = data;
+          this.setupMoon(ob);
+        } else {
+          const ob = await this.loadGlb(
+            moon.name,
+            "assets/moons/" +
+              moon.texture.map[0].toUpperCase() +
+              moon.texture.map.slice(1),
+            10 / moon.radius,
+            { x, y, z },
+            data.inclination * (Math.PI / 180)
+          );
+
+          ob.articifial = moon.articifial;
+          ob.data = data;
+          this.setupMoon(ob);
+        }
+
+        this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
+        resolve(true);
       });
-      geometry.setAttribute(
-        "color",
-        new THREE.Float32BufferAttribute(colors, 3)
-      );
-      const line = new THREE.Line(geometry, material);
-      line.position.set(
-        this.radius * Math.sin(this.theeta),
-        this.y_distance,
-        this.radius * Math.cos(this.theeta)
-      );
-      line.name = moon.name + "Trail";
-
-      this.scenes.push(line);
-
-      if (moon.texture.drawSelf) {
-        const ob = this.createMoon(
-          moon.name,
-          "assets/moons/" + moon.texture.map,
-          moon.radius,
-          {
-            x,
-            y,
-            z,
-          },
-          data.inclination * (Math.PI / 180)
-        );
-        ob.data = data;
-        this.setupMoon(ob);
-      } else {
-        const ob = await this.loadGlb(
-          moon.name,
-          "assets/moons/" +
-            moon.texture.map[0].toUpperCase() +
-            moon.texture.map.slice(1),
-          10 / moon.radius,
-          { x, y, z },
-          data.inclination * (Math.PI / 180)
-        );
-
-        ob.articifial = moon.articifial;
-        ob.data = data;
-        this.setupMoon(ob);
-      }
-
-      this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
     });
   }
   loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
@@ -209,10 +212,12 @@ export default class BaseEntity {
     moon.color = this.color;
     moon.mount = () => {
       this.scene.add(moon);
+      moon.removeTrail();
     };
     moon.symbol = this.symbol;
     moon.unmount = () => {
       this.scene.remove(moon);
+      moon.removeTrail();
     };
     moon.drawTrail = () => {
       this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
@@ -281,9 +286,11 @@ export default class BaseEntity {
     line.name = this.name + "Trail";
 
     this.scene.add(line);
+    this.trail = line;
   }
   drawTrail() {
-    this.createTrail();
+    if (!this.trail) this.createTrail();
+    this.scene.add(this.trail);
   }
   removeTrail() {
     var trail = this.scene.getObjectByName(this.name + "Trail");
@@ -291,13 +298,15 @@ export default class BaseEntity {
   }
   render() {}
 
-  mount() {
-    if (!this.fetchedMoons) this.loadMoons();
+  async mount() {
+    if (!this.fetchedMoons) await this.loadMoons();
     this.scenes.forEach((scene) => scene && this.scene.add(scene));
+    this.removeTrail();
   }
   unmount() {
     this.scenes.forEach((scene) => scene && this.scene.remove(scene));
     if (this.moons.length)
       this.moons.forEach((moon) => (moon.elem.style.display = "none"));
+    this.drawTrail();
   }
 }

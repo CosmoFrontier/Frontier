@@ -46,7 +46,32 @@ export default class PlanetCanvas {
     //document.body.appendChild(stats.domElement);
     window.onhashchange = () => {
       const hash = window.location.hash.slice(1);
+
       if (hash === "") return;
+      if (hash.includes("-")) {
+        const parent = hash.split("-")[0];
+        const child = hash.split("-")[1];
+        if (this.planet && this.planet.t) {
+          if (
+            this.planet.t.name.toLowerCase() +
+              "-" +
+              this.planet.name.toLowerCase() ===
+            hash
+          )
+            return;
+        }
+        const t = this.entities.find(
+          (x) => x.name.toLowerCase() === parent.toLowerCase()
+        );
+        if (!t) return;
+        const c = t.moons.find(
+          (x) => x.name.toLowerCase() === child.toLowerCase()
+        );
+        if (!c) return;
+        c.t.mount();
+        this.travelTo(c, true);
+        return;
+      }
       if (
         !this.entities.find((x) => x.name.toLowerCase() == hash.toLowerCase())
       )
@@ -75,13 +100,26 @@ export default class PlanetCanvas {
   async focusPlanet(planet, mounted, isMoon, angle) {
     if (this.planet && this.planet.name != "sun" && !planet.moon) {
       this.planet.elem.style.display = "flex";
-      this.planet.drawTrail();
+
       this.planet.unmount();
     }
-    window.location.hash = planet.name;
+    let hash = planet.name;
+    if (planet.moon) {
+      hash = planet.t.name.toLowerCase() + "-" + planet.name.toLowerCase();
+    }
+    window.location.hash = hash;
     if (this.planet && this.planet.name != "sun" && this.planet.moon) {
       this.planet.elem.style.display = "none";
       this.planet.unmount();
+
+      if (this.planet.t.name != planet.name && !planet.t) {
+        this.planet.t.elem.style.display = "flex";
+
+        this.planet.t.unmount();
+      } else if (planet.t && planet.t.name != this.planet.t.name) {
+        this.planet.t.elem.style.display = "flex";
+        this.planet.t.unmount();
+      }
     }
     if (planet.name != "sun") {
       document
@@ -122,20 +160,28 @@ export default class PlanetCanvas {
             }</span></div>
             <div class="info">Length of year </div>            
           </div>
+          
+         
           <div class="planet_data">
+          <div class="num">${new Intl.NumberFormat("en-US").format(
+            planet.data.radius * 1.49 * Math.pow(10, 8).toFixed(2)
+          )}<span class="unit">Kms</span></div>
+          <div class="info">Distance from ${
+            planet.t.name[0].toUpperCase() + planet.t.name.slice(1)
+          }</div>
+          </div>
+          <div class="planet_data" data-label="namesake">
           <div class="num" style="font-size:16px;">${data.table.namesake}</div>
           <div class="info">Namesake</div>
           </div>
-          <div class="planet_data">
-          <div class="num">${(
-            planet.data.radius *
-            1.49 *
-            Math.pow(10, 8)
-          ).toFixed(2)}<span class="unit">Kms</span></div>
-          <div class="info">Distance from parent planet</div>
-          </div>
-
           `;
+            if (planet.articifial) {
+              content.querySelector('[data-label="namesake"]').remove();
+              table.innerHTML += `<div class="planet_data">
+          <div class="num" style="font-size:16px;">${data.table.target}</div>
+          <div class="info">Mission Target</div>
+          </div>`;
+            }
           } else {
             const table = document.querySelector(".other_data");
             table.innerHTML = `<div class="planet_data" data-label="rev_time">
@@ -236,7 +282,6 @@ export default class PlanetCanvas {
 
     this.AUTOMOVE = true;
     this.controls.autoRotate = true;
-    if (this.planet.name != "sun") planet.removeTrail();
   }
 
   travelTo(x, isMoon) {
@@ -376,9 +421,9 @@ export default class PlanetCanvas {
     search.addEventListener("keyup", (e) => {
       if (!search.value) return;
       let results = this.bodies.filter((x) =>
-      x.name.toLowerCase().startsWith(search.value.toLowerCase())
-    );
-    
+        x.name.toLowerCase().startsWith(search.value.toLowerCase())
+      );
+
       ul.innerHTML = "";
       results.forEach((x) => {
         const el = document.createElement("li");
@@ -391,6 +436,7 @@ export default class PlanetCanvas {
             target = this.entities.find(
               (y) => y.name.toLowerCase() == x.parent.toLowerCase()
             );
+
             await target.loadMoons();
 
             target.mount();
