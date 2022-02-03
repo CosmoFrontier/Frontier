@@ -163,10 +163,11 @@ export default class BaseEntity {
             if(child.isMesh){
               const newMat = new THREE.MeshPhongMaterial({
                emissive : new THREE.Color(child.material.color),
-              
-               emissiveIntensity : 0,
+               emissiveMap : child.material.map?.clone(),
+               emissiveIntensity : 1,
                shininess:0,
                reflectivity:0,
+               
               })
               child.material = newMat;
             }
