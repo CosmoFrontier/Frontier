@@ -7,7 +7,7 @@
   <img src="https://user-images.githubusercontent.com/79041510/152324809-20f91635-47d7-44b7-b2c5-3d193ab5cbe9.png">
   <img src="https://user-images.githubusercontent.com/79041510/152324991-5ab60a3b-eff4-4b8e-ab38-f1baf5635f02.png" >
   </div>
-<div class="tech_stack"> <h2 align="center"> Our Tech Stack</h2>
+<div class="tech_stack"> <h2 align="center">  | Our Tech Stack |</h2>
   <div class="label" align="center" >
   <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" width="15%"> 
   <img src="https://img.shields.io/badge/ThreeJs-black?style=for-the-badge&logo=three.js&logoColor=white" width="12%">
