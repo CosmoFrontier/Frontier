@@ -135,6 +135,7 @@ export default class BaseEntity {
     });
   }
   loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
+   
     if (isNaN(radius)) {
       radius = 0.001;
     }
@@ -154,6 +155,7 @@ export default class BaseEntity {
         y: Math.abs(sceneBounds.max.y - sceneBounds.min.y),
         z: Math.abs(sceneBounds.max.z - sceneBounds.min.z),
       };
+    
 
       // Calculate side lengths of glb-model bounding box
 
@@ -162,7 +164,20 @@ export default class BaseEntity {
       Loader.load(
         map,
         (glb) => {
+          const light = new THREE.AmbientLight(0xffffff);
           const obj = glb.scene;
+          glb.scene.add(light);
+          obj.traverse(function (child) {
+            if (child.isMesh) {
+              console.log(child.material.map)
+             
+              
+                
+                
+                  
+                
+            }
+        })
 
           var meshBounds = new THREE.Box3().setFromObject(obj);
           let lengthMeshBounds = {
@@ -178,6 +193,7 @@ export default class BaseEntity {
           let minRatio = Math.min(...lengthRatios);
           obj.scale.set(minRatio, minRatio, minRatio);
           obj.position.set(pos.x, pos.y, pos.z);
+      
 
           obj.name = name;
 
@@ -191,6 +207,8 @@ export default class BaseEntity {
         }
       );
     });
+  
+
   }
   setupMoon(moon) {
     moon.t = this;
