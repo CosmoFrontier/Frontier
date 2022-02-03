@@ -66,8 +66,7 @@ git push -u origin <your_branch_name>
 **13.** Add appropriate title and description to your pull request explaining your changes and efforts done. Always make sure you have pulled the latest code from the master branch before making a PR.
 
 **14.** Click on `Create Pull Request`.
-
-**15.** Hurray ❗ You have created a PR to the Frontier Website 💥 . Sit back patiently and relax till then the project maintainers will review your PR. Please understand, there will be some time taken to review a PR and can vary from a few hours to a few days too so be Patient and keep contributing.
-
+  
+**15.** Wait for your PR to be reviewed by maintainers/creators
 
 </div>
