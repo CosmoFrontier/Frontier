@@ -158,6 +158,7 @@ export default class BaseEntity {
         map,
         (glb) => {
           const obj = glb.scene;
+
           var meshBounds = new THREE.Box3().setFromObject(obj);
           let lengthMeshBounds = {
             x: Math.abs(meshBounds.max.x - meshBounds.min.x),
@@ -176,7 +177,10 @@ export default class BaseEntity {
           obj.name = name;
 
           obj.zaxis = radius * 3;
+          let light = new THREE.PointLight(0xffffff, 1, 0, 100);
+          light.position.set(pos.x, pos.y, pos.z + obj.zaxis);
 
+          obj.add(light);
           resolve(obj);
         },
         function (xhr) {},
@@ -241,7 +245,7 @@ export default class BaseEntity {
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
     moon.name = name;
 
-    moon.zaxis = (10/radius) * 3;
+    moon.zaxis = (10 / radius) * 3;
     moon.position.set(pos.x, pos.y, pos.z);
 
     return moon;

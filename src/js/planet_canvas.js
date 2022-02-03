@@ -371,8 +371,7 @@ export default class PlanetCanvas {
       fetch("https://ssd-abh80.vercel.app/body/" + search.value)
       .then(data => data.json())
       .then((x)=>{
-  
-
+        const results = this.bodies
       ul.innerHTML = "";
       results.forEach((x) => {
         const el = document.createElement("li");
@@ -426,6 +425,7 @@ export default class PlanetCanvas {
       const res = await fetch("https://ssd-abh80.vercel.app/all"); //https://ssd-abh80.vercel.app/all
       const data = await res.json();
       this.data = data;
+      
     } catch {
       console.log("Error while fetching data!");
     }
