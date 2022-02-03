@@ -155,15 +155,22 @@ export default class BaseEntity {
         z: Math.abs(sceneBounds.max.z - sceneBounds.min.z),
       };
 
-      // Calculate side lengths of glb-model bounding box
-
-      // Calculate length ratios
-
       Loader.load(
         map,
         (glb) => {
           const obj = glb.scene;
-
+          obj.traverse((child) => {
+            if(child.isMesh){
+              const newMat = new THREE.MeshPhongMaterial({
+               emissive : new THREE.Color(child.material.color),
+              
+               emissiveIntensity : 0,
+               shininess:0,
+               reflectivity:0,
+              })
+              child.material = newMat;
+            }
+          })
           var meshBounds = new THREE.Box3().setFromObject(obj);
           let lengthMeshBounds = {
             x: Math.abs(meshBounds.max.x - meshBounds.min.x),
@@ -299,8 +306,13 @@ export default class BaseEntity {
   render() {}
 
   async mount() {
-    if (!this.fetchedMoons) await this.loadMoons();
+   
+    try{
+    if (!this.fetchedMoons) this.loadMoons();
+    }catch(e){}
+    
     this.scenes.forEach((scene) => scene && this.scene.add(scene));
+    
     this.removeTrail();
   }
   unmount() {
