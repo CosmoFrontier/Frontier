@@ -143,6 +143,7 @@ export default class BaseEntity {
 
       var sceneExtent = new THREE.BoxGeometry(radius, radius, radius);
       var cube = new THREE.Mesh(sceneExtent);
+
       var sceneBounds = new THREE.Box3().setFromObject(cube);
       let lengthSceneBounds = {
         x: Math.abs(sceneBounds.max.x - sceneBounds.min.x),
@@ -234,7 +235,7 @@ export default class BaseEntity {
   createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
     const moonGeometry = new THREE.SphereGeometry(10 / radius, 32, 32);
     const moonMaterial = new THREE.MeshPhongMaterial({
-      shininess: 0,
+      shininess: 1,
       map: new THREE.TextureLoader().load(map),
     });
 

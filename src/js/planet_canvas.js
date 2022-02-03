@@ -26,6 +26,7 @@ export default class PlanetCanvas {
       0.00001,
       1000000
     );
+    this.bodies = [];
 
     this.canvas = document.querySelector("#canvas");
     this.scene.add(this.camera);
@@ -43,6 +44,19 @@ export default class PlanetCanvas {
     global.stats.showPanel(0);
 
     //document.body.appendChild(stats.domElement);
+    window.onhashchange = () => {
+      const hash = window.location.hash.slice(1);
+      if (hash === "") return;
+      if (
+        !this.entities.find((x) => x.name.toLowerCase() == hash.toLowerCase())
+      )
+        return;
+      if (this.planet && this.planet.name.toLowerCase() == hash.toLowerCase())
+        return;
+      this.travelTo(
+        this.entities.find((x) => x.name.toLowerCase() == hash.toLowerCase())
+      );
+    };
   }
   setFocus(x, y, z, zaxis) {
     this.focusAt = new THREE.Vector3(x, y, z);
@@ -75,6 +89,7 @@ export default class PlanetCanvas {
       this.planet.drawTrail();
       this.planet.unmount();
     }
+    window.location.hash = planet.name;
     if (this.planet && this.planet.name != "sun" && this.planet.moon) {
       this.planet.elem.style.display = "none";
       this.planet.unmount();
@@ -367,25 +382,36 @@ export default class PlanetCanvas {
     const ul = document.querySelector(".search-holder ul");
     search.addEventListener("keyup", (e) => {
       if (!search.value) return;
-      // fetch("https://ssd-abh80.vercel.app/body/all")
-      fetch("https://ssd-abh80.vercel.app/body/" + search.value)
-      .then(data => data.json())
-      .then((x)=>{
-  
-
+      let results = this.bodies.filter((x) =>
+      x.name.toLowerCase().startsWith(search.value.toLowerCase())
+    );
+    
       ul.innerHTML = "";
       results.forEach((x) => {
         const el = document.createElement("li");
-        el.textContent = x.toUpperCase() + x.slice(1);
-        el.addEventListener("click", () => {
-          if (this.planet && this.planet.name == x) return;
-          this.travelTo(x);
+        el.textContent = x.name[0].toUpperCase() + x.name.slice(1);
+        el.addEventListener("click", async () => {
+          if (this.planet && this.planet.name == x.name) return;
+          let target = this.entities.find((y) => y.name == x.name);
+
+          if (!target) {
+            target = this.entities.find(
+              (y) => y.name.toLowerCase() == x.parent.toLowerCase()
+            );
+            await target.loadMoons();
+
+            target.mount();
+
+            target = target.moons.find(
+              (y) => y.name.toLowerCase() == x.name.toLowerCase()
+            );
+          }
+          this.travelTo(target, target.moon);
           ul.innerHTML = "";
           search.value = "";
         });
         ul.appendChild(el);
       });
-    })
     });
 
     this.entities.forEach((x) => {
@@ -425,6 +451,9 @@ export default class PlanetCanvas {
     try {
       const res = await fetch("https://ssd-abh80.vercel.app/all"); //https://ssd-abh80.vercel.app/all
       const data = await res.json();
+      const res1 = await fetch("https://ssd-abh80.vercel.app/bodies/all");
+      const data1 = await res1.json();
+      this.bodies = data1;
       this.data = data;
     } catch {
       console.log("Error while fetching data!");
