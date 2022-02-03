@@ -162,19 +162,21 @@ export default class BaseEntity {
         (glb) => {
           const light = new THREE.AmbientLight(0xffffff);
           const obj = glb.scene;
-          obj.traverse((child) => {
-            if(child.isMesh){
-              const newMat = new THREE.MeshPhongMaterial({
-               emissive : new THREE.Color(child.material.color),
-               emissiveMap : child.material.map?.clone(),
-               emissiveIntensity : 1,
-               shininess:0,
-               reflectivity:0,
+          // obj.traverse((child) => {
+          //   if(child.isMesh){
+          //     const newMat = new THREE.MeshPhongMaterial({
+          //      emissive : new THREE.Color(0xffffff),
+          //      emissiveMap : child.material.map?.clone(),
+          //      emissiveIntensity : 1,
+          //      shininess:0,
+          //      reflectivity:0,
                
-              })
-              child.material = newMat;
-            }
-          })
+      
+          //     })
+      
+          //     child.material = newMat;
+          //   }
+          // })
           var meshBounds = new THREE.Box3().setFromObject(obj);
           let lengthMeshBounds = {
             x: Math.abs(meshBounds.max.x - meshBounds.min.x),

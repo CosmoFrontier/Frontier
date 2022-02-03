@@ -536,9 +536,29 @@ export default class PlanetCanvas {
     this.controls.autoRotateSpeed = 0.5;
     this.controls.enableZoom = true;
     this.controls.autoRotate = true;
+    this.AUTOMOVE = true;
+
+    const wait = (delay = 0) =>
+    new Promise((resolve) => setTimeout(resolve, delay));
+
     this.controls.addEventListener("start", () => {
+      console.log("lol");
       this.controls.autoRotate = false;
-      this.AUTOMOVE = false;
+        this.AUTOMOVE = false;
+      wait(6000).then(()=>{
+        this.controls.autoRotate = true;
+        this.AUTOMOVE = true;
+      })
+    
+
+      
+    
+
+      
+
+      setTimeout(stop, 4000)
+      stop();
+      
     });
     this.loadEntities();
     this.renderer.render(this.scene, this.camera);

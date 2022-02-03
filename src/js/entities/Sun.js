@@ -91,6 +91,7 @@ export default class SUN {
   }
 
   render() {
+    // this.renderer.render(this.scene,this.camera)
     this.composer.render(this.scene, this.camera);
   }
 }
