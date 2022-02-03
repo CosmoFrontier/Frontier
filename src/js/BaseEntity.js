@@ -144,7 +144,7 @@ export default class BaseEntity {
     return new Promise((resolve, reject) => {
       if (!map) return;
       const Loader = new GLTFLoader();
-
+  
       var sceneExtent = new THREE.BoxGeometry(radius, radius, radius);
       var cube = new THREE.Mesh(sceneExtent);
 
