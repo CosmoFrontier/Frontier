@@ -26,7 +26,7 @@ export default class SUN {
     this.color = 0xfff93e;
   }
   get zaxis() {
-    return 1000;
+    return 3200;
   }
 
  

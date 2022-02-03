@@ -135,6 +135,7 @@ export default class BaseEntity {
     });
   }
   loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
+   
     if (isNaN(radius)) {
       radius = 0.001;
     }
@@ -144,7 +145,7 @@ export default class BaseEntity {
     return new Promise((resolve, reject) => {
       if (!map) return;
       const Loader = new GLTFLoader();
-
+  
       var sceneExtent = new THREE.BoxGeometry(radius, radius, radius);
       var cube = new THREE.Mesh(sceneExtent);
 
@@ -154,10 +155,12 @@ export default class BaseEntity {
         y: Math.abs(sceneBounds.max.y - sceneBounds.min.y),
         z: Math.abs(sceneBounds.max.z - sceneBounds.min.z),
       };
+    
 
       Loader.load(
         map,
         (glb) => {
+          const light = new THREE.AmbientLight(0xffffff);
           const obj = glb.scene;
           obj.traverse((child) => {
             if(child.isMesh){
@@ -186,6 +189,7 @@ export default class BaseEntity {
           let minRatio = Math.min(...lengthRatios);
           obj.scale.set(minRatio, minRatio, minRatio);
           obj.position.set(pos.x, pos.y, pos.z);
+      
 
           obj.name = name;
 
@@ -199,6 +203,8 @@ export default class BaseEntity {
         }
       );
     });
+  
+
   }
   setupMoon(moon) {
     moon.t = this;
