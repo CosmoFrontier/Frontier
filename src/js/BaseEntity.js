@@ -177,10 +177,7 @@ export default class BaseEntity {
           obj.name = name;
 
           obj.zaxis = radius * 3;
-          let light = new THREE.PointLight(0xffffff, 1, 0, 100);
-          light.position.set(pos.x, pos.y, pos.z + obj.zaxis);
 
-          obj.add(light);
           resolve(obj);
         },
         function (xhr) {},

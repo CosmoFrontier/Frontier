@@ -44,32 +44,21 @@ export default class PlanetCanvas {
 
     //document.body.appendChild(stats.domElement);
   }
-  setFocus(x, y, z, zaxis) {
+  setFocus(x, y, z, zaxis, angle) {
     this.focusAt = new THREE.Vector3(x, y, z);
     this.camera.lookAt(this.focusAt);
-    this.camera.position.set(x, y, z - zaxis);
+    if (angle)
+      this.camera.position.set(
+        x + zaxis * Math.sin(angle),
+        y + zaxis * Math.sin(angle),
+        z - zaxis * Math.cos(angle)
+      );
+    else this.camera.position.set(x, y, z - zaxis);
     this.controls.target.set(x, y, z);
     this.controls.update();
   }
-  // setFocussun(x, y, z, zaxis) {
-  //   this.focusAt = new THREE.Vector3(x, y, z);
-  //   this.camera.lookAt(this.focusAt);
-  //   this.camera.position.set(x, y, z - zaxis);
-  //   this.controls.target.set(x, y, z);
-  //   this.controls.update();
 
-  // }
-
-  // async focussun(planet){
-  //   if(this.planet.name === "sun")
-  //   this.setFocussun(
-  //     planet[planet.name.toLowerCase() + "Sphere"].position.x,
-  //     planet[planet.name.toLowerCase() + "Sphere"].position.y,
-  //     planet[planet.name.toLowerCase() + "Sphere"].position.z,
-  //     planet.zaxis
-  //   )
-  // }
-  async focusPlanet(planet, mounted, isMoon) {
+  async focusPlanet(planet, mounted, isMoon, angle) {
     if (this.planet && this.planet.name != "sun" && !planet.moon) {
       this.planet.elem.style.display = "flex";
       this.planet.drawTrail();
@@ -96,7 +85,6 @@ export default class PlanetCanvas {
         .then((x) => x.json())
         .then((data) => {
           if (isMoon) {
-            
             content
               .querySelector(".content-wrap")
               .classList.remove("is-not-visible");
@@ -114,7 +102,9 @@ export default class PlanetCanvas {
             const table = document.querySelector(".other_data");
             table.innerHTML = "";
             table.innerHTML += `<div class="planet_data" data-label="rev_time">
-            <div class="num">${data.table.year.value}<span class="unit">${data.table.year.suffix}</span></div>
+            <div class="num">${data.table.year.value}<span class="unit">${
+              data.table.year.suffix
+            }</span></div>
             <div class="info">Length of year </div>            
           </div>
           <div class="planet_data">
@@ -122,7 +112,11 @@ export default class PlanetCanvas {
           <div class="info">Namesake</div>
           </div>
           <div class="planet_data">
-          <div class="num">${(planet.data.radius * 1.49 * Math.pow(10,8)).toFixed(2)}<span class="unit">Kms</span></div>
+          <div class="num">${(
+            planet.data.radius *
+            1.49 *
+            Math.pow(10, 8)
+          ).toFixed(2)}<span class="unit">Kms</span></div>
           <div class="info">Distance from parent planet</div>
           </div>
 
@@ -208,14 +202,13 @@ export default class PlanetCanvas {
         planet.position.z,
         planet.zaxis
       );
-
-    }
-  else
+    } else
       this.setFocus(
         planet[planet.name.toLowerCase() + "Sphere"].position.x,
         planet[planet.name.toLowerCase() + "Sphere"].position.y,
         planet[planet.name.toLowerCase() + "Sphere"].position.z,
-        planet.zaxis
+        planet.zaxis,
+        angle
       );
     this.planet = planet;
     if (this.planet.name != "sun") {
@@ -369,22 +362,22 @@ export default class PlanetCanvas {
       if (!search.value) return;
       // fetch("https://ssd-abh80.vercel.app/body/all")
       fetch("https://ssd-abh80.vercel.app/body/" + search.value)
-      .then(data => data.json())
-      .then((x)=>{
-        const results = this.bodies
-      ul.innerHTML = "";
-      results.forEach((x) => {
-        const el = document.createElement("li");
-        el.textContent = x.toUpperCase() + x.slice(1);
-        el.addEventListener("click", () => {
-          if (this.planet && this.planet.name == x) return;
-          this.travelTo(x);
+        .then((data) => data.json())
+        .then((x) => {
+          const results = this.bodies;
           ul.innerHTML = "";
-          search.value = "";
+          results.forEach((x) => {
+            const el = document.createElement("li");
+            el.textContent = x.toUpperCase() + x.slice(1);
+            el.addEventListener("click", () => {
+              if (this.planet && this.planet.name == x) return;
+              this.travelTo(x);
+              ul.innerHTML = "";
+              search.value = "";
+            });
+            ul.appendChild(el);
+          });
         });
-        ul.appendChild(el);
-      });
-    })
     });
 
     this.entities.forEach((x) => {
@@ -407,7 +400,7 @@ export default class PlanetCanvas {
       });
     });
 
-    this.focusPlanet(sun);
+    this.focusPlanet(sun, null, null, (60 * Math.PI) / 180);
 
     document.querySelector("#travel_stats").innerHTML =
       `${this.sun.symbol} Welcome to <span class="bold-text" style="color:${
@@ -425,7 +418,6 @@ export default class PlanetCanvas {
       const res = await fetch("https://ssd-abh80.vercel.app/all"); //https://ssd-abh80.vercel.app/all
       const data = await res.json();
       this.data = data;
-      
     } catch {
       console.log("Error while fetching data!");
     }
