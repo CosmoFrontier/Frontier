@@ -97,6 +97,8 @@ export default class BaseEntity {
       line.name = moon.name + "Trail";
 
       this.scenes.push(line);
+    
+      
       if (moon.texture.drawSelf) {
         const ob = this.createMoon(
           moon.name,
@@ -128,11 +130,12 @@ export default class BaseEntity {
       }
 
       this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
+      
     });
   }
   loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
     if (isNaN(radius)) {
-      radius = 0.01;
+      radius = 0.001;
     }
     if (radius < 1) {
       radius *= 1.5;
@@ -140,9 +143,11 @@ export default class BaseEntity {
     return new Promise((resolve, reject) => {
       if (!map) return;
       const Loader = new GLTFLoader();
+      
 
       var sceneExtent = new THREE.BoxGeometry(radius, radius, radius);
       var cube = new THREE.Mesh(sceneExtent);
+    
 
       var sceneBounds = new THREE.Box3().setFromObject(cube);
       let lengthSceneBounds = {
@@ -159,6 +164,8 @@ export default class BaseEntity {
         map,
         (glb) => {
           const obj = glb.scene;
+       
+       
           var meshBounds = new THREE.Box3().setFromObject(obj);
           let lengthMeshBounds = {
             x: Math.abs(meshBounds.max.x - meshBounds.min.x),

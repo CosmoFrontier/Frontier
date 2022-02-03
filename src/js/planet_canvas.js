@@ -129,7 +129,7 @@ export default class PlanetCanvas {
             const table = document.querySelector(".other_data");
             table.innerHTML = "";
             table.innerHTML += `<div class="planet_data" data-label="rev_time">
-            <div class="num">${data.table.year.value}<span class="unit">${data.table.year.suffix}</span></div>
+            <div class="num">${(data.table.year.value)}<span class="unit">${data.table.year.suffix}</span></div>
             <div class="info">Length of year </div>            
           </div>
           <div class="planet_data">
