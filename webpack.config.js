@@ -11,8 +11,8 @@ module.exports = {
   plugins: [
     new copyPlugin({
       patterns: [
-        { from: "html", context: "public" },
-        { from: "assets", context: "public", to: "assets" },
+        { from: "html", context: "src" },
+        { from: "assets", context: "src", to: "assets" },
       ],
     }),
   ],
