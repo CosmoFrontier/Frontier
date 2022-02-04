@@ -1,0 +1,74 @@
+ 
+[
+    {
+        "name": "Earth",
+        "mass": 5.97e24,
+        "aphelion": 1.01,
+        "perihelion": 0.98,
+        "inclination": 23.44,
+        "radius": 12756
+    },
+    {
+        "name":"Mars",
+        "mass": 0.624e24,
+        "aphelion": 1.66,
+        "perihelion": 1.38,
+        "inclination": 25.19,
+        "radius": 6787
+
+    }
+    ,
+    {
+        "name":"Mercury",
+        "mass": 0.330e24,
+        "aphelion": 0.47,
+        "perihelion": 0.31,
+        "inclination": 0.03,
+        "radius": 4878
+    }
+    ,
+    {
+        "name":"Venus",
+        "mass": 4.87e24,
+        "aphelion": 0.73,
+        "perihelion": 0.72,
+        "inclination": 2.64,
+        "radius": 12104
+    }
+    ,
+    {
+        "name":"Jupiter",
+        "mass": 1898e24,
+        "aphelion": 5.45,
+        "perihelion": 4.95,
+        "inclination": 3.13,
+        "radius": 142796
+    }
+    ,
+    {
+        "name":"Saturn",
+        "mass": 568e24,
+        "aphelion": 10.07,
+        "perihelion": 9.07,
+        "inclination": 26.73,
+        "radius": 120660
+    }
+    ,
+    {
+        "name":"Uranus",
+        "mass": 86.8e24,
+        "aphelion": 20.06 ,
+        "perihelion": 18.30,
+        "inclination": 82.23,
+        "radius": 51118
+    }
+    ,
+    {
+        "name":"Neptune",
+        "mass": 102e24,
+        "aphelion": 30.47,
+        "perihelion": 29.88,
+        "inclination": 28.32,
+        "radius": 48600
+    }
+]

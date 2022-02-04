@@ -1,0 +1,16 @@
+/**
+ * @license
+ * Copyright 2010-2021 Three.js Authors
+ * SPDX-License-Identifier: MIT
+ */
+
+/**
+ * postprocessing v6.23.3 build Mon Dec 06 2021
+ * https://github.com/vanruesc/postprocessing
+ * Copyright 2021 Raoul van Rüschen
+ * @license Zlib
+ */
+
+//! moment.js
+
+//! moment.js locale configuration

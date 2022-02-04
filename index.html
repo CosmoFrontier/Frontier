@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+<!-- HTML Meta Tags -->
+<title>Frontier</title>
+<meta name="description" content="Frontier is a 3D real-time solar system exploration website, with amazing 3D models of planets, moons, satellites, gas giants, ice giants and many more. Explore it now!">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://cosmofrontier.netlify.app/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Frontier">
+<meta property="og:description" content="Frontier is a 3D real-time solar system exploration website, with amazing 3D models of planets, moons, satellites, gas giants, ice giants and many more. Explore it now!">
+<meta property="og:image" content="https://i.postimg.cc/bJ36h9ZJ/Screenshot-20220201-165230.png">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="">
+<meta property="twitter:url" content="https://cosmofrontier.netlify.app/">
+<meta name="twitter:title" content="Frontier">
+<meta name="twitter:description" content="Frontier is a 3D real-time solar system exploration website, with amazing 3D models of planets, moons, satellites, gas giants, ice giants and many more. Explore it now!">
+<meta name="twitter:image" content="https://i.postimg.cc/bJ36h9ZJ/Screenshot-20220201-165230.png">
+
+<!-- Meta Tags Generated via https://www.opengraph.xyz -->
+      
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Exo:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
+    rel="stylesheet" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="/assets/F.ico" />
+  <script src="js/script.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="/main.css" />
+</head>
+
+<body>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Orbitron:wght@900" rel="stylesheet" />
+  <div class="page">
+    <div class="logo">
+      <img src="/assets/logo.gif" width="100%" height="100%" alt="logo" />
+    </div>
+
+    <canvas id="canvas" width="100%" height="100%"></canvas>
+
+    <div class="date-time">
+      <div class="date"></div>
+      <div class="time"></div>
+      <div id="travel_stats"></div>
+    </div>
+    <div class="search-bar">
+      <div class="search-holder">
+        <ul></ul>
+      </div>
+      <input type="text" class="search-bar-input" id="input" placeholder="Search..." />
+    </div>
+
+
+    <div class="content is-not-visible" id="content">
+      <svg class="close-svg" width="20" height="20">
+        <line x1="20" y1="0" x2="0" y2="20" />
+        <line x1="0" x2="20" y1="0" y2="20" />
+      </svg>
+      <div class="loader is-visible"></div>
+
+      <div class="content-wrap">
+        <h1 class="planet_name">Mercury</h1>
+        <p class="planet_type" style="
+          text-transform: capitalize;
+      ">
+          <span>terrestrial planet</span>
+        </p>
+        <div class="planet_image"></div>
+        <p class="planet_desc">
+          Mercury—the smallest planet in our solar system and closest to the
+          Sun—is only slightly larger than Earth's Moon. Mercury is the
+          fastest planet, zipping around the Sun every 88 Earth days.
+        </p>
+        <div class="other_data">
+          <div class="planet_data" data-label="rev_time">
+            <div class="num">88</div>
+            <div class="info">Length of year</div>
+          </div>
+          <div class="planet_data" data-label="sun_distance">
+            <div class="num">0.4</div>
+            <div class="info">Distance from Sun</div>
+          </div>
+          <div class="planet_data" data-label="time_to_sun">
+            <div class="num">8</div>
+            <div class="info">One way light time to Sun</div>
+          </div>
+
+          <div class="planet_data" data-label="moons_count">
+            <div class="num">0</div>
+            <div class="info">Moons</div>
+          </div>
+          <div class="planet_data" data-label="name_sake">
+            <div class="num" style="font-size:16px;">
+              <Roman god of speed>
+            </div>
+            <div class="info">Namesake</div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+
+  <div class="bring-content-back">Panel</div>
+
+  <div class="footer">Powered by <span class="bold-t">Frontier</span></div>
+  </div>
+
+  <div id="loading">FRONTIER</div>
+  <script>
+    //searcbar
+
+    // const planets = [
+    //   {name: mercury},
+    //   {name: venus},
+    //   {name: earth},
+    //   {name: mars},
+    //   {name: jupiter},
+    //   {name: saturn},
+    //   {name: uranus},
+    //   {name: neptune},
+    //   {name: pluto}
+    // ]
+
+    // const searchInput = document.querySelector('.input');
+    // searchInput.addEventListener("input", (e)=>{
+    //   let value = e.target.value;
+    //   if(value && value.trim().length > 0){
+    //     value = value.trim().toLowerCase();
+    //     listFunc(planets.filter(planet => {
+    //       return planet.name.includes(value);
+    //     }))
+
+    //   }
+    //   else{
+    //     return false;
+
+    //   }
+    // })
+
+    // function listFunc(results){
+    //   for(const planet of results){
+    //     const resultItem = document.createElement('li');
+    //     resultItem.classList.add('result-item');
+    //     const text = document.createTextNode(planet.name)
+
+    //     resultItem.appendChild(text);
+    //     list.appendChild(resultItem);
+    //   }
+    // }
+
+
+
+
+
+
+
+
+    const wait = (delay = 0) =>
+      new Promise((resolve) => setTimeout(resolve, delay));
+
+    const setVisible = (anyelem, visible) =>
+    ((typeof anyelem === "string"
+      ? document.querySelector(anyelem)
+      : anyelem
+    ).style.display = visible ? "block" : "none");
+
+    setVisible(".page", false);
+    setVisible("#loading", true);
+
+    document.addEventListener("DOMContentLoaded", () =>
+      wait(5000).then(() => {
+        setVisible(".page", true);
+        setVisible("#loading", false);
+      })
+
+    );
+  </script>
+</body>
+
+</html>
