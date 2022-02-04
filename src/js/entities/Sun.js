@@ -36,7 +36,7 @@ export default class SUN {
     const SunMaterial = new THREE.MeshPhongMaterial({
       color: 0xfff93e,
       emissive: 0xfff93e,
-      map: new THREE.TextureLoader().load("assets/sun_main.jpg"),
+      map: new THREE.TextureLoader().load(window.location.pathname + "assets/sun_main.jpg"),
     });
     const sunSphere = new THREE.Mesh(SunGeometry, SunMaterial);
 

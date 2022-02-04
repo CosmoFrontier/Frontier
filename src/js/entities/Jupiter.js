@@ -15,7 +15,7 @@ export default class Jupiter extends BaseEntity {
     const JupiterGeometry = new THREE.SphereGeometry(10 / 9.6, 32, 32);
     this.size = 10 / 9.6;
     const material = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load("assets/jupiter_main.jpg"),
+      map: new THREE.TextureLoader().load(window.location.pathname + "assets/jupiter_main.jpg"),
     });
     this.jupiterSphere = new THREE.Mesh(JupiterGeometry, material);
     this.jupiterSphere.rotateX(this.tilt * (Math.PI / 180));

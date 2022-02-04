@@ -522,7 +522,7 @@ export default class PlanetCanvas {
     var geometryBackground = new THREE.SphereGeometry(60000, 32, 32);
     var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
 
-    background.load("/assets/star_map.png", (t) => {
+    background.load(window.location.pathname + "assets/star_map.png", (t) => {
       materialBackground.map = t;
       this.scene.add(meshBackground);
     });

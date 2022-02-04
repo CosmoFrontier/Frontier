@@ -14,7 +14,7 @@ export default class Earth extends BaseEntity {
     this.size = 10 / 54;
     const material = new THREE.MeshPhongMaterial({
       color: 0x48659f,
-      map: new THREE.TextureLoader().load("assets/earth_main.jpg"),
+      map: new THREE.TextureLoader().load(window.location.pathname + "assets/earth_main.jpg"),
     });
     this.earthSphere = new THREE.Mesh(EarthGeometry, material);
     this.earthSphere.position.set(

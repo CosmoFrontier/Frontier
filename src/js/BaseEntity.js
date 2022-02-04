@@ -102,7 +102,7 @@ export default class BaseEntity {
         if (moon.texture.drawSelf) {
           const ob = this.createMoon(
             moon.name,
-            "assets/moons/" + moon.texture.map,
+            window.location.pathname +  "assets/moons/" + moon.texture.map,
             moon.radius,
             {
               x,
@@ -116,7 +116,7 @@ export default class BaseEntity {
         } else {
           const ob = await this.loadGlb(
             moon.name,
-            "assets/moons/" +
+            window.location.pathname + "assets/moons/" +
               moon.texture.map[0].toUpperCase() +
               moon.texture.map.slice(1),
             10 / moon.radius,

@@ -14,7 +14,7 @@ export default class Uranus extends BaseEntity {
     const UranusGeometry = new THREE.SphereGeometry(10 / 27.45, 32, 32);
     this.size = 10 / 27.45;
     const material = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load("assets/uranus_main.jpg"),
+      map: new THREE.TextureLoader().load(window.location.pathname + "assets/uranus_main.jpg"),
       shininess: 0,
     });
     this.uranusSphere = new THREE.Mesh(UranusGeometry, material);
