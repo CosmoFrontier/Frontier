@@ -1,6 +1,6 @@
 <h1 align="center" > "FRONTIER" </h1>
 <h2 align="center"> A real-time 3D solar-system exploration website made with Three.js. </h2>
-<h3 align="center">Made by [@abh80](https://github.com/abh80) and [@mohittk](https://github.com/mohittk) </h3>
+<h3 align="center">Made by <a href="https://github.com/abh80">@abh80</a> and <a href="https://github.com/mohittk">@mohittk</a> </h3>
 
 <div class="img" align="center" >
 <img src="https://user-images.githubusercontent.com/79041510/152326812-dc790f1c-5f89-4cd7-a574-0477de41be97.png" >
