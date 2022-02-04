@@ -4,7 +4,7 @@ module.exports = {
     "js/script.js": "./src/js/main.js",
   },
   output: {
-    path: __dirname + "/dist",
+    path: __dirname + "/public",
     filename: "[name]",
   },
   resolve: { extensions: [".js"] },
