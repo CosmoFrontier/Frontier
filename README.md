@@ -1,6 +1,15 @@
 <h1 align="center" > "FRONTIER" </h1>
 <h2 align="center"> A real-time 3D solar-system exploration website made with Three.js. </h2>
-<h3 align="center">Made by @abh80 and @mohittk </h3>
+<h3 align="center">Made by <a href="https://github.com/abh80">@abh80</a> and <a href="https://github.com/mohittk">@mohittk</a> </h3>
+
+> ⚠️ This only **one** of very **__initial release__** and hence there may be bugs, lags, calculation errors.
+> Bug reports in Issues section will really helpful and it would be more great if you fix it and lend a helping hand by opening a pull request.
+
+<div class="contribute"> <h1 align="center"> 🚀 Preview 🚀</h1>
+  <b>Preview<b> the site on https://cosmofrontier.netlify.app/
+
+  Shipped and deployed using [Netlify](https://www.netlify.com/)
+</div>
 
 <div class="img" align="center" >
 <img src="https://user-images.githubusercontent.com/79041510/152326812-dc790f1c-5f89-4cd7-a574-0477de41be97.png" >
@@ -11,7 +20,6 @@
   <div class="label" align="center" >
   <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" width="15%"> 
   <img src="https://img.shields.io/badge/ThreeJs-black?style=for-the-badge&logo=three.js&logoColor=white" width="12%">
-  <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white" width="9%" >
   <img src="https://img.shields.io/badge/json-5E5C5C?style=for-the-badge&logo=json&logoColor=white" width="9%">
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" width="10%">
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" width="9%">
