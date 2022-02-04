@@ -160,7 +160,7 @@ export default class BaseEntity {
       Loader.load(
         map,
         (glb) => {
-          const light = new THREE.AmbientLight(0xffffff);
+        
           const obj = glb.scene;
           // obj.traverse((child) => {
           //   if(child.isMesh){

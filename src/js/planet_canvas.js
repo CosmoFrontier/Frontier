@@ -542,10 +542,9 @@ export default class PlanetCanvas {
     new Promise((resolve) => setTimeout(resolve, delay));
 
     this.controls.addEventListener("start", () => {
-      console.log("lol");
       this.controls.autoRotate = false;
         this.AUTOMOVE = false;
-      wait(6000).then(()=>{
+      wait(8000).then(()=>{
         this.controls.autoRotate = true;
         this.AUTOMOVE = true;
       })
