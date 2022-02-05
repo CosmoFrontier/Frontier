@@ -7,8 +7,6 @@
 
 <div class="contribute"> <h1 align="center"> 🚀 Preview 🚀</h1>
   This site has not yet been deployed
-
-  Shipped and deployed using [Netlify](https://www.netlify.com/)
 </div>
 
 <div class="img" align="center" >
