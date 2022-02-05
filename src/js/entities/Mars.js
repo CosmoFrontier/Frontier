@@ -6,6 +6,7 @@ export default class Mars extends BaseEntity {
     super(scene, camera, renderer, data, 0xb87f5f, 0);
     this.name = "mars";
     this.symbol = "♂";
+    this.texture = window.location.pathname + "assets/mars_main.jpg";
   }
 
   get zaxis() {
@@ -15,9 +16,7 @@ export default class Mars extends BaseEntity {
   init() {
     const MarsGeometry = new THREE.SphereGeometry(10 / 205.26, 32, 32);
     this.size = 10 / 205.26;
-    const material = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load(window.location.pathname + "assets/mars_main.jpg"),
-    });
+    const material = new THREE.MeshPhongMaterial({});
     this.marsSphere = new THREE.Mesh(MarsGeometry, material);
     this.marsSphere.rotateX(this.tilt * (Math.PI / 180));
     this.marsSphere.position.set(
@@ -38,8 +37,5 @@ export default class Mars extends BaseEntity {
 
   render() {
     super.render();
-    
   }
-
-
 }

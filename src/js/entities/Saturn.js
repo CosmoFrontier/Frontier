@@ -1,6 +1,4 @@
 import * as THREE from "three";
-import { PointsMaterial } from "three";
-import { Scene } from "three";
 import BaseEntity from "./../BaseEntity";
 
 export default class Saturn extends BaseEntity {
@@ -8,6 +6,7 @@ export default class Saturn extends BaseEntity {
     super(scene, camera, renderer, data, 0xfae5bf, (2.5 * Math.PI) / 180);
     this.name = "Saturn";
     this.symbol = "♄";
+    this.texture = window.location.pathname + "assets/saturn_main.jpg";
   }
   get zaxis() {
     return 4.5;
@@ -16,7 +15,6 @@ export default class Saturn extends BaseEntity {
     const SaturnGeometry = new THREE.SphereGeometry(10 / 11.95, 32, 32);
     this.size = 10 / 11.95;
     const material = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load(window.location.pathname + "assets/saturn_main.jpg"),
       shininess: 0,
     });
     this.saturnSphere = new THREE.Mesh(SaturnGeometry, material);

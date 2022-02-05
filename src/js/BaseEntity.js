@@ -102,7 +102,7 @@ export default class BaseEntity {
         if (moon.texture.drawSelf) {
           const ob = this.createMoon(
             moon.name,
-            window.location.pathname +  "assets/moons/" + moon.texture.map,
+            window.location.pathname + "assets/moons/" + moon.texture.map,
             moon.radius,
             {
               x,
@@ -114,18 +114,47 @@ export default class BaseEntity {
           ob.data = data;
           this.setupMoon(ob);
         } else {
-          const ob = await this.loadGlb(
-            moon.name,
-            window.location.pathname + "assets/moons/" +
-              moon.texture.map[0].toUpperCase() +
-              moon.texture.map.slice(1),
-            10 / moon.radius,
-            { x, y, z },
-            data.inclination * (Math.PI / 180)
+          // const ob = await this.loadGlb(
+          //   moon.name,
+          //   window.location.pathname + "assets/moons/" +
+          //     moon.texture.map[0].toUpperCase() +
+          //     moon.texture.map.slice(1),
+          //   10 / moon.radius,
+          //   { x, y, z },
+          //   data.inclination * (Math.PI / 180)
+          // );
+          if (!moon.radius) {
+            moon.radius = 0.001;
+          } else moon.radius = 10 / moon.radius;
+          const geo = new THREE.BoxGeometry(
+            moon.radius,
+            moon.radius,
+            moon.radius
           );
-
+          const material = new THREE.MeshBasicMaterial({
+            opacity: 0,
+            transparent: 0,
+          });
+          const ob = new THREE.Mesh(geo, material);
+          ob.loaded = false;
+          ob.props = {
+            x,
+            y,
+            z,
+            inclination: data.inclination * (Math.PI / 180),
+            radius: moon.radius,
+          };
+          ob.zaxis = ob.props.radius * 3;
+          ob.name = moon.name;
+          ob.texture =
+            window.location.pathname +
+            "assets/moons/" +
+            moon.texture.map[0].toUpperCase() +
+            moon.texture.map.slice(1);
           ob.articifial = moon.articifial;
           ob.data = data;
+          ob.position.set(x, y, z);
+
           this.setupMoon(ob);
         }
 
@@ -135,17 +164,14 @@ export default class BaseEntity {
     });
   }
   loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
-   
     if (isNaN(radius)) {
       radius = 0.001;
     }
-    if (radius < 1) {
-      radius *= 1.5;
-    }
+
     return new Promise((resolve, reject) => {
       if (!map) return;
       const Loader = new GLTFLoader();
-  
+
       var sceneExtent = new THREE.BoxGeometry(radius, radius, radius);
       var cube = new THREE.Mesh(sceneExtent);
 
@@ -155,28 +181,11 @@ export default class BaseEntity {
         y: Math.abs(sceneBounds.max.y - sceneBounds.min.y),
         z: Math.abs(sceneBounds.max.z - sceneBounds.min.z),
       };
-    
 
       Loader.load(
         map,
         (glb) => {
-        
           const obj = glb.scene;
-          // obj.traverse((child) => {
-          //   if(child.isMesh){
-          //     const newMat = new THREE.MeshPhongMaterial({
-          //      emissive : new THREE.Color(0xffffff),
-          //      emissiveMap : child.material.map?.clone(),
-          //      emissiveIntensity : 1,
-          //      shininess:0,
-          //      reflectivity:0,
-               
-      
-          //     })
-      
-          //     child.material = newMat;
-          //   }
-          // })
           var meshBounds = new THREE.Box3().setFromObject(obj);
           let lengthMeshBounds = {
             x: Math.abs(meshBounds.max.x - meshBounds.min.x),
@@ -191,7 +200,6 @@ export default class BaseEntity {
           let minRatio = Math.min(...lengthRatios);
           obj.scale.set(minRatio, minRatio, minRatio);
           obj.position.set(pos.x, pos.y, pos.z);
-      
 
           obj.name = name;
 
@@ -205,8 +213,6 @@ export default class BaseEntity {
         }
       );
     });
-  
-
   }
   setupMoon(moon) {
     moon.t = this;
@@ -226,9 +232,26 @@ export default class BaseEntity {
     moon.render = this.render.bind(this);
     document.body.appendChild(moon.elem);
     moon.color = this.color;
-    moon.mount = () => {
-      this.scene.add(moon);
+    moon.mount = async () => {
       moon.removeTrail();
+      if (!moon.loaded) {
+        let ob = await this.loadGlb(
+          moon.name,
+          moon.texture,
+          moon.props.radius,
+          { x: moon.props.x, y: moon.props.y, z: moon.props.z },
+          moon.props.inclination
+        );
+        ob.loaded = true;
+        moon.loaded = true;
+        for (var k in moon) {
+          if (!ob.hasOwnProperty(k)) {
+            ob[k] = moon[k];
+          }
+        }
+        moon = ob;
+      }
+      this.scene.add(moon);
     };
     moon.symbol = this.symbol;
     moon.unmount = () => {
@@ -315,13 +338,18 @@ export default class BaseEntity {
   render() {}
 
   async mount() {
-   
-    try{
-    if (!this.fetchedMoons) this.loadMoons();
-    }catch(e){}
-    
+    try {
+      if (!this.fetchedMoons) this.loadMoons();
+      if (!this[this.name.toLowerCase() + "Sphere"].material.texture) {
+        new THREE.TextureLoader().load(this.texture, (texture) => {
+          this[this.name.toLowerCase() + "Sphere"].material.map = texture;
+          this[this.name.toLowerCase() + "Sphere"].material.needsUpdate = true;
+        });
+      }
+    } catch (e) {}
+
     this.scenes.forEach((scene) => scene && this.scene.add(scene));
-    
+
     this.removeTrail();
   }
   unmount() {

@@ -6,6 +6,7 @@ export default class Uranus extends BaseEntity {
     super(scene, camera, renderer, data, 0x4fd0e7, (0.8 * Math.PI) / 180);
     this.name = "uranus";
     this.symbol = "⛢";
+    this.texture = window.location.pathname + "assets/uranus_main.jpg";
   }
   get zaxis() {
     return 1.5;
@@ -14,7 +15,6 @@ export default class Uranus extends BaseEntity {
     const UranusGeometry = new THREE.SphereGeometry(10 / 27.45, 32, 32);
     this.size = 10 / 27.45;
     const material = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load(window.location.pathname + "assets/uranus_main.jpg"),
       shininess: 0,
     });
     this.uranusSphere = new THREE.Mesh(UranusGeometry, material);

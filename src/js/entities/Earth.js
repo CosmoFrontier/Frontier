@@ -5,6 +5,9 @@ export default class Earth extends BaseEntity {
     super(scene, camera, renderer, data, 0x3f5d98, 0);
     this.name = "earth";
     this.symbol = "🜨";
+    this.texture = window.location.pathname + "assets/earth_main.jpg";
+    this.cloud_texture =
+      window.location.pathname + "assets/cloud_map_earth.png";
   }
   get zaxis() {
     return 1;
@@ -14,7 +17,6 @@ export default class Earth extends BaseEntity {
     this.size = 10 / 54;
     const material = new THREE.MeshPhongMaterial({
       color: 0x48659f,
-      map: new THREE.TextureLoader().load(window.location.pathname + "assets/earth_main.jpg"),
     });
     this.earthSphere = new THREE.Mesh(EarthGeometry, material);
     this.earthSphere.position.set(
@@ -25,10 +27,10 @@ export default class Earth extends BaseEntity {
 
     const cloudGeometry = new THREE.SphereGeometry(10 / 54 + 0.001, 32, 32);
     const cloudMaterial = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load("assets/cloud_map_earth.png"),
       transparent: true,
     });
     const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
+    this.cloudSphere = cloudSphere;
     this.earthSphere.add(cloudSphere);
     this.earthSphere.rotateX(this.tilt * (Math.PI / 180));
     this.scenes.push(this.earthSphere);
@@ -45,5 +47,24 @@ export default class Earth extends BaseEntity {
     super.render();
     this.earthSphere.rotation.y =
       -80 * (Math.PI / 180) + this.seconds() * ((2 * Math.PI) / (24 * 3600));
+  }
+  async mount() {
+    try {
+      if (!this.fetchedMoons) this.loadMoons();
+
+      this.scenes.forEach((scene) => scene && this.scene.add(scene));
+      if (!this[this.name.toLowerCase() + "Sphere"].material.texture) {
+        new THREE.TextureLoader().load(this.texture, (texture) => {
+          this[this.name.toLowerCase() + "Sphere"].material.map = texture;
+          this[this.name.toLowerCase() + "Sphere"].material.needsUpdate = true;
+          new THREE.TextureLoader().load(this.cloud_texture, (tex) => {
+            this.cloudSphere.material.map = tex;
+            this.cloudSphere.material.needsUpdate = true;
+          });
+        });
+      }
+    } catch (e) {}
+
+    this.removeTrail();
   }
 }

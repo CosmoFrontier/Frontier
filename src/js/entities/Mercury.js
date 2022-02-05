@@ -5,6 +5,7 @@ export default class Mercury extends BaseEntity {
     super(scene, camera, renderer, data, 0xd5d2d1, 7 * (Math.PI / 180));
     this.name = "mercury";
     this.symbol = "☿";
+    this.texture = window.location.pathname + "assets/mercury_main.jpeg";
   }
   get zaxis() {
     return 0.2;
@@ -12,9 +13,7 @@ export default class Mercury extends BaseEntity {
   init() {
     const MercuryGeometry = new THREE.SphereGeometry(10 / 285, 32, 32);
     this.size = 10 / 285;
-    const material = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load(window.location.pathname + "assets/mercury_main.jpeg"),
-    });
+    const material = new THREE.MeshPhongMaterial({});
     this.mercurySphere = new THREE.Mesh(MercuryGeometry, material);
     this.mercurySphere.rotateX(this.tilt * (Math.PI / 180));
     this.mercurySphere.position.set(
