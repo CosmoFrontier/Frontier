@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import moonData from "./moonData";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { retextureLoader } from "./Util";
 export default class BaseEntity {
   constructor(scene, camera, renderer, data, color, inclination) {
     this.scene = scene;
@@ -114,15 +115,6 @@ export default class BaseEntity {
           ob.data = data;
           this.setupMoon(ob);
         } else {
-          // const ob = await this.loadGlb(
-          //   moon.name,
-          //   window.location.pathname + "assets/moons/" +
-          //     moon.texture.map[0].toUpperCase() +
-          //     moon.texture.map.slice(1),
-          //   10 / moon.radius,
-          //   { x, y, z },
-          //   data.inclination * (Math.PI / 180)
-          // );
           if (!moon.radius) {
             moon.radius = 0.001;
           } else moon.radius = 10 / moon.radius;
@@ -168,7 +160,7 @@ export default class BaseEntity {
       radius = 0.001;
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       if (!map) return;
       const Loader = new GLTFLoader();
 
@@ -181,10 +173,13 @@ export default class BaseEntity {
         y: Math.abs(sceneBounds.max.y - sceneBounds.min.y),
         z: Math.abs(sceneBounds.max.z - sceneBounds.min.z),
       };
-
-      Loader.load(
-        map,
-        (glb) => {
+      let stop = false;
+      let tries = 0;
+      let wait = (time) => new Promise((res) => setTimeout(res, time));
+      while (!stop) {
+        if (tries >= 10) tries = 0;
+        try {
+          let glb = await Loader.loadAsync(map);
           const obj = glb.scene;
           var meshBounds = new THREE.Box3().setFromObject(obj);
           let lengthMeshBounds = {
@@ -204,14 +199,12 @@ export default class BaseEntity {
           obj.name = name;
 
           obj.zaxis = radius * 3;
-
+          stop = true;
           resolve(obj);
-        },
-        function (xhr) {},
-        function (err) {
-          reject(err);
-        }
-      );
+        } catch (e) {}
+        await wait(tries * 0.5 * 1000);
+        tries++;
+      }
     });
   }
   setupMoon(moon) {
@@ -278,11 +271,12 @@ export default class BaseEntity {
     };
     this.moons.push(moon);
   }
-  createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
+  async createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
     const moonGeometry = new THREE.SphereGeometry(10 / radius, 32, 32);
+    let map1 = await retextureLoader(map);
     const moonMaterial = new THREE.MeshPhongMaterial({
       shininess: 1,
-      map: new THREE.TextureLoader().load(map),
+      map: map1,
     });
 
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
@@ -341,10 +335,9 @@ export default class BaseEntity {
     try {
       if (!this.fetchedMoons) this.loadMoons();
       if (!this[this.name.toLowerCase() + "Sphere"].material.texture) {
-        new THREE.TextureLoader().load(this.texture, (texture) => {
-          this[this.name.toLowerCase() + "Sphere"].material.map = texture;
-          this[this.name.toLowerCase() + "Sphere"].material.needsUpdate = true;
-        });
+        let texture = await retextureLoader(this.texture);
+        this[this.name.toLowerCase() + "Sphere"].material.map = texture;
+        this[this.name.toLowerCase() + "Sphere"].material.needsUpdate = true;
       }
     } catch (e) {}
 

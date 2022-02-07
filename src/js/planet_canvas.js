@@ -13,7 +13,7 @@ import Neptune from "./entities/Neptune";
 import Pluto from "./entities/Pluto";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import moment from "moment";
-
+import { refetch, reloadBgImage, retextureLoader } from "./Util";
 export default class PlanetCanvas {
   constructor() {
     this.AUTOMOVE = true;
@@ -134,7 +134,7 @@ export default class PlanetCanvas {
       content.querySelector(".content-wrap").classList.add("is-not-visible");
       content.querySelector(".loader").classList.add("is-visible");
 
-      fetch("https://ssd-abh80.vercel.app/body/" + planet.name.toLowerCase()) //https://ssd-abh80.vercel.app/body/
+      refetch("https://ssd-abh80.vercel.app/body/" + planet.name.toLowerCase()) //https://ssd-abh80.vercel.app/body/
         .then((x) => x.json())
         .then((data) => {
           if (isMoon) {
@@ -146,9 +146,8 @@ export default class PlanetCanvas {
               data.description;
             content.querySelector(".planet_name").textContent =
               planet.name[0].toUpperCase() + planet.name.slice(1);
-            content.querySelector(
-              ".planet_image"
-            ).style.backgroundImage = `url(${data.cover})`;
+
+            reloadBgImage(data.cover, content.querySelector(".planet_image"));
             content.querySelector(".planet_type span").textContent =
               data.table.type;
 
@@ -498,9 +497,9 @@ export default class PlanetCanvas {
   }
   async fetchData() {
     try {
-      const res = await fetch("https://ssd-abh80.vercel.app/all"); //https://ssd-abh80.vercel.app/all
+      const res = await refetch("https://ssd-abh80.vercel.app/all"); //https://ssd-abh80.vercel.app/all
       const data = await res.json();
-      const res1 = await fetch("https://ssd-abh80.vercel.app/bodies/all");
+      const res1 = await refetch("https://ssd-abh80.vercel.app/bodies/all");
       const data1 = await res1.json();
       this.bodies = data1;
       this.data = data;
@@ -509,9 +508,10 @@ export default class PlanetCanvas {
     }
     this.init();
   }
-  init() {
-    var background = new THREE.TextureLoader();
-    background.crossOrigin = true;
+  async init() {
+    var background = await retextureLoader(
+      window.location.pathname + "assets/star_map.png"
+    );
 
     var materialBackground = new THREE.MeshBasicMaterial({
       depthTest: false,
@@ -522,10 +522,8 @@ export default class PlanetCanvas {
     var geometryBackground = new THREE.SphereGeometry(60000, 32, 32);
     var meshBackground = new THREE.Mesh(geometryBackground, materialBackground);
 
-    background.load(window.location.pathname + "assets/star_map.png", (t) => {
-      materialBackground.map = t;
-      this.scene.add(meshBackground);
-    });
+    materialBackground.map = background;
+    this.scene.add(meshBackground);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.07);
     this.scene.add(ambientLight);
@@ -539,25 +537,18 @@ export default class PlanetCanvas {
     this.AUTOMOVE = true;
 
     const wait = (delay = 0) =>
-    new Promise((resolve) => setTimeout(resolve, delay));
+      new Promise((resolve) => setTimeout(resolve, delay));
 
     this.controls.addEventListener("start", () => {
       this.controls.autoRotate = false;
-        this.AUTOMOVE = false;
-      wait(8000).then(()=>{
+      this.AUTOMOVE = false;
+      wait(8000).then(() => {
         this.controls.autoRotate = true;
         this.AUTOMOVE = true;
-      })
-    
+      });
 
-      
-    
-
-      
-
-      setTimeout(stop, 4000)
+      setTimeout(stop, 4000);
       stop();
-      
     });
     this.loadEntities();
     this.renderer.render(this.scene, this.camera);

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { retextureLoader } from "../Util";
 import BaseEntity from "./../BaseEntity";
 
 export default class Saturn extends BaseEntity {
@@ -11,7 +12,7 @@ export default class Saturn extends BaseEntity {
   get zaxis() {
     return 4.5;
   }
-  init() {
+  async init() {
     const SaturnGeometry = new THREE.SphereGeometry(10 / 11.95, 32, 32);
     this.size = 10 / 11.95;
     const material = new THREE.MeshPhongMaterial({
@@ -26,9 +27,9 @@ export default class Saturn extends BaseEntity {
     );
     this.saturnSphere.castShadow = true;
     this.saturnSphere.receiveShadow = true;
-    const texture = new THREE.TextureLoader().load("assets/saturnRings.png");
+    const ringMap = await retextureLoader("assets/saturnRings.png");
     const ring_material = new THREE.MeshPhongMaterial({
-      map: texture,
+      map: ringMap,
       side: THREE.DoubleSide,
       transparent: true,
     });

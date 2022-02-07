@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import BaseEntity from "../BaseEntity";
+import { retextureLoader } from "../Util";
 export default class Earth extends BaseEntity {
   constructor(scene, camera, renderer, data) {
     super(scene, camera, renderer, data, 0x3f5d98, 0);
@@ -54,14 +55,12 @@ export default class Earth extends BaseEntity {
 
       this.scenes.forEach((scene) => scene && this.scene.add(scene));
       if (!this[this.name.toLowerCase() + "Sphere"].material.texture) {
-        new THREE.TextureLoader().load(this.texture, (texture) => {
-          this[this.name.toLowerCase() + "Sphere"].material.map = texture;
-          this[this.name.toLowerCase() + "Sphere"].material.needsUpdate = true;
-          new THREE.TextureLoader().load(this.cloud_texture, (tex) => {
-            this.cloudSphere.material.map = tex;
-            this.cloudSphere.material.needsUpdate = true;
-          });
-        });
+        let texture = await retextureLoader(this.texture);
+        this[this.name.toLowerCase() + "Sphere"].material.map = texture;
+        this[this.name.toLowerCase() + "Sphere"].material.needsUpdate = true;
+        let tex = await retextureLoader(this.cloud_texture);
+        this.cloudSphere.material.map = tex;
+        this.cloudSphere.material.needsUpdate = true;
       }
     } catch (e) {}
 
