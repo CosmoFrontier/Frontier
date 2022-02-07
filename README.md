@@ -6,7 +6,7 @@
 > Bug reports in Issues section will really helpful and it would be more great if you fix it and lend a helping hand by opening a pull request.
 
 <div class="contribute"> <h1 align="center"> 🚀 Preview 🚀</h1>
-  This site has not yet been deployed
+  <b>Preview</b> this site on https://cosmofrontier.github.io/Frontier/
 </div>
 
 <div class="img" align="center" >
