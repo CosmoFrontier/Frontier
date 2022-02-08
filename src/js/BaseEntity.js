@@ -225,9 +225,12 @@ export default class BaseEntity {
     moon.render = this.render.bind(this);
     document.body.appendChild(moon.elem);
     moon.color = this.color;
+    var smallLoad = document.getElementById("lds-hourglass");
     moon.mount = async () => {
+
       moon.removeTrail();
       if (!moon.loaded) {
+        smallLoad.style.display = "inline-block";
         let ob = await this.loadGlb(
           moon.name,
           moon.texture,
@@ -235,6 +238,7 @@ export default class BaseEntity {
           { x: moon.props.x, y: moon.props.y, z: moon.props.z },
           moon.props.inclination
         );
+        smallLoad.style.display = "none";
         ob.loaded = true;
         moon.loaded = true;
         for (var k in moon) {
