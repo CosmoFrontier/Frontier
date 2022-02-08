@@ -11,7 +11,7 @@
 
 
 <div class="img" align="center" >
-  <h1 align="center">📺 Screenshots 📺</h1>
+  <h1 align="center">📺 SSnapshots 📺</h1>
 <img src="https://user-images.githubusercontent.com/79041510/152326812-dc790f1c-5f89-4cd7-a574-0477de41be97.png" >
   <img src="https://user-images.githubusercontent.com/79041510/152324809-20f91635-47d7-44b7-b2c5-3d193ab5cbe9.png">
   <img src="https://user-images.githubusercontent.com/79041510/152324991-5ab60a3b-eff4-4b8e-ab38-f1baf5635f02.png" >
