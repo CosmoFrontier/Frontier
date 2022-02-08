@@ -238,7 +238,7 @@ export default class BaseEntity {
           { x: moon.props.x, y: moon.props.y, z: moon.props.z },
           moon.props.inclination
         );
-        smallLoad.style.display = "none";
+      
         ob.loaded = true;
         moon.loaded = true;
         for (var k in moon) {
@@ -248,6 +248,7 @@ export default class BaseEntity {
         }
         moon = ob;
       }
+      smallLoad.style.display = "none";
       this.scene.add(moon);
     };
     moon.symbol = this.symbol;
