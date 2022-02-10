@@ -44,6 +44,8 @@ export default class PlanetCanvas {
     global.stats.showPanel(0);
 
     //document.body.appendChild(stats.domElement);
+
+    //history function of user activity on website
     window.onhashchange = () => {
       const hash = window.location.hash.slice(1);
 
@@ -83,6 +85,8 @@ export default class PlanetCanvas {
       );
     };
   }
+
+  //camera focus for each planet according to coordinates
   setFocus(x, y, z, zaxis, angle) {
     this.focusAt = new THREE.Vector3(x, y, z);
     this.camera.lookAt(this.focusAt);
@@ -97,6 +101,7 @@ export default class PlanetCanvas {
     this.controls.update();
   }
 
+  //function executing on-click of planet
   async focusPlanet(planet, mounted, isMoon, angle) {
     if (this.planet && this.planet.name != "sun" && !planet.moon) {
       this.planet.elem.style.display = "flex";
@@ -283,6 +288,7 @@ export default class PlanetCanvas {
     this.controls.autoRotate = true;
   }
 
+  //executes on-click of a certain moon or planet or satellite showing "traveling to data"
   travelTo(x, isMoon) {
     const travel_stats = document.querySelector("#travel_stats");
     var camPos = this.camera.position;
@@ -319,6 +325,8 @@ export default class PlanetCanvas {
     };
     requestAnimationFrame(animate);
   }
+
+  //loads the planet.js files upon call
   loadEntities() {
     const sun = new SUN(this.scene, this.camera, this.renderer);
     sun.init();
@@ -415,6 +423,8 @@ export default class PlanetCanvas {
     pluto.init();
     this.entities.push(pluto);
 
+
+    //search bar function
     var search = document.querySelector("input");
     const ul = document.querySelector(".search-holder ul");
     search.addEventListener("keyup", (e) => {
@@ -462,6 +472,10 @@ export default class PlanetCanvas {
       });
     });
 
+
+
+
+    //label for each space body which includes ring and name of planet
     this.entities.forEach((x) => {
       x.elem = document.createElement("div");
       x.elem.className = "label";

@@ -23,8 +23,6 @@
 <meta name="twitter:description" content="Frontier is a 3D real-time solar system exploration website, with amazing 3D models of planets, moons, satellites, gas giants, ice giants and many more. Explore it now!">
 <meta name="twitter:image" content="https://i.postimg.cc/bJ36h9ZJ/Screenshot-20220201-165230.png">
 
-<!-- Meta Tags Generated via https://www.opengraph.xyz -->
-      
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,7 +41,9 @@
 <body>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Orbitron:wght@900" rel="stylesheet" />
-  <div class="page">
+
+   <!-- hero content page section -->
+  <div class="page"> 
     <div class="logo">
       <img src="assets/logo.gif" width="100%" height="100%" alt="logo" />
     </div>
@@ -62,7 +62,6 @@
       <input type="text" class="search-bar-input" id="input" placeholder="Search..." />
     </div>
 
-
     <div class="content is-not-visible" id="content">
       <svg class="close-svg" width="20" height="20">
         <line x1="20" y1="0" x2="0" y2="20" />
@@ -70,6 +69,7 @@
       </svg>
       <div class="loader is-visible"></div>
 
+      <!-- panel data div -->
       <div class="content-wrap">
         <h1 class="planet_name">Mercury</h1>
         <p class="planet_type" style="
@@ -110,8 +110,6 @@
         </div>
       </div>
 
-
-
     </div>
   </div>
 
@@ -121,65 +119,14 @@
   <div class="footer">Powered by <span class="bold-t">Frontier</span></div>
   </div>
 
+  <!--pre-loader div -->
   <div id="loading">FRONTIER</div>
   <div class="lds-hourglass" id="lds-hourglass">
     <div class="lds-loader-text">Loading... </div>
   </div>
+  
   <script>
-    //searcbar
-
-    // const planets = [
-    //   {name: mercury},
-    //   {name: venus},
-    //   {name: earth},
-    //   {name: mars},
-    //   {name: jupiter},
-    //   {name: saturn},
-    //   {name: uranus},
-    //   {name: neptune},
-    //   {name: pluto}
-    // ]
-
-    // const searchInput = document.querySelector('.input');
-    // searchInput.addEventListener("input", (e)=>{
-    //   let value = e.target.value;
-    //   if(value && value.trim().length > 0){
-    //     value = value.trim().toLowerCase();
-    //     listFunc(planets.filter(planet => {
-    //       return planet.name.includes(value);
-    //     }))
-
-    //   }
-    //   else{
-    //     return false;
-
-    //   }
-    // })
-
-    // function listFunc(results){
-    //   for(const planet of results){
-    //     const resultItem = document.createElement('li');
-    //     resultItem.classList.add('result-item');
-    //     const text = document.createTextNode(planet.name)
-
-    //     resultItem.appendChild(text);
-    //     list.appendChild(resultItem);
-    //   }
-    // }
-
-    // window.onload(function() {
-    //   var otherloader = document.getElementById('lds-hourglass');
-    //   otherloader.style.display = 'none';
-
-    // })
-
-
-
-
-
-
-
-
+  
     const wait = (delay = 0) =>
       new Promise((resolve) => setTimeout(resolve, delay));
 
