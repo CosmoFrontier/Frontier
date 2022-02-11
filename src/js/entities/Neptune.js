@@ -12,6 +12,8 @@ export default class Neptune extends BaseEntity {
     return 1.5;
   }
   init() {
+
+    //initializing the neptune geometry
     const NeptuneGeometry = new THREE.SphereGeometry(10 / 28.8, 32, 32);
     this.size = 10 / 28.8;
     const material = new THREE.MeshPhongMaterial({});

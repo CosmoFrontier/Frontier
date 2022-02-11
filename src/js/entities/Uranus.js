@@ -12,6 +12,8 @@ export default class Uranus extends BaseEntity {
     return 1.5;
   }
   init() {
+
+    //initializing the uranus geometry
     const UranusGeometry = new THREE.SphereGeometry(10 / 27.45, 32, 32);
     this.size = 10 / 27.45;
     const material = new THREE.MeshPhongMaterial({

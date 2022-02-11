@@ -11,6 +11,8 @@ export default class Venus extends BaseEntity {
     return 0.7;
   }
   init() {
+
+    //initializing the venus geometry
     const VenusGeometry = new THREE.SphereGeometry(10 / 115.06, 32, 32);
     this.size = 10 / 115.06;
     const material = new THREE.MeshPhongMaterial({

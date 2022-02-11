@@ -25,6 +25,8 @@ export default class BaseEntity {
     this.scenes = [...scene, ...this.scenes];
   }
 
+
+  //moons coordinates according to realtime space
   loadMoons() {
     return new Promise(async (resolve, reject) => {
       let data = null;
@@ -155,6 +157,9 @@ export default class BaseEntity {
       });
     });
   }
+
+
+  //loading function of 3D models of moons & satellites 
   loadGlb(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
     if (isNaN(radius)) {
       radius = 0.001;
@@ -207,9 +212,12 @@ export default class BaseEntity {
       }
     });
   }
-  setupMoon(moon) {
-    moon.t = this;
 
+  //function for moons & satellites div
+  setupMoon(moon) {
+
+    //condition for being moon
+    moon.t = this;
     moon.moon = true;
     moon.elem = document.createElement("div");
     moon.elem.className = "label";
@@ -218,6 +226,7 @@ export default class BaseEntity {
     text.className = "label-text-sat";
     const ring = document.createElement("div");
 
+    //condition for being only a satellite
     if (moon.articifial) ring.className = "label-square";
     else ring.className = "label-diamond";
     moon.elem.appendChild(text);
@@ -257,10 +266,14 @@ export default class BaseEntity {
       this.scene.remove(moon);
       moon.removeTrail();
     };
+
+    //adding the orbit lines to scene
     moon.drawTrail = () => {
       this.scene.add(this.scenes.find((x) => x.name == moon.name + "Trail"));
     };
 
+
+    //removing the orbit lines from scene
     moon.removeTrail = () => {
       var trail = this.scene.getObjectByName(moon.name + "Trail");
       this.scene.remove(trail);
@@ -277,6 +290,8 @@ export default class BaseEntity {
     };
     this.moons.push(moon);
   }
+
+  //function for creating moon geometry upon promise returning
   async createMoon(name, map, radius, pos = { x: 0, y: 0, z: 0 }, incl) {
     const moonGeometry = new THREE.SphereGeometry(10 / radius, 32, 32);
     let map1 = await retextureLoader(map);
@@ -294,6 +309,7 @@ export default class BaseEntity {
     return moon;
   }
 
+  //function for creating orbit lines for moons & satellites
   createTrail() {
     const points = [];
     const colors = [];

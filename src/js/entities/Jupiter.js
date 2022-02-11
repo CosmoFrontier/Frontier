@@ -12,6 +12,8 @@ export default class Jupiter extends BaseEntity {
     return 5;
   }
   init() {
+
+    //initializing the jupiter geometry
     const JupiterGeometry = new THREE.SphereGeometry(10 / 9.6, 32, 32);
     this.size = 10 / 9.6;
     const material = new THREE.MeshPhongMaterial({});

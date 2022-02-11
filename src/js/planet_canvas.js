@@ -509,6 +509,8 @@ export default class PlanetCanvas {
       document.querySelector("#travel_stats").classList.remove("is-visible");
     }, 5000);
   }
+
+  //API data fetch URLs for information panel
   async fetchData() {
     try {
       const res = await refetch("https://ssd-abh80.vercel.app/all"); //https://ssd-abh80.vercel.app/all
@@ -522,6 +524,8 @@ export default class PlanetCanvas {
     }
     this.init();
   }
+
+  //background star body texture
   async init() {
     var background = await retextureLoader(
       window.location.pathname + "assets/star_map.png"
@@ -549,6 +553,9 @@ export default class PlanetCanvas {
     this.controls.enableZoom = true;
     this.controls.autoRotate = true;
     this.AUTOMOVE = true;
+
+
+    //function to start movement after 8s again when clicked anywhere on the webpage
 
     const wait = (delay = 0) =>
       new Promise((resolve) => setTimeout(resolve, delay));
@@ -651,6 +658,9 @@ export default class PlanetCanvas {
       this.controls.update();
     }
     stats.update();
+
+
+    //displaying data and time on the webpage
 
     let date = new Date();
     document.querySelector(".date-time .date").textContent =

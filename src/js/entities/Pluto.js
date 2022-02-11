@@ -15,6 +15,8 @@ export default class Pluto extends BaseEntity {
   }
 
   init() {
+
+    //initializing the earth geometry
     const PlutoGeometry = new THREE.SphereGeometry(10 / 585.996802154, 32, 32);
     this.size = 10 / 585.996802154;
     const material = new THREE.MeshPhongMaterial({

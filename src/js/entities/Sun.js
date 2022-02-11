@@ -32,6 +32,8 @@ export default class SUN {
  
 
   init() {
+
+    //initializing the sun geometry
     const SunGeometry = new THREE.SphereGeometry(10, 32, 32);
     const SunMaterial = new THREE.MeshPhongMaterial({
       color: 0xfff93e,

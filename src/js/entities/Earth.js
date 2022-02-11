@@ -14,6 +14,8 @@ export default class Earth extends BaseEntity {
     return 1;
   }
   init() {
+
+    //initializing the earth geometry
     const EarthGeometry = new THREE.SphereGeometry(10 / 54, 32, 32);
     this.size = 10 / 54;
     const material = new THREE.MeshPhongMaterial({
@@ -25,6 +27,8 @@ export default class Earth extends BaseEntity {
       0,
       this.radius * Math.cos(this.theeta)
     );
+
+    //initializing the clouds texture around earth
 
     const cloudGeometry = new THREE.SphereGeometry(10 / 54 + 0.001, 32, 32);
     const cloudMaterial = new THREE.MeshPhongMaterial({

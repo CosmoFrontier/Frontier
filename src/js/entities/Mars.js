@@ -13,7 +13,9 @@ export default class Mars extends BaseEntity {
     return 0.5;
   }
 
-  init() {
+  init() 
+  {
+    //initializing the mars geometry
     const MarsGeometry = new THREE.SphereGeometry(10 / 205.26, 32, 32);
     this.size = 10 / 205.26;
     const material = new THREE.MeshPhongMaterial({});

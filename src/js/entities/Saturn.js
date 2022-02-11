@@ -13,6 +13,8 @@ export default class Saturn extends BaseEntity {
     return 4.5;
   }
   async init() {
+
+    //initializing the saturn geometry
     const SaturnGeometry = new THREE.SphereGeometry(10 / 11.95, 32, 32);
     this.size = 10 / 11.95;
     const material = new THREE.MeshPhongMaterial({
@@ -27,6 +29,8 @@ export default class Saturn extends BaseEntity {
     );
     this.saturnSphere.castShadow = true;
     this.saturnSphere.receiveShadow = true;
+
+    //initializing code for ring geometry of saturn
     const ringMap = await retextureLoader("assets/saturnRings.png");
     const ring_material = new THREE.MeshPhongMaterial({
       map: ringMap,

@@ -11,6 +11,8 @@ export default class Mercury extends BaseEntity {
     return 0.2;
   }
   init() {
+
+    //initializing the mercury geometry
     const MercuryGeometry = new THREE.SphereGeometry(10 / 285, 32, 32);
     this.size = 10 / 285;
     const material = new THREE.MeshPhongMaterial({});
