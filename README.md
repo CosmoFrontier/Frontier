@@ -9,6 +9,7 @@
   <b>Preview</b> this site on https://cosmofrontier.netlify.app/
   
   Shipped and deployed using [Netlify](https://www.netlify.com/)
+  [![Netlify Status](https://api.netlify.com/api/v1/badges/4a2b6759-c153-4d0c-af34-d982f02c5822/deploy-status)](https://app.netlify.com/sites/cosmofrontier/deploys)
 </div>
 
 
